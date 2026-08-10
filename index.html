@@ -4,21 +4,28 @@
 :root{
   --bg:#eef1f4; --panel:#fbfcfd; --text:#22303c; --muted:#6b7885;
   --border:#d3dae1; --accent:#0e6fb8; --sel:#e07400;
-  --paper:#ffffff; --ink:#1c1c1c; --grid:#dde3ea; --wire:#0e6fb8; --hot:#0a2e6e; --hotw:2.6; --inkmuted:#8a8a8a; --lbl:#777777;
+  --paper:#ffffff; --ink:#1c1c1c; --grid:#b9c4d0; --wire:#0e6fb8; --wireoff:#a7b2be; --hot:#0a2e6e; --hotw:2.6; --inkmuted:#8a8a8a; --lbl:#777777;
+  --arrow:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1.6 6 6.4 11 1.6' fill='none' stroke='%236b7885' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/></svg>");
 }
 @media (prefers-color-scheme: dark){
   :root{--bg:#161b20;--panel:#1f262d;--text:#e4e9ee;--muted:#94a0ab;--border:#38424c;
-    --paper:#161d27;--ink:#eef2f6;--grid:#93a0af;--wire:#5aa7e8;--hot:#3be0ff;--hotw:3.4;--inkmuted:#b8c4d0;--lbl:#dde7f0;}
+    --paper:#161d27;--ink:#eef2f6;--grid:#93a0af;--wire:#5aa7e8;--wireoff:#55636f;--hot:#3be0ff;--hotw:3.4;--inkmuted:#b8c4d0;--lbl:#dde7f0;
+  --arrow:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1.6 6 6.4 11 1.6' fill='none' stroke='%2394a0ab' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/></svg>");}
 }
 :root[data-theme="light"]{--bg:#eef1f4;--panel:#fbfcfd;--text:#22303c;--muted:#6b7885;--border:#d3dae1;
-  --paper:#ffffff;--ink:#1c1c1c;--grid:#dde3ea;--wire:#0e6fb8;--hot:#0a2e6e;--hotw:2.6;--inkmuted:#8a8a8a;--lbl:#777777;}
+  --paper:#ffffff;--ink:#1c1c1c;--grid:#b9c4d0;--wire:#0e6fb8;--wireoff:#a7b2be;--hot:#0a2e6e;--hotw:2.6;--inkmuted:#8a8a8a;--lbl:#777777;}
 :root[data-theme="dark"]{--bg:#161b20;--panel:#1f262d;--text:#e4e9ee;--muted:#94a0ab;--border:#38424c;
-  --paper:#161d27;--ink:#eef2f6;--grid:#93a0af;--wire:#5aa7e8;--hot:#3be0ff;--hotw:3.4;--inkmuted:#b8c4d0;--lbl:#dde7f0;}
+  --paper:#161d27;--ink:#eef2f6;--grid:#93a0af;--wire:#5aa7e8;--wireoff:#55636f;--hot:#3be0ff;--hotw:3.4;--inkmuted:#b8c4d0;--lbl:#dde7f0;
+  --arrow:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1.6 6 6.4 11 1.6' fill='none' stroke='%2394a0ab' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/></svg>");}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;font:13.5px/1.45 system-ui,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);display:flex;overflow:hidden}
-#palette{width:272px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);padding:12px;display:flex;flex-direction:column;overflow:hidden}
-#palParts{flex:1;overflow-y:auto;margin-top:10px;padding-top:4px;border-top:1px solid var(--border)}
+#palette{width:334px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);padding:12px;display:flex;flex-direction:column;overflow:hidden}
+#palParts{flex:1;overflow-y:auto;margin-top:10px;padding-top:4px;padding-right:6px;border-top:1px solid var(--border);
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-content:start}
+#palParts .grp{grid-column:1/-1;margin:12px 0 -2px}
+#palParts .grp:first-child{margin-top:4px}
+#palParts,#lib,#float,#helpBg,textarea{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--muted) 55%,transparent) transparent}
 #mid{flex:1;display:flex;flex-direction:column;min-width:0}
 #tabbar{display:flex;align-items:center;gap:4px;padding:5px 8px;background:var(--panel);border-bottom:1px solid var(--border);flex-wrap:wrap}
 .tab{display:flex;align-items:center;gap:2px;padding:3px 4px 3px 10px;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:12.5px;user-select:none}
@@ -28,6 +35,11 @@ body{margin:0;font:13.5px/1.45 system-ui,"Segoe UI",sans-serif;background:var(--
 .tab.simtab{animation:simblink 1s infinite}
 @keyframes simblink{0%,100%{background:transparent}50%{background:rgba(211,47,47,.4)}}
 #tabbar .spacer{flex:1}
+/* feste Breiten, damit wechselnde Beschriftungen (Auto/Dunkel/Hell, Einfach/Vollständig) nichts verschieben */
+#tabbar>button{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+#btnMode{min-width:126px}
+#btnTheme{min-width:94px}
+#btnLib{min-width:112px}
 #lib{width:0;flex-shrink:0;background:var(--panel);border-left:1px solid var(--border);overflow:hidden;padding:0;position:relative}
 #lib.open{width:310px;padding:12px 12px 12px 16px;overflow-y:auto}
 #libGrip{position:absolute;left:0;top:0;bottom:0;width:7px;cursor:ew-resize;background:transparent}
@@ -49,6 +61,7 @@ body{margin:0;font:13.5px/1.45 system-ui,"Segoe UI",sans-serif;background:var(--
 #svg{background:var(--paper);display:block;width:100%;height:100%;user-select:none;-webkit-user-select:none;touch-action:none}
 #float{position:absolute;z-index:5;width:254px;background:var(--panel);border:1px solid var(--border);border-radius:9px;box-shadow:0 8px 28px rgba(0,0,0,.22);padding:12px;display:none;max-height:88%;overflow-y:auto}
 #float.wide{width:500px}
+#tip{position:absolute;z-index:6;pointer-events:none;background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:12px;display:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.25)}
 #float.wide3{width:710px}
 .cols{display:flex;gap:16px}
 .cols>div{flex:1;min-width:0}
@@ -65,16 +78,34 @@ body{margin:0;font:13.5px/1.45 system-ui,"Segoe UI",sans-serif;background:var(--
 h1{font-size:15px;margin:0 0 10px;letter-spacing:.01em}
 h3{font-size:13.5px;margin:0 0 10px}
 .grp{font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:14px 0 4px}
-button{font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--border);border-radius:5px;padding:5px 9px;cursor:pointer}
-button:hover{border-color:var(--accent)}
+button{font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:5px 9px;cursor:pointer;transition:border-color .12s,background .12s}
+button:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--panel))}
+button:disabled{opacity:.45;cursor:default}
+button:disabled:hover{border-color:var(--border);background:var(--panel)}
 button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
-.pal{display:flex;align-items:center;gap:9px;width:100%;text-align:left;margin:3px 0;padding:4px 7px}
-.pal svg{width:78px;height:38px;flex-shrink:0;background:#fff;border-radius:4px}
+.pal{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;text-align:center;margin:0;padding:7px 5px 6px;justify-content:flex-start;line-height:1.2}
+.pal svg{width:100%;height:52px;flex-shrink:0;background:#fff;border-radius:5px}
+.pal span{font-size:11.5px;display:block;hyphens:auto}
 .pal .sym *{stroke:#1c1c1c}
 .pal .sym text{fill:#8a8a8a}
 .pal.on{outline:2px solid var(--accent);outline-offset:-1px}
 label{display:block;margin:9px 0 2px;font-size:12px;color:var(--muted)}
-select,input[type=text],textarea{font:inherit;width:100%;padding:4px 5px;color:var(--text);background:var(--panel);border:1px solid var(--border);border-radius:5px}
+select,input[type=text],input[type=number],.combo>input,textarea{font:inherit;width:100%;padding:5px 7px;color:var(--text);background:var(--panel);border:1px solid var(--border);border-radius:6px;color-scheme:light dark;transition:border-color .12s,box-shadow .12s}
+select:hover,input[type=text]:hover,input[type=number]:hover,.combo>input:hover,textarea:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--border))}
+select:focus,input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 22%,transparent)}
+select{appearance:none;-webkit-appearance:none;background-image:var(--arrow);background-repeat:no-repeat;background-position:right 9px center;background-size:11px 7px;padding-right:28px}
+select::-ms-expand{display:none}
+input[type=number]::-webkit-inner-spin-button{opacity:.45}
+/* Eigenes Auswahlfeld: frei beschreibbar, Liste zeigt immer alle Vorgaben */
+.combo{position:relative}
+.combo>input{padding-right:30px}
+.cbtn{position:absolute;right:2px;top:2px;bottom:2px;width:26px;border:none;background:none;border-radius:5px;padding:0;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.cbtn:hover{background:color-mix(in srgb,var(--accent) 14%,transparent);border:none;color:var(--text)}
+.combo .copts{display:none}
+#comboPop{position:fixed;z-index:40;background:var(--panel);border:1px solid var(--border);border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.42);padding:4px;display:none;max-height:220px;overflow:auto;scrollbar-width:thin}
+.copt{padding:5px 9px;border-radius:5px;cursor:pointer;font-size:12.5px;white-space:nowrap}
+.copt:hover{background:color-mix(in srgb,var(--accent) 18%,transparent)}
+.copt.on{color:var(--accent);font-weight:600}
 textarea{resize:vertical}
 #helpBg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:30;overflow:auto}
 #helpBg.open{display:block}
@@ -85,7 +116,12 @@ textarea{resize:vertical}
 #helpBox li{margin:4px 0}
 #helpBox kbd{background:var(--bg);border:1px solid var(--border);border-bottom-width:2px;border-radius:4px;padding:1px 6px;font:12.5px ui-monospace,monospace}
 .clabel{font:12px system-ui,sans-serif;fill:var(--lbl);user-select:none;cursor:move}
-input[type=checkbox]{accent-color:var(--accent)}
+input[type=checkbox]{appearance:none;width:15px;height:15px;flex-shrink:0;border:1px solid var(--border);border-radius:4px;background:var(--panel);cursor:pointer;position:relative;margin:0;vertical-align:-3px}
+input[type=checkbox]:hover:not(:disabled){border-color:var(--accent)}
+input[type=checkbox]:checked{background:var(--accent);border-color:var(--accent)}
+input[type=checkbox]:checked::after{content:"";position:absolute;left:4.2px;top:1.4px;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+input[type=checkbox]:disabled{opacity:.45;cursor:default}
+input[type=checkbox]:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .row{display:flex;gap:6px;margin-top:16px}
 .row button{flex:1}
 .danger{color:#c62828;border-color:#c6282855}
@@ -94,6 +130,20 @@ input[type=checkbox]{accent-color:var(--accent)}
 .help{font-size:12px;color:var(--muted);margin-top:16px;border-top:1px solid var(--border);padding-top:10px}
 .help b{color:var(--text)}
 .chk{display:flex;align-items:center;gap:6px;margin:9px 0 2px;font-size:12.5px;color:var(--text)}
+.irow{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:4px 0;border-bottom:1px solid var(--border);font-size:12.5px}
+.irow:last-child{border-bottom:none}
+.irow span{color:var(--muted)}
+.irow b{font-weight:600;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.igrp{font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:12px 0 2px}
+#float header .pin{border:none;background:none;color:var(--muted);padding:1px 3px;line-height:1;cursor:pointer;border-radius:4px}
+#float header .pin:hover{color:var(--text);background:color-mix(in srgb,var(--accent) 14%,transparent)}
+#float header .pin.on{color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,transparent)}
+.lockrow{display:flex;gap:4px;align-items:center}
+.lockrow input{flex:1;min-width:0}
+.lockbtn{padding:2px 6px;font-size:13px;line-height:1.2;flex-shrink:0}
+details.adv{margin-top:12px;border-top:1px solid var(--border);padding-top:6px}
+details.adv summary{cursor:pointer;font-size:12px;color:var(--muted);user-select:none;letter-spacing:.03em}
+details.adv summary:hover{color:var(--text)}
 /* --- Zeichnung --- */
 .sym *{stroke:var(--ink);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .sym text{stroke:none;fill:var(--inkmuted);font:9px system-ui,sans-serif}
@@ -102,45 +152,73 @@ input[type=checkbox]{accent-color:var(--accent)}
 .port:hover{fill:#ffd766}
 .port.active{fill:#7bd47e}
 .wire{fill:none;stroke:var(--wire);stroke-width:2}
+.wire.dry{stroke:var(--wireoff);stroke-width:1.7}
 .wire.hot{stroke:var(--hot);stroke-width:var(--hotw,2.6)}
 .band{fill:rgba(14,111,184,.08);stroke:var(--accent);stroke-width:1;stroke-dasharray:4 3}
 .atile{width:52px;height:34px}
 .wire.selw{stroke:var(--sel);stroke-width:3}
-#btnPlay{width:100%;margin-top:8px;font-weight:600}
-#btnPlay.running{background:#d32f2f;color:#fff;border-color:#d32f2f}
+.ic{width:14px;height:14px;flex-shrink:0;vertical-align:-2.5px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+#simbox{border:1px solid color-mix(in srgb,var(--accent) 30%,var(--border));border-radius:11px;padding:10px 12px 12px;margin:0 0 12px;background:color-mix(in srgb,var(--accent) 9%,var(--panel));box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 1px 3px rgba(0,0,0,.12)}
+#simbox .simhead{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:color-mix(in srgb,var(--accent) 65%,var(--text));margin-bottom:9px;display:flex;align-items:center;gap:6px;font-weight:600}
+#simbox label{margin-top:11px;margin-bottom:3px}
+#simbox .row{margin-top:7px;gap:7px}
+#simbox .row button{padding:6px 0}
+#simbox .row button .ic{vertical-align:-3px}
+#btnPlay{background:var(--accent);color:#fff;border-color:var(--accent);padding:7px 9px;display:flex;align-items:center;justify-content:center;gap:7px}
+#btnPlay:hover{filter:brightness(1.1);border-color:var(--accent)}
+#btnPlay.running{background:#d32f2f;border-color:#d32f2f}
+#simClock{font-variant-numeric:tabular-nums;letter-spacing:.02em}
+#btnPlay{width:100%;margin-top:0;font-weight:600}
 #svg.simming g.comp{cursor:pointer}
 .chk.dis{color:var(--muted);opacity:.55}
 .wirehit{fill:none;stroke:rgba(0,0,0,0);stroke-width:12;cursor:pointer}
+.pstub{stroke:var(--ink);stroke-width:1.5;fill:none;stroke-linecap:round;pointer-events:none}
 .temp{fill:none;stroke:#9aa;stroke-width:1.6;stroke-dasharray:5 4;pointer-events:none}
 .selbox{fill:none;stroke:var(--sel);stroke-width:1.2;stroke-dasharray:5 4}
 g.comp{cursor:move}
+/* --- Druckrahmen --- */
+.pframe{fill:none;stroke:var(--sel);stroke-width:1.6;stroke-dasharray:9 6;pointer-events:none;opacity:.85}
+.pflabel{fill:var(--sel);font:11px system-ui,sans-serif;stroke:none;pointer-events:none;opacity:.9}
+.fedge{stroke:rgba(0,0,0,0);stroke-width:14;fill:none;cursor:move}
+.fcorner{fill:var(--sel);stroke:var(--paper);stroke-width:1.5}
+.fcorner.nw,.fcorner.se{cursor:nwse-resize}
+.fcorner.ne,.fcorner.sw{cursor:nesw-resize}
+#frmBar{position:absolute;z-index:6;display:none;gap:3px;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:3px;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+#frmBar button{padding:4px 6px;line-height:1}
+#printArea{display:none}
+@media print{
+  body{display:block!important;overflow:visible!important}
+  body>*{display:none!important}
+  #printArea{display:block!important;position:absolute;inset:0;background:#fff}
+  #printArea svg{width:100%;height:100vh;display:block}
+}
 </style>
 
 <div id="palette">
   <h1>Pneumatik-Editor</h1>
-  <div class="row" style="margin:0">
-    <button id="btnNew" title="Aktuelles Blatt leeren">Blatt leeren</button>
+  <div id="simbox">
+    <div class="simhead"><span id="icSim"></span>Simulation</div>
+    <button id="btnPlay" title="Druck auf die Quellen geben und Anlage schalten lassen"><span>Simulation starten</span></button>
+    <div class="row">
+      <button id="btnStepB" title="Schritt zurück" disabled></button>
+      <button id="btnPause" title="Pause / Weiter" disabled></button>
+      <button id="btnStepF" title="Schritt vor" disabled></button>
+    </div>
+    <label for="selSpeed">Geschwindigkeit (frei wählbar)</label>
+    <div class="combo" id="spdCombo">
+      <input id="selSpeed" value="1×" title="Wert wählen oder eigenen eintragen, z. B. 0,7× — „sofort“ überspringt die Luftausbreitung">
+      <button type="button" class="cbtn" tabindex="-1" title="Vorgaben"></button>
+      <div class="copts"></div>
+    </div>
+    <div id="simClock" class="muted" style="margin-top:7px;font-size:12.5px;min-height:16px" title="Simulierte Zeit — läuft mit der Simulations-Geschwindigkeit"></div>
   </div>
+  <button id="btnNew" style="width:100%" title="Aktuelles Blatt leeren">Blatt leeren</button>
   <button id="btnSave" style="width:100%;margin-top:6px" title="Aktuellen Plan in die Bibliothek legen">Aktuellen Plan in Bibliothek ablegen</button>
-  <div class="row">
-    <button id="btnUndo" title="Rückgängig (Strg+Z)">↶ Rückgängig</button>
-    <button id="btnRedo" title="Wiederholen (Strg+Y)">↷ Wiederholen</button>
-  </div>
-  <button id="btnPlay" title="Druck auf die Quellen geben und Anlage schalten lassen">▶ Simulation starten</button>
   <div class="row" style="margin-top:6px">
-    <button id="btnStepB" title="Schritt zurück" disabled>⏮</button>
-    <button id="btnPause" title="Pause / Weiter" disabled>⏸</button>
-    <button id="btnStepF" title="Schritt vor" disabled>⏭</button>
+    <button id="btnUndo" title="Rückgängig (Strg+Z)">Rückgängig</button>
+    <button id="btnRedo" title="Wiederholen (Strg+Y)">Wiederholen</button>
   </div>
-  <label>Simulations-Geschwindigkeit</label>
-  <select id="selSpeed">
-    <option value="0.25">0,25× (langsam)</option>
-    <option value="0.5">0,5×</option>
-    <option value="1" selected>1× (normal)</option>
-    <option value="2">2× (schnell)</option>
-    <option value="inst">sofort (keine Luftausbreitung)</option>
-  </select>
-  <button id="btnHelp" style="width:100%;margin-top:10px">❓ Bedienung</button>
+  <button id="btnHelp" style="width:100%;margin-top:6px">Bedienung</button>
   <div id="palParts">
   <div class="grp">Leitungen</div>
   <button class="pal" data-type="leitung" title="Leitung zeichnen — Klick auf eine bestehende Leitung beginnt dort mit einem Knoten">Leitung / Abzweig</button>
@@ -148,18 +226,23 @@ g.comp{cursor:move}
   <button class="pal" data-type="quelle">Druckluftquelle</button>
   <button class="pal" data-type="behaelter">Luftbehälter</button>
   <button class="pal" data-type="daempfer">Schalldämpfer</button>
+  <button class="pal" data-type="auslass" title="Kleine Auslassöffnung — rastet direkt auf einem Anschluss ein">Auslassöffnung</button>
   <div class="grp">Arbeitselemente</div>
-  <button class="pal" data-type="zylinder">Zylinder</button>
+  <button class="pal" data-type="zylinder" data-var="einfach">Zylinder einfachwirkend</button>
+  <button class="pal" data-type="zylinder" data-var="doppelt">Zylinder doppeltwirkend</button>
   <div class="grp">Ventile</div>
   <button class="pal" data-type="ventil">Wegeventil</button>
   <button class="pal" data-type="rueckschlag">Rückschlagventil</button>
-  <button class="pal" data-type="drossel">Drosselrückschlagventil</button>
+  <button class="pal" data-type="drosselventil" title="Drossel — wirkt in beide Richtungen">Drosselventil</button>
+  <button class="pal" data-type="drossel" title="Wird senkrecht eingesetzt: frei nach oben in den Zylinder (schnelles Ausfahren), gedrosselte Abluft nach unten (langsames Einfahren). R dreht.">Drosselrückschlagventil</button>
   <button class="pal" data-type="wechsel">Wechselventil (ODER)</button>
   <button class="pal" data-type="zweidruck">Zweidruckventil (UND)</button>
   <button class="pal" data-type="schnell">Schnellentlüftungsventil</button>
   <button class="pal" data-type="druckschalt">Druckschaltventil</button>
-  <div class="grp">Sensoren</div>
-  <button class="pal" data-type="sensor">Endlagen-Sensor</button>
+  <button class="pal" data-type="zeitventil" title="Zeitverzögerungsventil — anzugs- oder abfallverzögert (im Fenster umschaltbar)">Zeitverzögerungsventil</button>
+  <div class="grp">Sensoren &amp; Taster</div>
+  <button class="pal" data-type="sensor" title="Näherungsschalter (magnetisch) — rastet auf dem Zylinderrohr ein">Näherungsschalter</button>
+  <button class="pal" data-type="rollentaster" title="Mechanischer Grenztaster — rastet an der Kolbenstangen-Bahn ein">Rollenhebeltaster</button>
   <div class="grp">Beschriftung</div>
   <button class="pal" data-type="text">Textfeld</button>
   </div>
@@ -167,10 +250,19 @@ g.comp{cursor:move}
 
 <div id="mid">
   <div id="tabbar"></div>
-  <div id="canvasWrap"><svg id="svg" xmlns="http://www.w3.org/2000/svg"></svg><div id="float"></div></div>
+  <div id="canvasWrap"><svg id="svg" xmlns="http://www.w3.org/2000/svg"></svg><div id="float"></div><div id="tip"></div>
+    <div id="frmBar">
+      <button id="frmRot" title="Hoch-/Querformat wechseln (Mitte bleibt)"></button>
+      <button id="frmPrint" title="Drucken / als PDF speichern"></button>
+      <button id="frmDel" title="Druckrahmen entfernen"></button>
+    </div>
+  </div>
 </div>
 <div id="lib"></div>
 <input type="file" id="libFile" accept=".json,application/json" multiple hidden>
+<div id="comboPop"></div>
+<div id="printArea"></div>
+<style id="pageStyle">@page{size:A4 landscape;margin:8mm}</style>
 
 <div id="helpBg">
   <div id="helpBox">
@@ -179,7 +271,7 @@ g.comp{cursor:move}
     <ul>
       <li>Bauteil in der Palette wählen, dann aufs Blatt klicken — <kbd>Shift</kbd> hält den Modus für mehrfaches Platzieren.</li>
       <li>Bauteil anklicken: Das Fenster daneben konfiguriert es. Ziehen verschiebt, <kbd>R</kbd> dreht, <kbd>X</kbd> löscht.</li>
-      <li>Schalldämpfer rasten direkt auf Anschlüssen ein; Endlagen-Sensoren rasten auf Zylindern ein (vorn = ausgefahren, hinten = eingefahren).</li>
+      <li>Schalldämpfer rasten direkt auf Anschlüssen ein. Näherungsschalter rasten direkt auf dem Zylinderrohr ein, Rollenhebeltaster außen an der Kolbenstangen-Bahn (vorn = ausgefahren, hinten = eingefahren); beide schalten Wegeventile über die passende Betätigung („Elektromagnet / Näherungsschalter" bzw. „Rollenhebel/Rollenstößel") plus Geber-Zuordnung.</li>
       <li>Bezeichnungen (1S1, 1A1 …) werden automatisch vergeben, sind im Fenster änderbar und lassen sich mit der Maus verschieben.</li>
       <li>Beim Löschen eines Bauteils bleiben seine Leitungen als Knoten stehen — ein neues Bauteil passt direkt wieder darauf.</li>
     </ul>
@@ -188,6 +280,7 @@ g.comp{cursor:move}
       <li>Anschluss (Kreis) anklicken, dann zweiten Anschluss anklicken. Je Anschluss nur <b>eine</b> Leitung.</li>
       <li>Werkzeug „Leitung / Abzweig" in der Palette: Klick auf eine bestehende Leitung beginnt dort mit einem Knoten — so lassen sich Abzweige direkt setzen (<kbd>Shift</kbd> hält das Werkzeug).</li>
       <li>Verzweigen: beim Leitungsziehen auf eine Leitung klicken, oder Doppelklick setzt einen Knoten.</li>
+      <li>Zwei Leitungen verbinden: den Knoten am losen Ende auf die andere Leitung ziehen — sie wird beim Loslassen dort geteilt und angeschlossen (die Zielleitung wird beim Ziehen hervorgehoben).</li>
       <li>Mittlere Leitungssegmente lassen sich mit der Maus verschieben.</li>
     </ul>
     <h4>Auswahl &amp; Bearbeiten</h4>
@@ -199,21 +292,25 @@ g.comp{cursor:move}
     </ul>
     <h4>Tabs &amp; Bibliothek</h4>
     <ul>
-      <li>Oben lassen sich mehrere Pläne in Tabs öffnen (＋), per Doppelklick umbenennen und mit × schließen. Jeder Tab hat eigene Bezeichnungen und eigenen Rückgängig-Verlauf.</li>
-      <li>Ein rot blinkender Tab hat eine aktive Simulation; beim Wechsel in einen anderen Tab pausiert sie und läuft nach Rückkehr per ▶ weiter.</li>
-      <li>„📚 Bibliothek" öffnet die rechte Leiste: Auswahl als <b>Schnellbaustein</b> speichern (z.&nbsp;B. „Oder-Schaltung") und per ➕ beliebig oft wieder platzieren.</li>
+      <li>Oben lassen sich mehrere Pläne in Tabs öffnen (Plus-Schaltfläche), per Doppelklick umbenennen und über das Kreuz schließen. Jeder Tab hat eigene Bezeichnungen und eigenen Rückgängig-Verlauf.</li>
+      <li>Ein rot blinkender Tab hat eine aktive Simulation; beim Wechsel in einen anderen Tab pausiert sie und läuft nach Rückkehr per Start-Schaltfläche weiter.</li>
+      <li>„Bibliothek" öffnet die rechte Leiste: Auswahl als <b>Schnellbaustein</b> speichern (z.&nbsp;B. „Oder-Schaltung") und über die Plus-Schaltfläche beliebig oft wieder platzieren.</li>
       <li>Pläne lassen sich dort ablegen, umbenennen, in neuen Tabs öffnen sowie einzeln (Häkchen) oder komplett exportieren und importieren — Importiertes erscheint erst in der Liste, ohne sich zu öffnen.</li>
-      <li>Die Reihenfolge der Einträge lässt sich per Ziehen (⠿-Griff bzw. ganze Zeile) innerhalb der jeweiligen Liste ändern.</li>
+      <li>Die Reihenfolge der Einträge lässt sich per Ziehen (Griff links bzw. ganze Zeile) innerhalb der jeweiligen Liste ändern.</li>
       <li>Beim Speichern schlägt der Dateidialog den Dokumente-Ordner vor — dort z.&nbsp;B. einen Ordner „Pneumatik-Editor" anlegen; der Dialog merkt sich den zuletzt genutzten Ort.</li>
     </ul>
     <h4>Simulation</h4>
     <ul>
-      <li>▶ startet: Die Luft breitet sich sichtbar von den Quellen aus, dunkelblaue Leitungen führen Druck.</li>
+      <li>„Simulation starten" gibt Druck auf die Quellen: Die Luft breitet sich sichtbar aus, druckführende Leitungen werden hervorgehoben.</li>
+      <li>Drücke werden in <b>bar</b> gerechnet (0–6): Quellen liefern einstellbaren Druck, Drosseln lassen nur einen Anteil durch; Zylinder (Mindestdruck), druckbetätigte Ventile und Druckschaltventil (Ansprech-/Schaltdruck) sind konfigurierbar. Leitungen werden je nach Druck unterschiedlich kräftig hervorgehoben; Zeiger über Leitung, Anschluss oder Zylinder zeigt den anliegenden Druck.</li>
+      <li>Hinter einer Drossel baut sich der Druck in einer <b>abgeschlossenen</b> Zone stufenweise auf (2×, 3× … des gedrosselten Werts bis zum vollen Druck) — solange dort Luft verbraucht wird (Zylinder fährt) oder entweicht, bleibt er gedrosselt. Volumen von Luftbehältern und Zylindern (Hub, Kolben-Ø, … einstellbar) verlängern jeden Aufbau-Schritt; so entstehen einstellbare Zeitglieder. Links läuft die <b>simulierte Zeit</b> mit.</li>
       <li>Ventilseite anklicken und halten = betätigen; Betätigungen mit Raste schalten je Klick um.</li>
+      <li>Klick auf ein Bauteil öffnet ein <b>Info-Fenster</b> mit laufenden Werten (Drücke, Position, Kraft, Füllstand …). Über die Nadel oben lässt es sich anheften — dann bleibt es beim Klick daneben offen.</li>
       <li><kbd>Strg</kbd>+Klick hält Taster gedrückt, bis <kbd>Strg</kbd> losgelassen wird — so lassen sich mehrere gleichzeitig drücken.</li>
-      <li>⏸ Pause · ⏭ Einzelschritt vor · ⏮ Schritt zurück · Geschwindigkeit 0,25×–2×.</li>
-      <li>Druck-betätigte Ventile bekommen Steueranschlüsse 12/14; Sensoren wirken über „Pneumatisch (Sensor)".</li>
-      <li>Pulsierende Kreise = Luft entweicht; mit gelbem Dreieck = Dauerleck (Leitung oder Schalldämpfer fehlt).</li>
+      <li>Pause · Einzelschritt vor/zurück · Geschwindigkeit frei wählbar (Vorschläge im Feld, eigener Wert wie „0,7×" möglich, „sofort" überspringt die Ausbreitung).</li>
+      <li>Oben rechts schaltet <b>Einfach/Vollständig</b> um: Der einfache Modus zeigt nur Grundbauteile (ohne Behälter, Drossel, Druckschaltventil) und blendet Detaileinstellungen aus — die Physik bleibt identisch.</li>
+      <li>Druck-betätigte Ventile bekommen Steueranschlüsse, die nach der angesteuerten Stellung benannt sind (12 verbindet 1 mit 2, 14 mit 4, 10 sperrt 1 ab); Endlagen-Sensoren und Rollenhebeltaster schalten Ventile automatisch, sobald ihr Zylinder die Endlage erreicht.</li>
+      <li>Pulsierende Kreise = Luft entweicht; mit gelbem Dreieck = Dauerleck (Leitung oder Schalldämpfer fehlt). Auch <b>lose Leitungsenden</b> blasen ab und werden so gewarnt.</li>
     </ul>
   </div>
 </div>
@@ -258,6 +355,43 @@ g.comp{cursor:move}
   }catch(e){}
 })();
 const KEY='pneumatik-editor-v1';
+/* Einheitliche Strich-Icons statt Emoji */
+const SVGI=p=>`<svg class="ic" viewBox="0 0 16 16" aria-hidden="true">${p}</svg>`;
+const ICO={
+  book:SVGI('<path d="M2 3h3.6a2 2 0 0 1 2 2v8.2a2 2 0 0 0-2-1.6H2z"/><path d="M14 3h-3.6a2 2 0 0 0-2 2v8.2a2 2 0 0 1 2-1.6H14z"/>'),
+  sun:SVGI('<circle cx="8" cy="8" r="3.1"/><path d="M8 1.3v1.6M8 13.1v1.6M1.3 8h1.6M13.1 8h1.6M3.3 3.3l1.1 1.1M11.6 11.6l1.1 1.1M12.7 3.3l-1.1 1.1M4.4 11.6l-1.1 1.1"/>'),
+  moon:SVGI('<path d="M13 9.6A5.6 5.6 0 0 1 6.4 3 5.6 5.6 0 1 0 13 9.6z"/>'),
+  auto:SVGI('<circle cx="8" cy="8" r="5.6"/><path d="M8 2.4a5.6 5.6 0 0 1 0 11.2z" fill="currentColor" stroke="none"/>'),
+  help:SVGI('<circle cx="8" cy="8" r="6.2"/><path d="M6.1 6.2a1.95 1.95 0 1 1 2.5 1.9c-.55.2-.6.6-.6 1.1"/><circle cx="8" cy="11.4" r=".75" fill="currentColor" stroke="none"/>'),
+  play:SVGI('<path d="M4.5 3.2 12.4 8l-7.9 4.8z" fill="currentColor" stroke="none"/>'),
+  stop:SVGI('<rect x="4" y="4" width="8" height="8" rx="1" fill="currentColor" stroke="none"/>'),
+  pause:SVGI('<path d="M5.6 3.6v8.8M10.4 3.6v8.8" stroke-width="2.2"/>'),
+  stepF:SVGI('<path d="M3.6 3.4 10.4 8l-6.8 4.6z" fill="currentColor" stroke="none"/><path d="M12.4 3.6v8.8" stroke-width="1.8"/>'),
+  stepB:SVGI('<path d="M12.4 3.4 5.6 8l6.8 4.6z" fill="currentColor" stroke="none"/><path d="M3.6 3.6v8.8" stroke-width="1.8"/>'),
+  sim:SVGI('<path d="M1.8 11.5h2.6l1.8-7 2.4 9.2 1.9-6.1 1.2 3.9h2.5"/>'),
+  undo:SVGI('<path d="M13.2 12.8a5.3 5.3 0 0 0-5.3-5.3H3.2"/><path d="M6.4 4.4 3 7.5l3.4 3.1"/>'),
+  redo:SVGI('<path d="M2.8 12.8a5.3 5.3 0 0 1 5.3-5.3h4.7"/><path d="M9.6 4.4 13 7.5l-3.4 3.1"/>'),
+  chev:SVGI('<path d="M3.6 6 8 10.4 12.4 6"/>'),
+  pin:SVGI('<path d="M6.2 2.4h3.6l-.7 4.1 2.6 2.3H4.3l2.6-2.3z"/><path d="M8 8.8v4.8"/>'),
+  print:SVGI('<path d="M4.6 6.2V2.5h6.8v3.7"/><path d="M4.6 11.4H2.4V6.4h11.2v5h-2.2"/><path d="M4.6 9.4h6.8v4.1H4.6z"/>'),
+  rotate:SVGI('<path d="M13.2 8a5.2 5.2 0 1 1-1.7-3.9"/><path d="M13.4 2.6v3.2h-3.2"/>'),
+  clear:SVGI('<path d="M2.6 4.6h10.8M6 4.6V3.2a.9.9 0 0 1 .9-.9h2.2a.9.9 0 0 1 .9.9v1.4"/><path d="M4 4.6l.7 8.2a1 1 0 0 0 1 .9h4.6a1 1 0 0 0 1-.9l.7-8.2"/>'),
+  save:SVGI('<path d="M3.4 2.6h7.2L13 5v8.4H3.4z"/><path d="M5.6 2.6v3.6h4.6V2.6M5.6 13.4v-3.6h4.8v3.6"/>'),
+  plus:SVGI('<path d="M8 3.2v9.6M3.2 8h9.6"/>'),
+  open:SVGI('<path d="M9.4 2.6h4v4"/><path d="M13.4 2.6 7.8 8.2"/><path d="M11.6 9.2v3.3a.9.9 0 0 1-.9.9H3.5a.9.9 0 0 1-.9-.9V5.3a.9.9 0 0 1 .9-.9h3.3"/>'),
+  pencil:SVGI('<path d="M11.4 2.5 13.5 4.6 5.6 12.5 2.6 13.4l.9-3z"/>'),
+  x:SVGI('<path d="M4.2 4.2 11.8 11.8M11.8 4.2 4.2 11.8"/>'),
+  grip:SVGI('<path d="M6 3.6h.01M10 3.6h.01M6 8h.01M10 8h.01M6 12.4h.01M10 12.4h.01" stroke-width="2.1"/>'),
+  lock:SVGI('<rect x="3.6" y="7" width="8.8" height="6.4" rx="1.3"/><path d="M5.8 7V5.2a2.2 2.2 0 0 1 4.4 0V7"/>'),
+  unlock:SVGI('<rect x="3.6" y="7" width="8.8" height="6.4" rx="1.3"/><path d="M5.8 7V5.2a2.2 2.2 0 0 1 4.4 0"/>'),
+  modeS:SVGI('<circle cx="8" cy="8" r="5.8"/><path d="M5.4 8.2 7.2 10l3.4-4"/>'),
+  modeF:SVGI('<path d="M2.6 4.6h10.8M2.6 8h10.8M2.6 11.4h10.8"/><circle cx="6" cy="4.6" r="1.5" fill="var(--panel)"/><circle cx="10.4" cy="11.4" r="1.5" fill="var(--panel)"/>')
+};
+/* Im einfachen Modus ausgeblendete Bauteile */
+const ADVPARTS=new Set(['behaelter','drossel','drosselventil','druckschalt','zeitventil']);
+let simpleMode=false;
+/* Leitwert des Netzes: Volumenstrom je bar Druckdifferenz (l/(s·bar)) — Nennweite ~4 mm ≈ 0,3 l/s bei 6 bar */
+const FLOW=0.05;
 const svg=document.getElementById('svg');
 const el=id=>document.getElementById(id);
 const GRID=10;
@@ -266,14 +400,20 @@ function rotP(x,y,r){switch(((r%360)+360)%360){case 90:return[-y,x];case 180:ret
 
 let state={comps:[],wires:[],nextId:1};
 let tabs=[],activeTab=0,simTabIdx=-1,snips=[],libPlans=[],placingSnip=null,simView=false;
-let selArr=[], placing=null, pending=null, pendingVia=[], drag=null, band=null, wdrag=null, ldrag=null, mouse={x:0,y:0};
+let selArr=[], placing=null, placingVar=null, pending=null, pendingVia=[], drag=null, band=null, wdrag=null, ldrag=null, mouse={x:0,y:0}, knotenSnapW=null;
+/* Palette-Variante (z. B. einfach-/doppeltwirkender Zylinder) auf die Grundkonfiguration anwenden */
+function cfgFor(type,varr){
+  const g=DEFS[type].cfg();
+  if(varr&&type==='zylinder')g.typ=varr;
+  return g;
+}
 let libW=310,libDrag=null;
 let OLD_DEFAULT_SNIPS=[{"name":"Oder-Schaltung","comps":[{"id":111,"type":"quelle","x":-40,"y":270,"rot":0,"cfg":{},"label":"1P1"},{"id":112,"type":"ventil","x":-160,"y":40,"rot":0,"cfg":{"pos":2,"pc":5,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[false,false]},"label":"1S1","lblOff":{"dx":26.14678955078125,"dy":12.38531494140625}},{"id":113,"type":"ventil","x":170,"y":40,"rot":0,"cfg":{"pos":2,"pc":5,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[false,false],"rastR":[false,false]},"label":"1S2","lblOff":{"dx":28.615509033203125,"dy":8.324493408203125}},{"id":114,"type":"daempfer","x":-154,"y":102,"rot":0,"cfg":{},"label":""},{"id":115,"type":"daempfer","x":-126,"y":102,"rot":0,"cfg":{},"label":""},{"id":116,"type":"daempfer","x":176,"y":102,"rot":0,"cfg":{},"label":""},{"id":118,"type":"knoten","x":-40,"y":160,"rot":0,"cfg":{},"label":""},{"id":128,"type":"zylinder","x":-30,"y":-280,"rot":0,"cfg":{"typ":"doppelt","daempf":"beid","einstellbar":false},"label":"1A1"},{"id":132,"type":"daempfer","x":204,"y":102,"rot":0,"cfg":{},"label":""},{"id":135,"type":"knoten","x":20,"y":-110,"rot":0,"cfg":{},"label":""},{"id":136,"type":"knoten","x":100,"y":-110,"rot":0,"cfg":{},"label":""},{"id":137,"type":"knoten","x":60,"y":-140,"rot":0,"cfg":{},"label":""},{"id":139,"type":"knoten","x":-110,"y":-50,"rot":0,"cfg":{},"label":""},{"id":140,"type":"knoten","x":-30,"y":-50,"rot":0,"cfg":{},"label":""},{"id":141,"type":"knoten","x":-70,"y":-80,"rot":0,"cfg":{},"label":""},{"id":142,"type":"wechsel","x":-70,"y":-50,"rot":0,"cfg":{},"label":"1V1"},{"id":143,"type":"zweidruck","x":60,"y":-110,"rot":0,"cfg":{},"label":"1V2"}],"wires":[{"id":119,"a":{"c":111,"p":"1"},"b":{"c":118,"p":"1"}},{"id":120,"a":{"c":118,"p":"1"},"b":{"c":112,"p":"1"}},{"id":121,"a":{"c":113,"p":"1"},"b":{"c":118,"p":"1"}},{"id":124,"a":{"c":112,"p":"4"},"b":{"c":135,"p":"1"}},{"id":125,"a":{"c":113,"p":"4"},"b":{"c":136,"p":"1"},"adj":{"my":-110}},{"id":126,"a":{"c":112,"p":"2"},"b":{"c":139,"p":"1"},"adj":{"my":-50}},{"id":127,"a":{"c":113,"p":"2"},"b":{"c":140,"p":"1"}},{"id":129,"a":{"c":141,"p":"1"},"b":{"c":128,"p":"1"}},{"id":130,"a":{"c":137,"p":"1"},"b":{"c":128,"p":"2"},"adj":{"my":-200}}]},{"name":"Und-Schaltung","comps":[{"id":144,"type":"quelle","x":-40,"y":270,"rot":0,"cfg":{},"label":"2P1"},{"id":145,"type":"ventil","x":-160,"y":40,"rot":0,"cfg":{"pos":2,"pc":5,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[true,false]},"label":"2S1","lblOff":{"dx":23.39447021484375,"dy":12.38531494140625}},{"id":146,"type":"ventil","x":170,"y":40,"rot":0,"cfg":{"pos":2,"pc":5,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[true,false],"rastR":[false,false]},"label":"2S2","lblOff":{"dx":28.615509033203125,"dy":8.324493408203125}},{"id":147,"type":"daempfer","x":-154,"y":102,"rot":0,"cfg":{},"label":""},{"id":148,"type":"daempfer","x":-126,"y":102,"rot":0,"cfg":{},"label":""},{"id":149,"type":"daempfer","x":176,"y":102,"rot":0,"cfg":{},"label":""},{"id":150,"type":"knoten","x":-40,"y":160,"rot":0,"cfg":{},"label":""},{"id":151,"type":"zylinder","x":-30,"y":-280,"rot":0,"cfg":{"typ":"doppelt","daempf":"beid","einstellbar":false},"label":"2A1"},{"id":152,"type":"daempfer","x":204,"y":102,"rot":0,"cfg":{},"label":""},{"id":153,"type":"knoten","x":20,"y":-110,"rot":0,"cfg":{},"label":""},{"id":154,"type":"knoten","x":100,"y":-110,"rot":0,"cfg":{},"label":""},{"id":155,"type":"knoten","x":60,"y":-140,"rot":0,"cfg":{},"label":""},{"id":156,"type":"knoten","x":-110,"y":-50,"rot":0,"cfg":{},"label":""},{"id":157,"type":"knoten","x":-30,"y":-50,"rot":0,"cfg":{},"label":""},{"id":158,"type":"knoten","x":-70,"y":-80,"rot":0,"cfg":{},"label":""},{"id":170,"type":"zweidruck","x":-70,"y":-50,"rot":0,"cfg":{},"label":"2V1"},{"id":171,"type":"wechsel","x":60,"y":-110,"rot":0,"cfg":{},"label":"2V2"}],"wires":[{"id":161,"a":{"c":144,"p":"1"},"b":{"c":150,"p":"1"}},{"id":162,"a":{"c":150,"p":"1"},"b":{"c":145,"p":"1"}},{"id":163,"a":{"c":146,"p":"1"},"b":{"c":150,"p":"1"}},{"id":164,"a":{"c":145,"p":"4"},"b":{"c":153,"p":"1"}},{"id":165,"a":{"c":146,"p":"4"},"b":{"c":154,"p":"1"},"adj":{"my":-110}},{"id":166,"a":{"c":145,"p":"2"},"b":{"c":156,"p":"1"},"adj":{"my":-50}},{"id":167,"a":{"c":146,"p":"2"},"b":{"c":157,"p":"1"}},{"id":168,"a":{"c":158,"p":"1"},"b":{"c":151,"p":"1"}},{"id":169,"a":{"c":155,"p":"1"},"b":{"c":151,"p":"2"},"adj":{"my":-200}}]},{"name":"Direkt angesteuerter Zylinder","comps":[{"id":200,"type":"ventil","x":-30,"y":-20,"rot":0,"cfg":{"pos":2,"pc":3,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[false,false]},"label":"-SJ1"},{"id":201,"type":"quelle","x":-20,"y":150,"rot":0,"cfg":{},"label":"-AZ1","lblOff":{"dx":-15.858978271484375,"dy":11.792572021484375}},{"id":202,"type":"daempfer","x":0,"y":42,"rot":0,"cfg":{},"label":""},{"id":203,"type":"zylinder","x":30,"y":-190,"rot":0,"cfg":{"typ":"einfach","daempf":"keine","einstellbar":false},"label":"-MM1"}],"wires":[{"id":204,"a":{"c":201,"p":"1"},"b":{"c":200,"p":"1"}},{"id":205,"a":{"c":200,"p":"2"},"b":{"c":203,"p":"1"}}]},{"name":"Indirekt angesteuerter Zylinder","comps":[{"id":200,"type":"ventil","x":-70,"y":0,"rot":0,"cfg":{"pos":2,"pc":3,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[false,false]},"label":"-SJ1"},{"id":201,"type":"quelle","x":-60,"y":170,"rot":0,"cfg":{},"label":"-AZ1","lblOff":{"dx":-15.858978271484375,"dy":11.792572021484375}},{"id":202,"type":"daempfer","x":-40,"y":62,"rot":0,"cfg":{},"label":""},{"id":203,"type":"zylinder","x":110,"y":-240,"rot":0,"cfg":{"typ":"einfach","daempf":"keine","einstellbar":false},"label":"-MM1"},{"id":217,"type":"ventil","x":50,"y":-80,"rot":0,"cfg":{"pos":2,"pc":3,"rest":1,"patterns":["a","b"],"actL":["druck","none"],"actR":["feder","none"],"rastL":[false,false]},"label":"-SJ2"},{"id":219,"type":"knoten","x":-60,"y":109,"rot":0,"cfg":{}},{"id":223,"type":"daempfer","x":80,"y":-18,"rot":0,"cfg":{},"label":""}],"wires":[{"id":218,"a":{"c":200,"p":"2"},"b":{"c":217,"p":"12"}},{"id":220,"a":{"c":200,"p":"1"},"b":{"c":219,"p":"1"}},{"id":221,"a":{"c":219,"p":"1"},"b":{"c":201,"p":"1"}},{"id":222,"a":{"c":217,"p":"1"},"b":{"c":219,"p":"1"},"adj":{"my":110}},{"id":224,"a":{"c":217,"p":"2"},"b":{"c":203,"p":"1"}}]}];
 let DEFAULT_SNIPS=[{"name":"5/2-Impulsventil","comps":[{"id":1,"type":"ventil","x":-10,"y":-40,"rot":0,"cfg":{"pos":2,"pc":5,"rest":1,"patterns":["a","b"],"actL":["vorstufe","none"],"actR":["vorstufe","none"],"rastL":[false,false],"rastR":[false,false]},"label":"-QM1"},{"id":2,"type":"daempfer","x":-4,"y":22,"rot":0,"cfg":{},"label":""},{"id":3,"type":"daempfer","x":24,"y":22,"rot":0,"cfg":{},"label":""}],"wires":[]}];
 let DEFAULT_PLANS=[{"name":"Und-Schaltung","state":{"comps":[{"id":144,"type":"quelle","x":-40,"y":270,"rot":0,"cfg":{},"label":"-AZ1"},{"id":145,"type":"ventil","x":-160,"y":40,"rot":0,"cfg":{"pos":2,"pc":5,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[true,false]},"label":"-SJ1","lblOff":{"dx":23.39447021484375,"dy":12.38531494140625}},{"id":146,"type":"ventil","x":170,"y":40,"rot":0,"cfg":{"pos":2,"pc":5,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[true,false],"rastR":[false,false]},"label":"-SJ2","lblOff":{"dx":28.615509033203125,"dy":8.324493408203125}},{"id":150,"type":"knoten","x":-40,"y":160,"rot":0,"cfg":{},"label":""},{"id":151,"type":"zylinder","x":-30,"y":-280,"rot":0,"cfg":{"typ":"doppelt","daempf":"beid","einstellbar":false},"label":"-MM1"},{"id":153,"type":"knoten","x":20,"y":-110,"rot":0,"cfg":{},"label":""},{"id":154,"type":"knoten","x":100,"y":-110,"rot":0,"cfg":{},"label":""},{"id":155,"type":"knoten","x":60,"y":-140,"rot":0,"cfg":{},"label":""},{"id":156,"type":"knoten","x":-110,"y":-50,"rot":0,"cfg":{},"label":""},{"id":157,"type":"knoten","x":-30,"y":-50,"rot":0,"cfg":{},"label":""},{"id":158,"type":"knoten","x":-70,"y":-80,"rot":0,"cfg":{},"label":""},{"id":170,"type":"zweidruck","x":-70,"y":-50,"rot":0,"cfg":{},"label":"-KH1"},{"id":171,"type":"wechsel","x":60,"y":-110,"rot":0,"cfg":{},"label":"-KH2"},{"id":172,"type":"daempfer","x":-154,"y":102,"rot":0,"cfg":{},"label":"-RQ1"},{"id":173,"type":"daempfer","x":-126,"y":102,"rot":0,"cfg":{},"label":"-RQ2"},{"id":174,"type":"daempfer","x":176,"y":102,"rot":0,"cfg":{},"label":"-RQ3"},{"id":175,"type":"daempfer","x":204,"y":102,"rot":0,"cfg":{},"label":"-RQ4"}],"wires":[{"id":161,"a":{"c":144,"p":"1"},"b":{"c":150,"p":"1"}},{"id":162,"a":{"c":150,"p":"1"},"b":{"c":145,"p":"1"}},{"id":163,"a":{"c":146,"p":"1"},"b":{"c":150,"p":"1"}},{"id":164,"a":{"c":145,"p":"4"},"b":{"c":153,"p":"1"}},{"id":165,"a":{"c":146,"p":"4"},"b":{"c":154,"p":"1"},"adj":{"my":-110}},{"id":166,"a":{"c":145,"p":"2"},"b":{"c":156,"p":"1"},"adj":{"my":-50}},{"id":167,"a":{"c":146,"p":"2"},"b":{"c":157,"p":"1"}},{"id":168,"a":{"c":158,"p":"1"},"b":{"c":151,"p":"1"}},{"id":169,"a":{"c":155,"p":"1"},"b":{"c":151,"p":"2"},"adj":{"my":-200}}],"nextId":176}},{"name":"Oder-Schaltung","state":{"comps":[{"id":111,"type":"quelle","x":-40,"y":270,"rot":0,"cfg":{},"label":"-AZ1"},{"id":112,"type":"ventil","x":-160,"y":40,"rot":0,"cfg":{"pos":2,"pc":5,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[false,false]},"label":"-SJ1","lblOff":{"dx":26.14678955078125,"dy":12.38531494140625}},{"id":113,"type":"ventil","x":170,"y":40,"rot":0,"cfg":{"pos":2,"pc":5,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[false,false],"rastR":[false,false]},"label":"-SJ2","lblOff":{"dx":28.615509033203125,"dy":8.324493408203125}},{"id":118,"type":"knoten","x":-40,"y":160,"rot":0,"cfg":{},"label":""},{"id":128,"type":"zylinder","x":-30,"y":-280,"rot":0,"cfg":{"typ":"doppelt","daempf":"beid","einstellbar":false},"label":"-MM1"},{"id":135,"type":"knoten","x":20,"y":-110,"rot":0,"cfg":{},"label":""},{"id":136,"type":"knoten","x":100,"y":-110,"rot":0,"cfg":{},"label":""},{"id":137,"type":"knoten","x":60,"y":-140,"rot":0,"cfg":{},"label":""},{"id":139,"type":"knoten","x":-110,"y":-50,"rot":0,"cfg":{},"label":""},{"id":140,"type":"knoten","x":-30,"y":-50,"rot":0,"cfg":{},"label":""},{"id":141,"type":"knoten","x":-70,"y":-80,"rot":0,"cfg":{},"label":""},{"id":142,"type":"wechsel","x":-70,"y":-50,"rot":0,"cfg":{},"label":"-KH1"},{"id":143,"type":"zweidruck","x":60,"y":-110,"rot":0,"cfg":{},"label":"-KH2"},{"id":144,"type":"daempfer","x":-154,"y":102,"rot":0,"cfg":{},"label":"-RQ1"},{"id":145,"type":"daempfer","x":-126,"y":102,"rot":0,"cfg":{},"label":"-RQ2"},{"id":146,"type":"daempfer","x":176,"y":102,"rot":0,"cfg":{},"label":"-RQ3"},{"id":147,"type":"daempfer","x":204,"y":102,"rot":0,"cfg":{},"label":"-RQ4"}],"wires":[{"id":119,"a":{"c":111,"p":"1"},"b":{"c":118,"p":"1"}},{"id":120,"a":{"c":118,"p":"1"},"b":{"c":112,"p":"1"}},{"id":121,"a":{"c":113,"p":"1"},"b":{"c":118,"p":"1"}},{"id":124,"a":{"c":112,"p":"4"},"b":{"c":135,"p":"1"}},{"id":125,"a":{"c":113,"p":"4"},"b":{"c":136,"p":"1"},"adj":{"my":-110}},{"id":126,"a":{"c":112,"p":"2"},"b":{"c":139,"p":"1"},"adj":{"my":-50}},{"id":127,"a":{"c":113,"p":"2"},"b":{"c":140,"p":"1"}},{"id":129,"a":{"c":141,"p":"1"},"b":{"c":128,"p":"1"}},{"id":130,"a":{"c":137,"p":"1"},"b":{"c":128,"p":"2"},"adj":{"my":-200}}],"nextId":148}},{"name":"Direkt angesteuerter Zylinder","state":{"comps":[{"id":200,"type":"ventil","x":-30,"y":-20,"rot":0,"cfg":{"pos":2,"pc":3,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[false,false]},"label":"-SJ1"},{"id":201,"type":"quelle","x":-20,"y":150,"rot":0,"cfg":{},"label":"-AZ1","lblOff":{"dx":-15.858978271484375,"dy":11.792572021484375}},{"id":203,"type":"zylinder","x":30,"y":-190,"rot":0,"cfg":{"typ":"einfach","daempf":"keine","einstellbar":false},"label":"-MM1"},{"id":206,"type":"daempfer","x":0,"y":42,"rot":0,"cfg":{},"label":"-RQ1"}],"wires":[{"id":204,"a":{"c":201,"p":"1"},"b":{"c":200,"p":"1"}},{"id":205,"a":{"c":200,"p":"2"},"b":{"c":203,"p":"1"}}],"nextId":207}},{"name":"Indirekt angesteuerter Zylinder","state":{"comps":[{"id":200,"type":"ventil","x":-70,"y":0,"rot":0,"cfg":{"pos":2,"pc":3,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[false,false]},"label":"-SJ1"},{"id":201,"type":"quelle","x":-60,"y":170,"rot":0,"cfg":{},"label":"-AZ1","lblOff":{"dx":-15.858978271484375,"dy":11.792572021484375}},{"id":203,"type":"zylinder","x":110,"y":-240,"rot":0,"cfg":{"typ":"einfach","daempf":"keine","einstellbar":false},"label":"-MM1"},{"id":217,"type":"ventil","x":50,"y":-80,"rot":0,"cfg":{"pos":2,"pc":3,"rest":1,"patterns":["a","b"],"actL":["druck","none"],"actR":["feder","none"],"rastL":[false,false]},"label":"-QM1"},{"id":219,"type":"knoten","x":-60,"y":109,"rot":0,"cfg":{},"label":""},{"id":225,"type":"daempfer","x":-40,"y":62,"rot":0,"cfg":{},"label":"-RQ1"},{"id":226,"type":"daempfer","x":80,"y":-18,"rot":0,"cfg":{},"label":"-RQ2"}],"wires":[{"id":218,"a":{"c":200,"p":"2"},"b":{"c":217,"p":"12"}},{"id":220,"a":{"c":200,"p":"1"},"b":{"c":219,"p":"1"}},{"id":221,"a":{"c":219,"p":"1"},"b":{"c":201,"p":"1"}},{"id":222,"a":{"c":217,"p":"1"},"b":{"c":219,"p":"1"},"adj":{"my":110}},{"id":224,"a":{"c":217,"p":"2"},"b":{"c":203,"p":"1"}}],"nextId":227}}];
 function saveWS(){
   try{
-    localStorage.setItem(KEY,JSON.stringify({ws:1,defv:2,active:activeTab,libW,tabs:tabs.map(t=>({name:t.name,state:t.state})),snippets:snips,plans:libPlans}));
+    localStorage.setItem(KEY,JSON.stringify({ws:1,defv:2,active:activeTab,libW,simple:simpleMode,tabs:tabs.map(t=>({name:t.name,state:t.state})),snippets:snips,plans:libPlans}));
   }catch(e){}
 }
 function applyLibW(){
@@ -286,19 +426,44 @@ function labelPrefix(type,cfg){
     case'quelle':case'behaelter':return'AZ';
     case'daempfer':return'RQ';
     case'zylinder':return'MM';
-    case'sensor':return'BG';
-    case'drossel':return'RZ';
+    case'sensor':case'rollentaster':return'BG';
+    case'drossel':case'drosselventil':return'RZ';
     case'rueckschlag':case'wechsel':case'zweidruck':case'schnell':return'KH';
-    case'druckschalt':return'QM';
+    case'druckschalt':case'zeitventil':return'QM';
     case'ventil':{
       const acts=[...((cfg&&cfg.actL)||[]),...((cfg&&cfg.actR)||[])];
       if(acts.some(a=>a==='rollenstoessel'||a==='rollenhebel'||a==='stoessel'))return'BG';
-      if(acts.some(a=>a==='druck'||a==='vorstufe'||a==='sensor'||a==='magnet'))return'QM';
+      if(acts.some(a=>a==='druck'||a==='vorstufe'||a==='magnet'))return'QM';
       if(acts.some(a=>a==='muskel'||a==='knopf'||a==='hebel'||a==='pedal'))return'SJ';
       return'QM';
     }
     default:return'';
   }
+}
+const barTxt=v=>String(Math.round(v*10)/10).replace('.',',');
+function dsSchwelle(cfg){
+  if(cfg&&cfg.schwelle!=null)return cfg.schwelle;
+  return cfg&&cfg.ansprech==='voll'?5:0.5;
+}
+/* Kolbenbreite und die Kolbenmitte in beiden Endlagen (für das Einrasten der Magnetsensoren) */
+const ZPW=14;
+function pistonCenters(cfg){
+  const t=(cfg&&cfg.typ)==='vereinfacht'?'doppelt':(cfg&&cfg.typ);
+  const base=t==='einfach'?-36:-32;
+  return[base+ZPW/2,base+56+ZPW/2];
+}
+/* Endlagendämpfung je Seite (mit Rückfall auf das frühere Feld daempf/einstellbar) */
+function zylDamp(g){
+  if(!g)return{L:false,R:false,e:false};
+  if(g.dL!=null||g.dR!=null)return{L:!!g.dL,R:!!g.dR,e:!!g.einstellbar};
+  const d=g.daempf||'keine';
+  return{L:d==='kolben'||d==='beid',R:d==='stange'||d==='beid',e:!!g.einstellbar};
+}
+function zylGeo(cfg){
+  const dk=cfg&&cfg.dk!=null?cfg.dk:32,ds=cfg&&cfg.ds!=null?cfg.ds:12,hub=cfg&&cfg.hub!=null?cfg.hub:100;
+  const A=Math.PI*dk*dk/400;
+  const Ar=Math.max(0.05,A-Math.PI*ds*ds/400);
+  return{dk,ds,hub,A,Ar,V:A*hub/10};
 }
 function autoLabel(type,cfg){
   const L=labelPrefix(type,cfg);
@@ -309,6 +474,10 @@ function autoLabel(type,cfg){
   return'-'+L+n;
 }
 function ensureLabels(){
+  /* Migration Altformat: frühere Endlagen-Sensoren (ohne gen-Marker) werden zu Rollenhebeltastern
+     an identischer Position; zugehörige Ventil-Betätigung "sensor" wird zu "rollenhebel". */
+  for(const c of state.comps)
+    if(c.type==='sensor'&&(!c.cfg||c.cfg.gen!==2))c.type='rollentaster';
   for(const c of state.comps){
     if(c.label==null)c.label=autoLabel(c.type,c.cfg);
     if(c.type==='ventil'&&c.cfg){
@@ -318,6 +487,12 @@ function ensureLabels(){
           if(arr[i]==='knopfrast'){arr[i]='knopf';c.cfg[sd==='actL'?'rastL':'rastR']=true;}
           else if(arr[i]==='hebelrast'){arr[i]='hebel';c.cfg[sd==='actL'?'rastL':'rastR']=true;}
         }
+      }
+      for(const[sd,sk]of[['actL','senL'],['actR','senR']]){
+        const arr=c.cfg[sd]||[];
+        const li=comp(c.cfg[sk]);
+        for(let i=0;i<arr.length;i++)if(arr[i]==='sensor')
+          arr[i]=(li&&li.type==='rollentaster')?'rollenhebel':'magnet';
       }
       for(const rk of['rastL','rastR'])
         if(c.cfg[rk]!=null&&!Array.isArray(c.cfg[rk]))c.cfg[rk]=[!!c.cfg[rk],false];
@@ -359,12 +534,28 @@ function valvePresets(pc){
     {id:'e',label:'Entlüftet: 2→3, 4→5 (1 gesperrt)',conns:[['2','3'],['4','5']]}];
 }
 
+/* Bauteile, die einen Anschluss zur Umgebung öffnen und direkt darauf einrasten */
+const VENTP=new Set(['daempfer','auslass']);
+/* Steueranschluss-Bezeichnung nach Norm: 1 + der Anschluss, mit dem die angesteuerte Stellung
+   den Anschluss 1 verbindet — bleibt 1 dabei gesperrt, heißt er 10. */
+function pilotName(cfg,side){
+  const idx=side==='L'?0:Math.max(0,cfg.pos-1);
+  const ps=valvePresets(cfg.pc);
+  const pr=ps.find(p=>p.id===cfg.patterns[idx])||ps[0];
+  let partner='0';
+  for(const[a,b]of pr.conns){
+    if(a==='1'){partner=b;break;}
+    if(b==='1'){partner=a;break;}
+  }
+  return'1'+String(partner).replace('*','');
+}
 /* ---------- Betätigungsarten ---------- */
 const ACTS={none:'— keine —',muskel:'Muskelkraft (allgemein)',knopf:'Druckknopf',
   hebel:'Hebel',pedal:'Pedal',
   stoessel:'Stößel',rollenstoessel:'Rollenstößel',rollenhebel:'Rollenhebel',feder:'Feder',
-  magnet:'Magnet (elektrisch)',druck:'Druck (direkt)',vorstufe:'Druck indirekt (Vorstufe)',
-  sensor:'Pneumatisch (Sensor)'};
+  magnet:'Elektromagnet / Näherungsschalter',druck:'Druck (direkt)',vorstufe:'Druck indirekt (Vorstufe)'};
+/* Betätigungen, denen ein Endlagen-Geber (Näherungsschalter/Rollenhebeltaster) zugeordnet werden kann */
+const LINKACTS=new Set(['magnet','rollenhebel','rollenstoessel']);
 const RASTN='<polygon points="3.4,-5 10.6,-5 7,1.4" style="fill:var(--paper);stroke:none"/><polyline points="4,-4 7,1 10,-4"/>';
 const RASTABLE=new Set(['muskel','knopf','hebel','pedal']);
 const ACT_DRAW={
@@ -378,8 +569,7 @@ const ACT_DRAW={
   feder:'<polyline points="0,0 4,-7 10,7 16,-7 21,0"/>',
   magnet:'<rect x="0" y="-8" width="18" height="16"/><line x1="6" y1="-8" x2="12" y2="8"/>',
   druck:'<line x1="22" y1="0" x2="12" y2="0"/><polygon points="12,-4 12,4 4,0"/><line x1="4" y1="0" x2="0" y2="0"/>',
-  vorstufe:'<rect x="2" y="-9" width="18" height="18"/><polygon points="15,-5 15,5 6,0"/>',
-  sensor:'<line x1="22" y1="0" x2="12" y2="0"/><polygon points="12,-4 12,4 4,0"/><line x1="4" y1="0" x2="0" y2="0"/><circle cx="18" cy="8" r="2.6"/>'
+  vorstufe:'<rect x="2" y="-9" width="18" height="18"/><polygon points="15,-5 15,5 6,0"/>'
 };
 function actStack(kinds,side,W,rast){
   const items=[];
@@ -399,24 +589,55 @@ function actStack(kinds,side,W,rast){
 const DEFS={
   quelle:{
     label:'Druckluftquelle',
-    cfg:()=>({}),
+    cfg:()=>({druck:6}),
     ports:()=>[{n:'1',x:0,y:-32,d:[0,-1]}],
-    box:()=>({x:-20,y:-38,w:40,h:58}),
-    draw:()=>'<circle cx="0" cy="0" r="16"/><polygon points="-8,7 8,7 0,-9"/><line x1="0" y1="-16" x2="0" y2="-28"/>'
+    box:()=>({x:-22,y:-38,w:44,h:72}),
+    draw:cfg=>'<circle cx="0" cy="0" r="16"/><polygon points="-8,7 8,7 0,-9"/><line x1="0" y1="-16" x2="0" y2="-28"/>'+
+      `<text x="0" y="30" text-anchor="middle">${barTxt(cfg&&cfg.druck!=null?cfg.druck:6)} bar</text>`
   },
   behaelter:{
     label:'Luftbehälter',
-    cfg:()=>({}),
+    cfg:()=>({vol:0.5}),
     ports:()=>[{n:'1',x:-50,y:0,d:[-1,0]},{n:'2',x:50,y:0,d:[1,0]}],
     box:()=>({x:-56,y:-16,w:112,h:32}),
-    draw:()=>'<rect x="-40" y="-12" width="80" height="24" rx="12"/><line x1="-46" y1="0" x2="-40" y2="0"/><line x1="40" y1="0" x2="46" y2="0"/>'
+    draw(cfg,c){
+      let s='';
+      if(simView&&c){
+        const pT=Math.max(0,Math.min(6,simTankP[c.id]||0));
+        const f=pT/6;
+        s+=`<clipPath id="tk${c.id}"><rect x="-39" y="-11" width="78" height="22" rx="11"/></clipPath><g clip-path="url(#tk${c.id})">`;
+        if(f>0.002){
+          /* immer von links nach rechts bzw. (gedreht) von unten nach oben füllen */
+          const r=((c.rot%360)+360)%360;
+          const w=78*f;
+          const x=(r===90||r===180)?39-w:-39;
+          s+=`<rect x="${x.toFixed(1)}" y="-11" width="${w.toFixed(1)}" height="22" style="fill:var(--hot);stroke:none;opacity:0.55"/>`;
+        }
+        for(let i=1;i<6;i++){
+          const xx=(-39+78*i/6).toFixed(1);
+          s+=`<line x1="${xx}" y1="-11" x2="${xx}" y2="11" style="stroke:var(--ink);stroke-width:0.7;opacity:0.3"/>`;
+        }
+        s+='</g>';
+      }
+      s+='<rect x="-40" y="-12" width="80" height="24" rx="12"/><line x1="-46" y1="0" x2="-40" y2="0"/><line x1="40" y1="0" x2="46" y2="0"/>';
+      return s;
+    }
   },
   daempfer:{
     label:'Schalldämpfer',
     cfg:()=>({}),
     ports:()=>[{n:'3',x:0,y:-30,d:[0,-1]}],
-    box:()=>({x:-16,y:-36,w:32,h:54}),
-    draw:()=>'<line x1="0" y1="-26" x2="0" y2="-10"/><polygon points="-11,-10 11,-10 0,12"/><line x1="-7" y1="-4" x2="7" y2="-4"/><line x1="-4" y1="2" x2="4" y2="2"/>'
+    box:()=>({x:-10,y:-34,w:20,h:48}),
+    draw:()=>'<line x1="0" y1="-26" x2="0" y2="-20"/><rect x="-5.5" y="-20" width="11" height="22"/>'+
+      '<line x1="-5.5" y1="-14" x2="0" y2="-14"/><line x1="5.5" y1="-9" x2="0" y2="-9"/><line x1="-5.5" y1="-4" x2="0" y2="-4"/>'+
+      '<polyline points="-4.2,2 0,10 4.2,2"/>'
+  },
+  auslass:{
+    label:'Auslassöffnung',
+    cfg:()=>({}),
+    ports:()=>[{n:'3',x:0,y:-14,d:[0,-1]}],
+    box:()=>({x:-8,y:-18,w:16,h:32}),
+    draw:()=>'<line x1="0" y1="-10" x2="0" y2="0"/><polygon points="-6,0 6,0 0,10"/>'
   },
   ventil:{
     label:'Wegeventil',
@@ -424,8 +645,8 @@ const DEFS={
     ports(cfg){
       const S=40,W=cfg.pos*S,x0=-W/2+cfg.rest*S;
       const ps=portLayout(cfg.pc).map(p=>({n:p.n,x:x0+p.ox,y:p.s==='b'?32:-32,d:p.s==='b'?[0,1]:[0,-1]}));
-      if(hasPilot(cfg.actL))ps.push({n:'12',x:-W/2-30,y:pilotY(cfg.actL),d:[-1,0]});
-      if(hasPilot(cfg.actR))ps.push({n:'14',x:W/2+30,y:pilotY(cfg.actR),d:[1,0]});
+      if(hasPilot(cfg.actL))ps.push({n:'12',lbl:pilotName(cfg,'L'),x:-W/2-30,y:pilotY(cfg.actL),d:[-1,0]});
+      if(hasPilot(cfg.actR))ps.push({n:'14',lbl:pilotName(cfg,'R'),x:W/2+30,y:pilotY(cfg.actR),d:[1,0]});
       return ps;
     },
     box(cfg){
@@ -454,14 +675,14 @@ const DEFS={
       s+=actStack(cfg.actL,-1,W,cfg.rastL)+actStack(cfg.actR,1,W,cfg.rastR);
       const senY=acts=>{
         const ks=(acts||[]).filter(k=>k&&k!=='none');
-        const i=ks.indexOf('sensor');
+        const i=ks.findIndex(k=>LINKACTS.has(k));
         return(i<0||ks.length===1)?0:(i===0?-11:11);
       };
-      if((cfg.actL||[]).includes('sensor')){
+      if((cfg.actL||[]).some(k=>LINKACTS.has(k))){
         const sc=comp(cfg.senL);
         if(sc)s+=`<text x="${-W/2-26}" y="${senY(cfg.actL)+3.5}" text-anchor="end">${esc(sc.label||'')}</text>`;
       }
-      if((cfg.actR||[]).includes('sensor')){
+      if((cfg.actR||[]).some(k=>LINKACTS.has(k))){
         const sc=comp(cfg.senR);
         if(sc)s+=`<text x="${W/2+26}" y="${senY(cfg.actR)+3.5}">${esc(sc.label||'')}</text>`;
       }
@@ -472,14 +693,14 @@ const DEFS={
         if(p.s==='b')s+=`<line x1="${x}" y1="20" x2="${x}" y2="28"/><text x="${x+3.5}" y="31">${p.n}</text>`;
         else s+=`<line x1="${x}" y1="-20" x2="${x}" y2="-28"/><text x="${x+3.5}" y="-23">${p.n}</text>`;
       }
-      if(hasPilot(cfg.actL)){const py=pilotY(cfg.actL);s+=`<line x1="${-W/2-20+off}" y1="${py}" x2="${-W/2-26}" y2="${py}"/><text x="${-W/2-30}" y="${py+16}" text-anchor="middle">12</text>`;}
-      if(hasPilot(cfg.actR)){const py=pilotY(cfg.actR);s+=`<line x1="${W/2+20+off}" y1="${py}" x2="${W/2+26}" y2="${py}"/><text x="${W/2+30}" y="${py+16}" text-anchor="middle">14</text>`;}
+      if(hasPilot(cfg.actL)){const py=pilotY(cfg.actL);s+=`<line x1="${-W/2-20+off}" y1="${py}" x2="${-W/2-26}" y2="${py}"/><text x="${-W/2-30}" y="${py+16}" text-anchor="middle">${pilotName(cfg,'L')}</text>`;}
+      if(hasPilot(cfg.actR)){const py=pilotY(cfg.actR);s+=`<line x1="${W/2+20+off}" y1="${py}" x2="${W/2+26}" y2="${py}"/><text x="${W/2+30}" y="${py+16}" text-anchor="middle">${pilotName(cfg,'R')}</text>`;}
       return s;
     }
   },
   zylinder:{
     label:'Zylinder',
-    cfg:()=>({typ:'doppelt',daempf:'keine',einstellbar:false}),
+    cfg:()=>({typ:'doppelt',daempf:'keine',einstellbar:false,mindruck:0.5}),
     ports(cfg){
       return cfg.typ==='einfach'
         ?[{n:'1',x:-40,y:31,d:[0,1]}]
@@ -489,20 +710,38 @@ const DEFS={
     draw(cfg,c){
       const t=cfg.typ==='vereinfacht'?'doppelt':cfg.typ;
       const st=(simView&&c)?(simStroke[c.id]||0):0;
-      const px=(t==='einfach'?-34:-30)+st*56;
-      const hasC=t!=='einfach'&&cfg.daempf!=='keine';
-      const capC=hasC&&(cfg.daempf==='kolben'||cfg.daempf==='beid');
-      const rodC=hasC&&(cfg.daempf==='stange'||cfg.daempf==='beid');
-      let s='<rect x="-50" y="-20" width="100" height="40"/>';
-      s+=`<rect x="${px}" y="-19" width="6" height="38"/>`;
-      const rodStart=px+6+(rodC?9:0),rodEnd=78+st*56;
+      const PW=ZPW;
+      const px=(t==='einfach'?-36:-32)+st*56;
+      const D=zylDamp(cfg);
+      const capC=D.L,rodC=D.R;
+      let s='';
+      if(simView&&c){
+        const q1=simVals[nk(c.id,'1')]||0,q2=t==='einfach'?0:(simVals[nk(c.id,'2')]||0);
+        /* Die Kolbenstange bleibt frei — dort ist keine Luft, also auch keine Einfärbung */
+        const cham=(x0,x1,p,rod)=>{
+          if(p<=0.001||x1-x0<1)return'';
+          const k=Math.sqrt(Math.min(1,p/6));
+          const st=`style="fill:var(--hot);stroke:none;opacity:${(0.16+0.44*k).toFixed(2)}"`;
+          const x=x0.toFixed(1),w=(x1-x0).toFixed(1);
+          return rod
+            ?`<rect x="${x}" y="-19" width="${w}" height="15" ${st}/><rect x="${x}" y="4" width="${w}" height="15" ${st}/>`
+            :`<rect x="${x}" y="-19" width="${w}" height="38" ${st}/>`;
+        };
+        s+=cham(-49,px,q1,t==='gleichlauf')+cham(px+PW,49,q2,true);
+      }
+      s+='<rect x="-50" y="-20" width="100" height="40"/>';
+      s+=`<rect x="${px}" y="-19" width="${PW}" height="38"/>`;
+      /* Kolben mit Permanentmagnet (für magnetische Endlagensensoren) */
+      if(cfg.magnet)
+        s+=`<path d="M${px+3},-13 H${px+PW-3} V-4.5 H${px+PW-6.5} V4.5 H${px+PW-3} V13 H${px+3} Z" style="fill:var(--ink);stroke:none"/>`;
+      const rodStart=px+PW+(rodC?9:0),rodEnd=78+st*56;
       if(t==='gleichlauf'){
         const rodEndL=px-(capC?9:0),rodL=-78+st*56;
         s+=`<rect x="${rodL}" y="-4" width="${rodEndL-rodL}" height="8"/>`;
         s+=`<rect x="${rodStart}" y="-4" width="${rodEnd-rodStart}" height="8"/>`;
       }else if(t==='einfach'){
-        s+=`<rect x="${px+6}" y="-4" width="${rodEnd-px-6}" height="8"/>`;
-        const sx=px+6,ex=46;
+        s+=`<rect x="${rodStart}" y="-4" width="${rodEnd-rodStart}" height="8"/>`;
+        const sx=rodStart,ex=46;
         let pts=`${sx},0`;
         for(let i=1;i<=6;i++)pts+=` ${(sx+(ex-sx)*i/7).toFixed(1)},${i%2?-14:14}`;
         pts+=` ${ex},0`;
@@ -510,14 +749,14 @@ const DEFS={
       }else{
         s+=`<rect x="${rodStart}" y="-4" width="${rodEnd-rodStart}" height="8"/>`;
       }
-      if(capC)s+=`<rect x="${px-9}" y="-12" width="9" height="24"/>`;
-      if(rodC)s+=`<rect x="${px+6}" y="-12" width="9" height="24"/>`;
-      if(hasC&&cfg.einstellbar){
-        const cx=px+3;
-        s+=`<line x1="${cx-13}" y1="17" x2="${cx+13}" y2="-17" marker-end="url(#arr)"/>`;
-      }
+      /* Dämpfungsblöcke sind Bauteile, keine Luft — deshalb mit Papierfarbe gefüllt */
+      if(capC)s+=`<rect x="${px-9}" y="-12" width="9" height="24" style="fill:var(--paper)"/>`;
+      if(rodC)s+=`<rect x="${px+PW}" y="-12" width="9" height="24" style="fill:var(--paper)"/>`;
+      if((capC||rodC)&&D.e)s+=`<line x1="${px-8}" y1="17" x2="${px+18}" y2="-17" marker-end="url(#arr)"/>`;
       s+='<line x1="-40" y1="20" x2="-40" y2="26"/>';
       if(t!=='einfach')s+='<line x1="40" y1="20" x2="40" y2="26"/>';
+      /* einfachwirkend: Entlüftungsbohrung ohne Anschlussgewinde — Dreieck ohne Grundlinie, bündig am Zylinder */
+      else s+='<polyline points="34,20 40,30 46,20"/>';
       return s;
     }
   },
@@ -530,7 +769,9 @@ const DEFS={
   },
   drossel:{
     label:'Drosselrückschlagventil',
-    cfg:()=>({}),
+    /* senkrecht eingesetzt: frei nach oben (schnelles Ausfahren), gedrosselt nach unten (langsames Einfahren) */
+    rot0:270,
+    cfg:()=>({faktor:50}),
     ports:()=>[{n:'1',x:-40,y:0,d:[-1,0]},{n:'2',x:40,y:0,d:[1,0]}],
     box:()=>({x:-44,y:-34,w:88,h:68}),
     draw:()=>'<title>Drosselrückschlagventil (einstellbar)</title>'+
@@ -541,6 +782,16 @@ const DEFS={
       '<path d="M-9,-23 Q0,-14 9,-23"/><path d="M-9,-5 Q0,-14 9,-5"/>'+
       '<line x1="-16" y1="-2" x2="14" y2="-26" marker-end="url(#arr)"/>'+
       '<line x1="-24" y1="14" x2="-16" y2="14"/><polyline points="-8,6 -16,14 -8,22"/><circle cx="-4" cy="14" r="7"/><line x1="3" y1="14" x2="24" y2="14"/>'
+  },
+  drosselventil:{
+    label:'Drosselventil',
+    cfg:()=>({faktor:50,einstellbar:true}),
+    ports:()=>[{n:'1',x:-34,y:0,d:[-1,0]},{n:'2',x:34,y:0,d:[1,0]}],
+    box:()=>({x:-38,y:-24,w:76,h:48}),
+    draw:cfg=>'<title>Drosselventil (in beide Richtungen drosselnd)</title>'+
+      '<line x1="-30" y1="0" x2="30" y2="0"/>'+
+      '<path d="M-9,-9 Q0,0 9,-9"/><path d="M-9,9 Q0,0 9,9"/>'+
+      ((!cfg||cfg.einstellbar!==false)?'<line x1="-16" y1="13" x2="16" y2="-15" marker-end="url(#arr)"/>':'')
   },
   wechsel:{
     label:'Wechselventil (ODER)',
@@ -582,18 +833,22 @@ const DEFS={
   },
   druckschalt:{
     label:'Druckschaltventil',
-    cfg:()=>({ansprech:'jed'}),
+    cfg:()=>({schwelle:3}),
     ports:()=>[{n:'2',x:70,y:-85,d:[0,-1]},{n:'1',x:60,y:85,d:[0,1]},{n:'3',x:80,y:85,d:[0,1]},{n:'12',x:-70,y:85,d:[0,1]}],
     box:()=>({x:-130,y:-92,w:260,h:184}),
     draw(cfg,c){
-      const on=simView&&c&&(simVals[nk(c.id,'12')]||0)>=((cfg&&cfg.ansprech)==='voll'?2:1);
-      const off=on?40:0;
+      const thr=Math.max(dsSchwelle(cfg),0.01);
+      const on=simView&&c&&(simVals[nk(c.id,'12')]||0)>=thr;
+      const off=on?40:0,pOff=on?0:14;
       let s='<title>Druckschaltventil</title>';
       s+='<rect x="-125" y="-75" width="250" height="150" stroke-dasharray="6 5"/>';
+      s+=`<text x="-70" y="-58" text-anchor="middle">${barTxt(dsSchwelle(cfg))} bar</text>`;
+      s+=`<g transform="translate(0,${pOff})">`;
       s+='<rect x="-90" y="-20" width="40" height="40"/>';
       s+='<line x1="-90" y1="0" x2="-52" y2="0" marker-end="url(#arr)"/>';
       s+='<polyline points="-70,-20 -77,-23 -63,-29 -77,-35 -70,-38"/>';
       s+='<line x1="-84" y1="-23" x2="-56" y2="-37" marker-end="url(#arr)"/>';
+      s+='</g>';
       s+=`<g transform="translate(${off},0)">`;
       s+='<rect x="10" y="-20" width="40" height="40"/><rect x="50" y="-20" width="40" height="40"/>';
       s+='<line x1="20" y1="20" x2="30" y2="-20" marker-end="url(#arr)"/>';
@@ -605,11 +860,50 @@ const DEFS={
       s+='</g>';
       s+=`<line x1="-50" y1="0" x2="${off}" y2="0"/>`;
       s+='<line x1="-70" y1="81" x2="-70" y2="46"/><polygon points="-76,46 -64,46 -70,36"/>';
-      s+='<line x1="-70" y1="36" x2="-70" y2="20"/>';
+      s+=`<line x1="-70" y1="36" x2="-70" y2="${20+pOff}"/>`;
       s+='<polyline points="60,50 -104,50 -104,0 -90,0" stroke-dasharray="4 3"/>';
       s+='<circle cx="60" cy="50" r="2.5" style="fill:var(--ink);stroke:none"/>';
       s+='<line x1="60" y1="20" x2="60" y2="81"/><line x1="80" y1="20" x2="80" y2="81"/><line x1="70" y1="-20" x2="70" y2="-81"/>';
       s+='<text x="73.5" y="-78">2</text><text x="63.5" y="82">1</text><text x="83.5" y="82">3</text><text x="-66.5" y="82">12</text>';
+      return s;
+    }
+  },
+  zeitventil:{
+    label:'Zeitverzögerungsventil',
+    cfg:()=>({zeit:2,offen:false}),
+    ports:cfg=>[
+      {n:'12',lbl:(cfg&&cfg.offen)?'10':'12',x:-135,y:0,d:[-1,0]},
+      {n:'2',x:70,y:-85,d:[0,-1]},
+      {n:'1',x:60,y:85,d:[0,1]},
+      {n:'3',x:80,y:85,d:[0,1]}
+    ],
+    box:()=>({x:-142,y:-92,w:262,h:184}),
+    draw(cfg,c){
+      const on=!!(simView&&c&&simDelayOn[c.id]);
+      const off=on?40:0;
+      const bx=(x0,flow)=>`<rect x="${x0}" y="-20" width="40" height="40"/>`+(flow
+        ?`<line x1="${x0+10}" y1="20" x2="${x0+20}" y2="-20" marker-end="url(#arr)"/><line x1="${x0+30}" y1="20" x2="${x0+30}" y2="12"/><line x1="${x0+25}" y1="12" x2="${x0+35}" y2="12"/>`
+        :`<line x1="${x0+20}" y1="-20" x2="${x0+30}" y2="20" marker-end="url(#arr)"/><line x1="${x0+10}" y1="20" x2="${x0+10}" y2="12"/><line x1="${x0+5}" y1="12" x2="${x0+15}" y2="12"/>`);
+      const openRest=!!cfg.offen;
+      let s='<title>Zeitverzögerungsventil</title>';
+      s+='<rect x="-125" y="-75" width="250" height="150" stroke-dasharray="6 5"/>';
+      /* Drosselrückschlagventil in Originalgröße, gespiegelt: gedrosselt hinein, frei zurück */
+      s+='<g transform="translate(-70,0) scale(-1,1)">'+DEFS.drossel.draw({}).replace(/<title>[\s\S]*?<\/title>/,'')+'</g>';
+      s+='<line x1="-135" y1="0" x2="-106" y2="0"/>';
+      s+='<line x1="-34" y1="0" x2="0" y2="0"/>';
+      /* Luftspeicher, seitlich an die Steuerleitung angebunden */
+      s+='<rect x="-100" y="-58" width="44" height="18" rx="9"/>';
+      s+='<polyline points="-56,-49 -20,-49 -20,0"/>';
+      s+='<circle cx="-20" cy="0" r="2.6" style="fill:var(--ink);stroke:none"/>';
+      s+=`<g transform="translate(${off},0)">`;
+      s+='<polygon points="0,-6 0,6 10,0"/>';
+      s+=bx(10,openRest?false:true)+bx(50,openRest?true:false);
+      s+='<polyline points="90,0 94,-8 100,8 106,-8 111,0"/>';
+      s+='</g>';
+      s+='<line x1="70" y1="-20" x2="70" y2="-81"/><line x1="60" y1="20" x2="60" y2="81"/><line x1="80" y1="20" x2="80" y2="81"/>';
+      s+='<text x="73.5" y="-78">2</text><text x="63.5" y="82">1</text><text x="83.5" y="82">3</text>';
+      s+=`<text x="-120" y="-7">${openRest?'10':'12'}</text>`;
+      s+=`<text x="-78" y="-63" text-anchor="middle">${(cfg.zeit!=null?cfg.zeit:2).toString().replace('.',',')} s</text>`;
       return s;
     }
   },
@@ -621,7 +915,19 @@ const DEFS={
     draw:()=>'<circle cx="0" cy="0" r="3.5" style="fill:var(--ink);stroke:none"/>'
   },
   sensor:{
-    label:'Endlagen-Sensor',
+    label:'Näherungsschalter',
+    cfg:()=>({target:null,mode:'aus',gen:2}),
+    ports:()=>[],
+    box:()=>({x:-10,y:-14,w:20,h:16}),
+    draw(cfg,c){
+      const act=simView&&sensorActive(cfg);
+      let s='<rect x="-7" y="-9" width="14" height="9"/><line x1="-3.5" y1="-9" x2="3.5" y2="0"/>';
+      if(act)s+='<circle cx="0" cy="-13" r="2.6" style="fill:var(--hot);stroke:none"/>';
+      return s;
+    }
+  },
+  rollentaster:{
+    label:'Rollenhebeltaster',
     cfg:()=>({target:null,mode:'aus'}),
     ports:()=>[],
     box:()=>({x:-14,y:-20,w:30,h:34}),
@@ -667,16 +973,22 @@ function absPort(ref){
   const[x,y]=rotP(p.x,p.y,c.rot),[dx,dy]=rotP(p.d[0],p.d[1],c.rot);
   return{x:c.x+x,y:c.y+y,d:[dx,dy]};
 }
-function pruneWires(){state.wires=state.wires.filter(w=>absPort(w.a)&&absPort(w.b));}
+function pruneWires(){
+  state.wires=state.wires.filter(w=>absPort(w.a)&&absPort(w.b));
+  /* Knotenpunkte ohne jede Leitung sind bedeutungslos — wegräumen */
+  const used=new Set();
+  for(const w of state.wires){used.add(w.a.c);used.add(w.b.c);}
+  state.comps=state.comps.filter(c=>c.type!=='knoten'||used.has(c.id));
+}
 function attachedDaempfer(cids){
   const res=[];
   for(const d of state.comps){
-    if(d.type!=='daempfer'||cids.has(d.id))continue;
-    const dp=absPort({c:d.id,p:DEFS.daempfer.ports()[0].n});
+    if(!VENTP.has(d.type)||cids.has(d.id))continue;
+    const dp=absPort({c:d.id,p:DEFS[d.type].ports()[0].n});
     if(!dp)continue;
     outer:
     for(const o of state.comps){
-      if(!cids.has(o.id)||o.type==='daempfer')continue;
+      if(!cids.has(o.id)||VENTP.has(o.type))continue;
       for(const q of DEFS[o.type].ports(o.cfg)){
         const[qx,qy]=rotP(q.x,q.y,o.rot);
         if(Math.abs(o.x+qx-dp.x)<6&&Math.abs(o.y+qy-dp.y)<6){res.push(d.id);break outer;}
@@ -703,21 +1015,27 @@ function daempferLabelSide(c){
   }
   return'r';
 }
-function sensorSlots(excludeId){
+function sensorSlots(excludeId,typ){
+  /* 'sensor' (magnetisch): direkt auf dem Zylinderrohr über den Kolben-Endlagen;
+     'rollentaster': außen über der Kolbenstangen-Bahn (frühere Sensor-Plätze). */
   const out=[];
   for(const z of state.comps){
     if(z.type!=='zylinder')continue;
-    for(const sl of[{ox:72,mode:'ein'},{ox:128,mode:'aus'}]){
-      if(state.comps.some(s=>s.type==='sensor'&&s.id!==excludeId&&s.cfg&&s.cfg.target===z.id&&s.cfg.mode===sl.mode))continue;
-      const[sx,sy]=rotP(sl.ox,-16,z.rot);
+    const pc=pistonCenters(z.cfg);
+    const slots=typ==='sensor'
+      ?[{ox:pc[0],oy:-20,mode:'ein'},{ox:pc[1],oy:-20,mode:'aus'}]
+      :[{ox:72,oy:-16,mode:'ein'},{ox:128,oy:-16,mode:'aus'}];
+    for(const sl of slots){
+      if(state.comps.some(s=>s.type===typ&&s.id!==excludeId&&s.cfg&&s.cfg.target===z.id&&s.cfg.mode===sl.mode))continue;
+      const[sx,sy]=rotP(sl.ox,sl.oy,z.rot);
       out.push({x:z.x+sx,y:z.y+sy,rot:z.rot,target:z.id,mode:sl.mode});
     }
   }
   return out;
 }
-function sensorSnap(x,y,excludeId){
+function sensorSnap(x,y,excludeId,typ){
   let best=null;
-  for(const sl of sensorSlots(excludeId)){
+  for(const sl of sensorSlots(excludeId,typ)){
     const d=Math.hypot(sl.x-x,sl.y-y);
     if(d<60&&(!best||d<best.d))best=Object.assign({d},sl);
   }
@@ -726,7 +1044,7 @@ function sensorSnap(x,y,excludeId){
 function attachedExtras(cids){
   const res=attachedDaempfer(cids);
   for(const s of state.comps)
-    if(s.type==='sensor'&&!cids.has(s.id)&&s.cfg&&s.cfg.target!=null&&cids.has(s.cfg.target))res.push(s.id);
+    if((s.type==='sensor'||s.type==='rollentaster')&&!cids.has(s.id)&&s.cfg&&s.cfg.target!=null&&cids.has(s.cfg.target))res.push(s.id);
   for(const j of state.comps){
     if(j.type!=='knoten'||cids.has(j.id))continue;
     let hit=false;
@@ -742,18 +1060,18 @@ function attachedExtras(cids){
   }
   return res;
 }
-function daempferSnap(x,y,excludeId){
-  const p0=DEFS.daempfer.ports()[0];
+function daempferSnap(x,y,excludeId,typ){
+  const p0=DEFS[typ||'daempfer'].ports()[0];
   const wired=new Set();
   for(const w of state.wires){wired.add(nk(w.a.c,w.a.p));wired.add(nk(w.b.c,w.b.p));}
   const dPos=[];
-  for(const d of state.comps)if(d.type==='daempfer'&&d.id!==excludeId){
-    const dp=absPort({c:d.id,p:p0.n});
+  for(const d of state.comps)if(VENTP.has(d.type)&&d.id!==excludeId){
+    const dp=absPort({c:d.id,p:DEFS[d.type].ports()[0].n});
     if(dp)dPos.push(dp);
   }
   let best=null;
   for(const o of state.comps){
-    if(o.id===excludeId||o.type==='daempfer')continue;
+    if(o.id===excludeId||VENTP.has(o.type))continue;
     for(const q of DEFS[o.type].ports(o.cfg)){
       if(o.type!=='knoten'&&wired.has(nk(o.id,q.n)))continue;
       const[qx,qy]=rotP(q.x,q.y,o.rot),[qdx,qdy]=rotP(q.d[0],q.d[1],o.rot);
@@ -772,9 +1090,9 @@ function daempferSnap(x,y,excludeId){
 }
 function ghostSnap(){
   let b=null;
-  if(placing==='daempfer')b=daempferSnap(mouse.x,mouse.y,-1);
-  else if(placing==='sensor')b=sensorSnap(mouse.x,mouse.y,-1);
-  return b?{x:b.x,y:b.y,rot:b.rot}:{x:snap(mouse.x),y:snap(mouse.y),rot:0};
+  if(VENTP.has(placing))b=daempferSnap(mouse.x,mouse.y,-1,placing);
+  else if(placing==='sensor'||placing==='rollentaster')b=sensorSnap(mouse.x,mouse.y,-1,placing);
+  return b?{x:b.x,y:b.y,rot:b.rot}:{x:snap(mouse.x),y:snap(mouse.y),rot:(DEFS[placing]&&DEFS[placing].rot0)||0};
 }
 function wireToolDone(e){
   if(placing==='leitung'&&!(e&&e.shiftKey)){
@@ -861,7 +1179,20 @@ function splitWireAt(w,pt){
     const dd=(pt.x-qx)*(pt.x-qx)+(pt.y-qy)*(pt.y-qy);
     if(dd<best.d)best={d:dd,x:qx,y:qy,i};
   }
-  const j={id:state.nextId++,type:'knoten',x:Math.round(best.x),y:Math.round(best.y),rot:0,cfg:{},label:''};
+  /* Knoten aufs Raster ziehen, aber exakt auf der Leitung bleiben: nur längs des Segments verschieben */
+  let jx=best.x,jy=best.y;
+  {
+    const p1=pts[best.i],p2=pts[best.i+1];
+    const lo=(a,b)=>Math.min(a,b),hi=(a,b)=>Math.max(a,b);
+    if(Math.abs(p1.y-p2.y)<0.01){
+      jy=p1.y;
+      jx=Math.max(lo(p1.x,p2.x),Math.min(hi(p1.x,p2.x),snap(jx)));
+    }else if(Math.abs(p1.x-p2.x)<0.01){
+      jx=p1.x;
+      jy=Math.max(lo(p1.y,p2.y),Math.min(hi(p1.y,p2.y),snap(jy)));
+    }else{jx=Math.round(jx);jy=Math.round(jy);}
+  }
+  const j={id:state.nextId++,type:'knoten',x:jx,y:jy,rot:0,cfg:{},label:''};
   state.comps.push(j);
   state.wires=state.wires.filter(x=>x.id!==w.id);
   const w1={id:state.nextId++,a:w.a,b:{c:j.id,p:'1'}};
@@ -872,6 +1203,135 @@ function splitWireAt(w,pt){
   if(v2.length)w2.via=v2;
   state.wires.push(w1,w2);
   return j;
+}
+/* Knoten mit genau zwei Leitungen löschen: beide zu einer durchgehenden Leitung verschmelzen */
+function mergeWiresAt(nodeId,ws){
+  const[w1,w2]=ws;
+  const A1=absPort(w1.a),B1=absPort(w1.b),A2=absPort(w2.a),B2=absPort(w2.b);
+  if(!A1||!B1||!A2||!B2)return false;
+  const atA1=w1.a.c===nodeId,atA2=w2.a.c===nodeId;
+  const far1=atA1?w1.b:w1.a,far2=atA2?w2.b:w2.a;
+  if(far1.c===nodeId||far2.c===nodeId)return false;
+  const q1=atA1?wirePts(A1,B1,w1.adj,w1.via).reverse():wirePts(A1,B1,w1.adj,w1.via);
+  const q2=atA2?wirePts(A2,B2,w2.adj,w2.via):wirePts(A2,B2,w2.adj,w2.via).reverse();
+  const all=dedupePts([...q1,...q2]);
+  const F1=absPort(far1),F2=absPort(far2);
+  const s1=(F1.d[0]||F1.d[1])?2:1,s2=(F2.d[0]||F2.d[1])?2:1;
+  const nw={id:state.nextId++,a:far1,b:far2};
+  const via=all.slice(s1,all.length-s2).map(p=>({x:p.x,y:p.y}));
+  if(via.length)nw.via=via;
+  state.wires=state.wires.filter(w=>w.id!==w1.id&&w.id!==w2.id);
+  state.wires.push(nw);
+  return true;
+}
+/* Leitung vom gelöschten Knoten lösen: etwas kürzen und offen stehen lassen */
+function openWireEnd(w,nodeId){
+  const A=absPort(w.a),B=absPort(w.b);
+  if(!A||!B)return;
+  const atA=w.a.c===nodeId;
+  const pts=wirePts(A,B,w.adj,w.via);
+  const q=atA?[...pts].reverse():pts;
+  const pE=q[q.length-1],pP=q[q.length-2]||q[0];
+  const len=Math.hypot(pE.x-pP.x,pE.y-pP.y);
+  let P;
+  if(len<=24)P={x:(pE.x+pP.x)/2,y:(pE.y+pP.y)/2};
+  else{
+    const t=20/len;
+    P={x:pE.x+(pP.x-pE.x)*t,y:pE.y+(pP.y-pE.y)*t};
+    if(Math.abs(pE.y-pP.y)<0.01)P={x:Math.max(Math.min(snap(P.x),Math.max(pE.x,pP.x)),Math.min(pE.x,pP.x)),y:pE.y};
+    else if(Math.abs(pE.x-pP.x)<0.01)P={x:pE.x,y:Math.max(Math.min(snap(P.y),Math.max(pE.y,pP.y)),Math.min(pE.y,pP.y))};
+  }
+  const far=atA?w.b:w.a,F=absPort(far);
+  const st=(F.d[0]||F.d[1])?2:1;
+  const via=q.slice(st,q.length-1).map(p=>({x:p.x,y:p.y}));
+  const j={id:state.nextId++,type:'knoten',x:Math.round(P.x),y:Math.round(P.y),rot:0,cfg:{},label:''};
+  state.comps.push(j);
+  if(atA){w.a={c:j.id,p:'1'};if(via.length)w.via=via.slice().reverse();else delete w.via;}
+  else{w.b={c:j.id,p:'1'};if(via.length)w.via=via;else delete w.via;}
+  delete w.adj;
+}
+/* Leitungsverlauf entrümpeln: gerade durchlaufende und zurücklaufende Ecken entfernen,
+   damit beim Zurückziehen offener Enden keine blinden 180°-Schlaufen stehen bleiben. */
+/* Schnittpunkt zweier Strecken (null, wenn sie sich nicht kreuzen oder parallel sind) */
+function segInt(a,b,c,d){
+  const rx=b.x-a.x,ry=b.y-a.y,sx=d.x-c.x,sy=d.y-c.y;
+  const den=rx*sy-ry*sx;
+  if(Math.abs(den)<1e-9)return null;
+  const t=((c.x-a.x)*sy-(c.y-a.y)*sx)/den;
+  const u=((c.x-a.x)*ry-(c.y-a.y)*rx)/den;
+  if(t<1e-6||t>1-1e-6||u<1e-6||u>1-1e-6)return null;
+  return{x:a.x+rx*t,y:a.y+ry*t};
+}
+function simplifyWire(w){
+  const A=absPort(w.a),B=absPort(w.b);
+  if(!A||!B)return;
+  let ps=dedupePts(wirePts(A,B,w.adj,w.via));
+  /* geradlinig durchlaufende Ecken entfernen */
+  const collin=()=>{
+    let changed=true;
+    while(changed&&ps.length>2){
+      changed=false;
+      for(let i=1;i<ps.length-1;i++){
+        const a=ps[i-1],b=ps[i],c=ps[i+1];
+        if((Math.abs(a.x-b.x)<0.01&&Math.abs(b.x-c.x)<0.01)||(Math.abs(a.y-b.y)<0.01&&Math.abs(b.y-c.y)<0.01)){
+          ps.splice(i,1);changed=true;break;
+        }
+      }
+    }
+  };
+  collin();
+  /* kreuzt die Leitung sich selbst, die Schleife dazwischen herausschneiden */
+  let cut=true,guard=0;
+  while(cut&&guard++<20){
+    cut=false;
+    for(let i=0;i<ps.length-1&&!cut;i++){
+      for(let j=i+2;j<ps.length-1&&!cut;j++){
+        const P=segInt(ps[i],ps[i+1],ps[j],ps[j+1]);
+        if(!P)continue;
+        ps=ps.slice(0,i+1).concat([P],ps.slice(j+1));
+        cut=true;
+      }
+    }
+    if(cut){ps=dedupePts(ps);collin();}
+  }
+  const via=ps.slice(1,ps.length-1).map(p=>({x:p.x,y:p.y}));
+  delete w.adj;
+  if(via.length)w.via=via;else delete w.via;
+}
+function simplifyWiresOf(cid){
+  for(const w of state.wires)if(w.a.c===cid||w.b.c===cid)simplifyWire(w);
+}
+/* Leitung, auf der ein gezogener Knoten liegt (zum Verknüpfen) */
+function wireNearKnoten(j){
+  let best=null;
+  for(const w of state.wires){
+    if(w.a.c===j.id||w.b.c===j.id)continue;
+    const A=absPort(w.a),B=absPort(w.b);
+    if(!A||!B)continue;
+    const pts=wirePts(A,B,w.adj,w.via);
+    for(let i=0;i<pts.length-1;i++){
+      const p1=pts[i],p2=pts[i+1];
+      const vx=p2.x-p1.x,vy=p2.y-p1.y,l2=vx*vx+vy*vy||1;
+      let t=((j.x-p1.x)*vx+(j.y-p1.y)*vy)/l2;
+      t=Math.max(0,Math.min(1,t));
+      const d=Math.hypot(j.x-(p1.x+vx*t),j.y-(p1.y+vy*t));
+      if(d<10&&(!best||d<best.d))best={w,d};
+    }
+  }
+  return best?best.w:null;
+}
+/* Gezogenen Knoten in eine Leitung einhängen: Leitung teilen, beide Hälften an den Knoten */
+function joinKnotenToWire(j){
+  const w=wireNearKnoten(j);
+  if(!w)return false;
+  const j2=splitWireAt(w,{x:j.x,y:j.y});
+  for(const x of state.wires){
+    if(x.a.c===j2.id)x.a={c:j.id,p:'1'};
+    if(x.b.c===j2.id)x.b={c:j.id,p:'1'};
+  }
+  state.comps=state.comps.filter(c=>c.id!==j2.id);
+  j.x=j2.x;j.y=j2.y;
+  return true;
 }
 function tempD(){
   const A=absPort(pending);
@@ -893,6 +1353,12 @@ function svgPoint(e){
   return pt.matrixTransform(svg.getScreenCTM().inverse());
 }
 
+/* Druckabhängiges Aussehen druckführender Leitungen: schon geringer Druck sieht kräftig aus,
+   der Unterschied zu vollem Druck bleibt sichtbar, ohne dass „wenig Druck" wie „keine Luft" wirkt. */
+function hotStyle(pv){
+  const k=Math.sqrt(Math.max(0,Math.min(1,pv/6)));
+  return` style="stroke-width:${(2.3+1.7*k).toFixed(2)};opacity:${(0.62+0.38*k).toFixed(2)}"`;
+}
 /* ---------- Rendern ---------- */
 function render(){
   simView=simOn&&activeTab===simTabIdx;
@@ -902,17 +1368,20 @@ function render(){
     '<marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" style="fill:var(--ink);stroke:none"/></marker>'+
     '<pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" style="fill:var(--grid)"/></pattern>'+
     '</defs>';
-  s+='<rect x="-5000" y="-5000" width="14000" height="14000" fill="url(#grid)"/>';
+  s+='<rect id="gridBg" x="-5000" y="-5000" width="14000" height="14000" fill="url(#grid)"/>';
   for(const w of state.wires){
     const pts=wirePts(absPort(w.a),absPort(w.b),w.adj,w.via);
     const d='M'+pts.map(p=>`${p.x},${p.y}`).join(' L');
-    const full=simView&&(simVals[nk(w.a.c,w.a.p)]||0)>0&&(simVals[nk(w.b.c,w.b.p)]||0)>0;
-    s+=`<path d="${d}" class="wire${full?' hot':''}${isSel('wire',w.id)?' selw':''}"/>`;
+    const pva=simView?(simVals[nk(w.a.c,w.a.p)]||0):0,pvb=simView?(simVals[nk(w.b.c,w.b.p)]||0):0;
+    const full=simView&&pva>0&&pvb>0;
+    const hsty=hotStyle(Math.max(pva,pvb));
+    const marked=isSel('wire',w.id)||knotenSnapW===w.id;
+    s+=`<path d="${d}" class="wire${full?' hot':(simView?' dry':'')}${marked?' selw':''}"${full&&!marked?hsty:''}/>`;
     if(simView&&!full){
       const f=simFill[w.id];
       if(f){
-        if(f.a>0.5)s+=`<path d="${'M'+partialPts(pts,f.a).map(p=>`${p.x},${p.y}`).join(' L')}" class="wire hot" pointer-events="none"/>`;
-        if(f.b>0.5)s+=`<path d="${'M'+partialPts([...pts].reverse(),f.b).map(p=>`${p.x},${p.y}`).join(' L')}" class="wire hot" pointer-events="none"/>`;
+        if(f.a>0.5)s+=`<path d="${'M'+partialPts(pts,f.a).map(p=>`${p.x},${p.y}`).join(' L')}" class="wire hot"${hotStyle(pva)} pointer-events="none"/>`;
+        if(f.b>0.5)s+=`<path d="${'M'+partialPts([...pts].reverse(),f.b).map(p=>`${p.x},${p.y}`).join(' L')}" class="wire hot"${hotStyle(pvb)} pointer-events="none"/>`;
       }
     }
     s+=`<path d="${d}" class="wirehit" data-wire="${w.id}"/>`;
@@ -922,7 +1391,7 @@ function render(){
     const a=nk(w.a.c,w.a.p),b=nk(w.b.c,w.b.p);
     portUse[a]=(portUse[a]||0)+1;portUse[b]=(portUse[b]||0)+1;
   }
-  const drawOrder=[...state.comps].sort((a,b)=>(a.type==='daempfer'?0:1)-(b.type==='daempfer'?0:1));
+  const drawOrder=[...state.comps].sort((a,b)=>(VENTP.has(a.type)?0:1)-(VENTP.has(b.type)?0:1));
   for(const c of drawOrder){
     const def=DEFS[c.type],hb=def.box(c.cfg);
     let hx=hb.x,hw=hb.w;
@@ -935,6 +1404,9 @@ function render(){
     s+=`<rect x="${hx}" y="${hb.y}" width="${hw}" height="${hb.h}" fill="rgba(0,0,0,0)" stroke="none"/>`;
     s+=`<g class="sym">${def.draw(c.cfg,c)}</g>`;
     for(const p of def.ports(c.cfg)){
+      /* Lücke zwischen Symbolstutzen und Anschlusspunkt schließen (sonst wirkt es beim Druck getrennt) */
+      if(p.d[0]||p.d[1])
+        s+=`<line class="pstub" x1="${p.x}" y1="${p.y}" x2="${p.x-p.d[0]*7}" y2="${p.y-p.d[1]*7}"/>`;
       const act=pending&&pending.c===c.id&&pending.p===p.n;
       const pk=nk(c.id,p.n),leak=simView&&simLeaks.has(pk),puff=simView&&(simPuffs.get(pk)||0)>performance.now();
       if(leak||puff){
@@ -948,9 +1420,9 @@ function render(){
         s+=`<g transform="translate(${p.x},${p.y}) rotate(${-c.rot})" pointer-events="none">`+
           '<polygon points="13,-25 20,-12 6,-12" style="fill:#ffb300;stroke:#7a5200;stroke-width:1.2"/>'+
           '<text x="13" y="-14.5" text-anchor="middle" style="font:bold 9px sans-serif;fill:#4a3200;stroke:none">!</text>'+
-          '<title>Druckluft entweicht ungehindert — Schalldämpfer oder Leitung fehlt</title></g>';
+          `<title>${c.type==='daempfer'?'Druckluft bläst dauerhaft über den Schalldämpfer ab — Quelle direkt mit der Abluft verbunden':c.type==='auslass'?'Druckluft bläst dauerhaft über die Auslassöffnung ab — die ist nur für kurze, kleine Entlüftungen gedacht':'Druckluft entweicht ungehindert — Schalldämpfer oder Leitung fehlt'}</title></g>`;
       }
-      s+=`<circle class="port${act?' active':''}" data-c="${c.id}" data-p="${p.n}" cx="${p.x}" cy="${p.y}" r="4.5"><title>Anschluss ${p.n}</title></circle>`;
+      s+=`<circle class="port${act?' active':''}" data-c="${c.id}" data-p="${p.n}" data-lbl="${p.lbl||p.n}" cx="${p.x}" cy="${p.y}" r="4.5">${simView?'':`<title>Anschluss ${p.lbl||p.n}</title>`}</circle>`;
       if(c.type==='knoten'||(portUse[nk(c.id,p.n)]||0)>1)
         s+=`<circle cx="${p.x}" cy="${p.y}" r="3" style="fill:var(--wire);stroke:none" pointer-events="none"/>`;
     }
@@ -974,15 +1446,30 @@ function render(){
     const bx=Math.min(band.x0,mouse.x),by=Math.min(band.y0,mouse.y);
     s+=`<rect class="band" x="${bx}" y="${by}" width="${Math.abs(mouse.x-band.x0)}" height="${Math.abs(mouse.y-band.y0)}" pointer-events="none"/>`;
   }
+  if(state.frame&&!simView){
+    const f=state.frame,hs=7;
+    s+=`<g id="printFrame"><rect class="pframe" x="${f.x}" y="${f.y}" width="${f.w}" height="${f.h}"/>`+
+      `<text class="pflabel" x="${f.x+4}" y="${f.y-6}">A4 ${f.w>=f.h?'quer':'hoch'}</text>`+
+      `<path class="fedge" data-frame="move" d="M${f.x},${f.y} H${f.x+f.w} V${f.y+f.h} H${f.x} Z"/>`;
+    const cs=[['nw',f.x,f.y],['ne',f.x+f.w,f.y],['sw',f.x,f.y+f.h],['se',f.x+f.w,f.y+f.h]];
+    for(const[k,cx,cy]of cs)
+      s+=`<rect class="fcorner ${k}" data-frame="${k}" x="${cx-hs}" y="${cy-hs}" width="${hs*2}" height="${hs*2}" rx="2"/>`;
+    s+='</g>';
+  }
   s+=`<path id="temppath" class="temp" d="${pending?tempD():''}"/>`;
-  const senDragId=(drag&&drag.items&&drag.items.length===1&&(comp(drag.items[0].id)||{}).type==='sensor')?drag.items[0].id:null;
-  if(placing==='sensor'||senDragId!=null){
-    for(const sl of sensorSlots(senDragId!=null?senDragId:-1))
-      s+=`<g transform="translate(${sl.x},${sl.y}) rotate(${sl.rot})" pointer-events="none" opacity="0.55"><rect x="-10" y="-16" width="20" height="16" fill="none" style="stroke:var(--accent);stroke-width:1.5;stroke-dasharray:4 3"/></g>`;
+  {
+    const sdComp=(drag&&drag.items&&drag.items.length===1)?comp(drag.items[0].id):null;
+    const senTyp=(placing==='sensor'||placing==='rollentaster')?placing
+      :(sdComp&&(sdComp.type==='sensor'||sdComp.type==='rollentaster')?sdComp.type:null);
+    if(senTyp){
+      const mr=senTyp==='sensor'?'<rect x="-7" y="-9" width="14" height="9"':'<rect x="-10" y="-16" width="20" height="16"';
+      for(const sl of sensorSlots(sdComp?sdComp.id:-1,senTyp))
+        s+=`<g transform="translate(${sl.x},${sl.y}) rotate(${sl.rot})" pointer-events="none" opacity="0.55">${mr} fill="none" style="stroke:var(--accent);stroke-width:1.5;stroke-dasharray:4 3"/></g>`;
+    }
   }
   if(placing&&placing!=='leitung'){
     const gp=ghostSnap();
-    s+=`<g id="ghost" opacity="0.45" pointer-events="none" transform="translate(${gp.x},${gp.y}) rotate(${gp.rot})"><g class="sym">${DEFS[placing].draw(DEFS[placing].cfg())}</g></g>`;
+    s+=`<g id="ghost" opacity="0.45" pointer-events="none" transform="translate(${gp.x},${gp.y}) rotate(${gp.rot})"><g class="sym">${DEFS[placing].draw(cfgFor(placing,placingVar))}</g></g>`;
   }
   if(placingSnip){
     s+=`<g opacity="0.45" pointer-events="none" transform="translate(${snap(mouse.x)},${snap(mouse.y)})">`;
@@ -991,14 +1478,119 @@ function render(){
     s+='</g>';
   }
   svg.innerHTML=s;
-  positionFloat();
+  if(simView&&simInfoId!=null)renderSimInfo();
+  else positionFloat();
+  positionFrmBar();
+  paintTip();
   saveWS();
 }
 
+/* ---------- Druckrahmen (A4) ---------- */
+const A4R=210/297;
+let fdrag=null;
+function toggleFrame(){
+  if(state.frame){state.frame=null;render();return;}
+  /* Vorgabe: Hochformat — Querformat per Drehen-Schaltfläche */
+  const h=Math.round(Math.min(1500,Math.max(500,view.h*0.8)));
+  const w=Math.round(h*A4R);
+  state.frame={x:Math.round(view.x+view.w/2-w/2),y:Math.round(view.y+view.h/2-h/2),w,h};
+  render();
+}
+function positionFrmBar(){
+  const b=el('frmBar');
+  if(!state.frame||simView){b.style.display='none';return;}
+  const f=state.frame,m=svg.getScreenCTM();
+  if(!m){b.style.display='none';return;}
+  const wrap=el('canvasWrap').getBoundingClientRect();
+  b.style.display='flex';
+  const sx=m.a*(f.x+f.w)+m.c*f.y+m.e-wrap.left;
+  const sy=m.b*(f.x+f.w)+m.d*f.y+m.f-wrap.top;
+  b.style.left=Math.round(Math.max(2,Math.min(sx-b.offsetWidth,wrap.width-b.offsetWidth-2)))+'px';
+  b.style.top=Math.round(Math.max(2,Math.min(sy-b.offsetHeight-8,wrap.height-b.offsetHeight-2)))+'px';
+}
+function rotateFrame(){
+  const f=state.frame;if(!f)return;
+  const cx=f.x+f.w/2,cy=f.y+f.h/2;
+  const nw=f.h,nh=f.w;
+  f.w=Math.round(nw);f.h=Math.round(nh);
+  f.x=Math.round(cx-f.w/2);f.y=Math.round(cy-f.h/2);
+  render();
+}
+function doPrint(){
+  const f=state.frame;
+  if(!f)return;
+  const clone=svg.cloneNode(true);
+  clone.removeAttribute('id');
+  clone.setAttribute('viewBox',`${f.x} ${f.y} ${f.w} ${f.h}`);
+  clone.setAttribute('preserveAspectRatio','xMidYMid meet');
+  clone.querySelectorAll('.port,.band,.selbox,.temp,.wirehit,#ghost,#printFrame,#gridBg').forEach(n=>n.remove());
+  clone.querySelectorAll('.selw').forEach(n=>n.classList.remove('selw'));
+  /* eigene Kennungen, damit Marker/Schraffuren nicht mit der Arbeitsfläche kollidieren */
+  clone.innerHTML=clone.innerHTML
+    .split('id="arr"').join('id="arrPR"').split('url(#arr)').join('url(#arrPR)')
+    .replace(/id="tk(\d+)"/g,'id="tkPR$1"').replace(/url\(#tk(\d+)\)/g,'url(#tkPR$1)');
+  clone.setAttribute('style','--paper:#fff;--ink:#000;--wire:#000;--hot:#000;--inkmuted:#333;--lbl:#333;--sel:#000;--hotw:2.6;background:#fff');
+  el('pageStyle').textContent=`@page{size:A4 ${f.w>=f.h?'landscape':'portrait'};margin:8mm}`;
+  const pa=el('printArea');
+  pa.innerHTML='';
+  pa.appendChild(clone);
+  window.print();
+}
+window.addEventListener('afterprint',()=>{el('printArea').innerHTML='';});
 /* ---------- Eigenschaften-Panel ---------- */
 function optHtml(k,opts,val,label){
   return`<label>${label}</label><select data-k="${k}">${opts.map(o=>`<option value="${o[0]}"${String(o[0])===String(val)?' selected':''}>${o[1]}</option>`).join('')}</select>`;
 }
+function numHtml(k,val,label,min,max,step){
+  return`<label>${label}</label><input type="number" data-k="${k}" value="${val}" min="${min}" max="${max}" step="${step}">`;
+}
+/* frei beschreibbares Auswahlfeld; die Liste zeigt immer alle Vorgaben */
+function comboOpts(opts,val){
+  return opts.map(o=>`<div class="copt${String(o)===String(val)?' on':''}">${esc(o)}</div>`).join('');
+}
+function comboHtml(k,val,opts,label,title){
+  return`<label>${label}</label><div class="combo"><input data-k="${k}" value="${esc(val)}"${title?` title="${esc(title)}"`:''}>`+
+    `<button type="button" class="cbtn" tabindex="-1" title="Vorgaben">${ICO.chev}</button>`+
+    `<div class="copts">${comboOpts(opts,val)}</div></div>`;
+}
+/* Die Liste liegt als eigene Ebene über allem — so wächst kein Konfigurationsfenster mit */
+let comboOwner=null;
+function closeCombo(){el('comboPop').style.display='none';comboOwner=null;}
+function openCombo(box){
+  const inp=box.querySelector('input'),src=box.querySelector('.copts'),pop=el('comboPop');
+  if(!inp||!src)return;
+  pop.innerHTML=src.innerHTML;
+  pop.querySelectorAll('.copt').forEach(o=>o.classList.toggle('on',o.textContent===inp.value.trim()));
+  const r=inp.getBoundingClientRect();
+  pop.style.display='block';
+  pop.style.left=Math.round(Math.min(r.left,window.innerWidth-r.width-6))+'px';
+  pop.style.width=Math.round(r.width)+'px';
+  pop.style.top='0px';
+  const h=pop.offsetHeight;
+  pop.style.top=Math.round(window.innerHeight-r.bottom>h+10||r.top<h+10?r.bottom+4:r.top-h-4)+'px';
+  comboOwner=inp;
+}
+document.addEventListener('click',e=>{
+  const opt=e.target.closest&&e.target.closest('#comboPop .copt');
+  if(opt&&comboOwner){
+    const inp=comboOwner;
+    inp.value=opt.textContent;
+    closeCombo();
+    inp.dispatchEvent(new Event('input',{bubbles:true}));
+    inp.dispatchEvent(new Event('change',{bubbles:true}));
+    return;
+  }
+  const btn=e.target.closest&&e.target.closest('.cbtn');
+  if(btn){
+    const box=btn.closest('.combo');
+    const was=comboOwner&&box.contains(comboOwner);
+    closeCombo();
+    if(!was)openCombo(box);
+    return;
+  }
+  if(!(e.target.closest&&e.target.closest('#comboPop')))closeCombo();
+});
+window.addEventListener('resize',closeCombo);
 function posNames(n){return n===2?['links','rechts']:['links','Mitte','rechts'];}
 function presetSvg(pc,pr){
   const lay=portLayout(pc);
@@ -1038,11 +1630,92 @@ function actTiles(side,arr,slot){
       :`<button type="button" class="tile atile${cur===k?' on':''}" data-act="${side}" data-slot="${slot}" data-v="${k}" title="${ACTS[k]}">${actSvg(k,mir)}</button>`).join('')+
     `</div><div class="tilecap">${cur==='none'?'— keine —':ACTS[cur]}</div>`;
 }
-let floatOff={dx:0,dy:0},lastSelKey='';
+let floatOff={dx:0,dy:0},lastSelKey='',advOpen=false;
+/* ---------- Info-Fenster während der Simulation ---------- */
+let simInfoId=null,simInfoPin=false;
+function simInfoBody(c){
+  let s='';
+  const row=(k,v)=>{s+=`<div class="irow"><span>${k}</span><b>${v}</b></div>`;};
+  const grp=t=>{s+=`<div class="igrp">${t}</div>`;};
+  const bar=p=>barTxt(p||0)+' bar';
+  if(c.label)row('Bezeichnung',esc(c.label));
+  if(c.type==='zylinder'){
+    const g=zylGeo(c.cfg),st=simStroke[c.id]||0;
+    const p1=simVals[nk(c.id,'1')]||0,p2=c.cfg.typ==='einfach'?0:(simVals[nk(c.id,'2')]||0);
+    const dir=simCylDir[c.id]||0;
+    row('Bauart',c.cfg.typ==='einfach'?'einfachwirkend':c.cfg.typ==='gleichlauf'?'Gleichlauf':'doppeltwirkend');
+    row('Zustand',dir>0?'fährt aus':dir<0?'fährt ein':(st>=0.999?'ausgefahren':st<=0.001?'eingefahren':'steht'));
+    row('Position',`${Math.round(st*100)} % · ${Math.round(st*g.hub)} von ${Math.round(g.hub)} mm`);
+    grp('Drücke');
+    row('Kammer 1 (Kolben)',bar(p1));
+    if(c.cfg.typ!=='einfach')row('Kammer 2 (Stange)',bar(p2));
+    const F=(p1*g.A-p2*(c.cfg.typ==='einfach'?0:g.Ar))*10;
+    row('Kraft am Kolben',`${F>=0?'+':'−'}${Math.abs(F).toFixed(0)} N`);
+    grp('Bauform');
+    row('Kolben-Ø / Stange-Ø',`${g.dk} / ${g.ds} mm`);
+    row('Flächen',`${g.A.toFixed(1)} / ${g.Ar.toFixed(1)} cm²`);
+    row('Hubvolumen',`${g.V.toFixed(0)} cm³`);
+  }else if(c.type==='ventil'){
+    const act=Math.min(simPos[c.id]!=null?simPos[c.id]:c.cfg.rest,c.cfg.pos-1);
+    const ps=valvePresets(c.cfg.pc);
+    const pr=ps.find(p=>p.id===c.cfg.patterns[act])||ps[0];
+    row('Bauart',`${c.cfg.pc}/${c.cfg.pos}-Wegeventil`);
+    row('Stellung',posNames(c.cfg.pos)[act]);
+    row('Durchgang',pr.label);
+    row('Betätigt',(sideForce(c,'L')?'links':'')+(sideForce(c,'L')&&sideForce(c,'R')?' + ':'')+(sideForce(c,'R')?'rechts':'')||'—');
+  }else if(c.type==='behaelter'){
+    const pT=simTankP[c.id]||0,vol=c.cfg.vol!=null?c.cfg.vol:0.5;
+    row('Volumen',`${vol} l`);
+    row('Druck',bar(pT));
+    row('Füllstand',`${Math.round(pT/6*100)} %`);
+    row('Luftinhalt',`${(pT*vol).toFixed(2)} bar·l`);
+  }else if(c.type==='quelle'){
+    row('Eingestellt',bar(c.cfg.druck!=null?c.cfg.druck:6));
+  }else if(c.type==='drossel'){
+    row('Durchlass 2 → 1',`${c.cfg.faktor!=null?c.cfg.faktor:50} %`);
+  }else if(c.type==='zeitventil'){
+    const z=c.cfg.zeit!=null?c.cfg.zeit:2,el2=simDelayT[c.id]||0;
+    row('Art',c.cfg.offen?'abfallverzögert':'anzugsverzögert');
+    row('Verzögerungszeit',`${String(z).replace('.',',')} s`);
+    row('Steuerdruck',bar(simVals[nk(c.id,'12')]||0));
+    row('Zeit läuft',`${el2.toFixed(1).replace('.',',')} s`);
+    row('Zustand',zvFlow(c)?'1 → 2 offen':'2 → 3 entlüftet');
+  }else if(c.type==='druckschalt'){
+    const thr=dsSchwelle(c.cfg),pv=simVals[nk(c.id,'12')]||0;
+    row('Schaltdruck',bar(thr));
+    row('Steuerdruck an 12',bar(pv));
+    row('Zustand',pv>=Math.max(thr,0.01)?'geschaltet (1 → 2)':'Ruhe (2 → 3 entlüftet)');
+  }else if(c.type==='sensor'||c.type==='rollentaster'){
+    const t=comp(c.cfg.target);
+    row('Überwacht',t?esc(t.label||('Zylinder '+t.id)):'— nicht zugeordnet —');
+    row('Endlage',c.cfg.mode==='ein'?'eingefahren (hinten)':'ausgefahren (vorn)');
+    row('Zustand',sensorActive(c.cfg)?'betätigt':'frei');
+  }
+  const ports=DEFS[c.type].ports(c.cfg);
+  if(ports.length){
+    grp('Anschlüsse');
+    for(const p of ports)row(p.lbl||p.n,bar(simVals[nk(c.id,p.n)]));
+  }
+  return s;
+}
+function renderSimInfo(){
+  const c=comp(simInfoId);
+  const p=el('float');
+  if(!c){simInfoId=null;p.style.display='none';return;}
+  p.className='';
+  p.innerHTML=`<header><span>${DEFS[c.type].label}</span><span style="display:flex;gap:2px">`+
+    `<button class="pin${simInfoPin?' on':''}" id="btnPin" title="${simInfoPin?'Angeheftet — Fenster bleibt offen':'Anheften, damit das Fenster offen bleibt'}">${ICO.pin}</button>`+
+    `<button class="close" id="btnClose" title="Schließen">×</button></span></header>${simInfoBody(c)}`;
+  p.style.display='block';
+  el('btnPin').addEventListener('click',()=>{simInfoPin=!simInfoPin;renderSimInfo();});
+  el('btnClose').addEventListener('click',()=>{simInfoId=null;simInfoPin=false;p.style.display='none';});
+  positionFloat();
+}
 function positionFloat(){
   const p=el('float');
-  if(!selArr.length||p.style.display==='none')return;
-  const s0=selArr[0];
+  if(p.style.display==='none')return;
+  const s0=(simView&&simInfoId!=null)?{kind:'comp',id:simInfoId}:selArr[0];
+  if(!s0)return;
   let ax,ay;
   if(s0.kind==='comp'){
     const c=comp(s0.id);if(!c)return;
@@ -1064,9 +1737,16 @@ function positionFloat(){
 }
 function renderProps(){
   const p=el('float');
+  closeCombo();
+  if(simView&&simInfoId!=null){renderSimInfo();return;}
   if(!selArr.length){p.style.display='none';lastSelKey='';return;}
+  /* Leitungen und Knoten haben nichts einzustellen — kein Fenster beim Anfassen */
+  if(selArr.length===1){
+    const s1=selArr[0];
+    if(s1.kind==='wire'||(comp(s1.id)||{}).type==='knoten'){p.style.display='none';lastSelKey='';return;}
+  }
   const key=selArr.map(s=>s.kind+':'+s.id).join(',');
-  if(key!==lastSelKey){floatOff={dx:0,dy:0};lastSelKey=key;}
+  if(key!==lastSelKey){floatOff={dx:0,dy:0};lastSelKey=key;advOpen=false;}
   const single=selArr.length===1?selArr[0]:null;
   let title='',body='',c=null;
   if(!single){
@@ -1086,48 +1766,89 @@ function renderProps(){
       body+=optHtml('pos',[[2,'2 Stellungen'],[3,'3 Stellungen']],g.pos,'Schaltstellungen');
       body+=optHtml('pc',[[2,'2'],[3,'3'],[4,'4'],[5,'5']],g.pc,'Anschlüsse');
       body+=optHtml('rest',names.map((n,i)=>[i,n]),g.rest,'Anschlüsse an Stellung (Ruhestellung)');
+      if(!simpleMode&&(hasPilot(g.actL)||hasPilot(g.actR)))
+        body+=numHtml('pmin',g.pmin!=null?g.pmin:0.5,`Ansprechdruck Steueranschlüsse ${hasPilot(g.actL)?pilotName(g,'L'):''}${hasPilot(g.actL)&&hasPilot(g.actR)?'/':''}${hasPilot(g.actR)?pilotName(g,'R'):''} (bar)`,0,6,0.1);
       const patHtml=i=>{
         const cur=ps.find(x=>x.id===g.patterns[i])||ps[0];
         return`<label>Schaltbild ${names[i]}</label><div class="tiles">`+
           ps.map(x=>`<button type="button" class="tile${x.id===cur.id?' on':''}" data-pat="${i}" data-v="${x.id}" title="${x.label}">${presetSvg(g.pc,x)}</button>`).join('')+
           `</div><div class="tilecap">${cur.label}</div>`;
       };
-      const sensors=state.comps.filter(x=>x.type==='sensor');
-      const senOpts=[['','— wählen —']].concat(sensors.map(z=>[z.id,z.label||('Sensor '+z.id)]));
+      const sensors=state.comps.filter(x=>x.type==='sensor'||x.type==='rollentaster');
+      const senOpts=[['','— wählen —']].concat(sensors.map(z=>[z.id,(z.label||('#'+z.id))+(z.type==='rollentaster'?' (Rollentaster)':' (Näherungsschalter)')]));
       const rastChk=(side,slot)=>{
         const a=(side==='L'?g.actL:g.actR)||[];
         const rA=side==='L'?g.rastL:g.rastR;
         const en=RASTABLE.has(a[slot]||'none');
         const on=Array.isArray(rA)?!!rA[slot]:(slot===0&&!!rA);
-        return`<label class="chk${en?'':' dis'}"><input type="checkbox" data-k="rast${side}${slot}"${on&&en?' checked':''}${en?'':' disabled'}> Mit Raste (rastend)</label>`;
+        return`<label class="chk${en?'':' dis'}"><input type="checkbox" data-k="rast${side}${slot}"${on&&en?' checked':''}${en?'':' disabled'}> rastend</label>`;
       };
       let colL=patHtml(0);
       colL+=actTiles('L',g.actL,0)+rastChk('L',0);
       colL+=actTiles('L',g.actL,1)+rastChk('L',1);
-      if((g.actL||[]).includes('sensor'))colL+=optHtml('senL',senOpts,g.senL==null?'':g.senL,'Sensor für Betätigung links');
+      if((g.actL||[]).some(a=>LINKACTS.has(a)))colL+=optHtml('senL',senOpts,g.senL==null?'':g.senL,'Endlagen-Geber links');
       let colR=patHtml(g.pos-1);
       colR+=actTiles('R',g.actR,0)+rastChk('R',0);
       colR+=actTiles('R',g.actR,1)+rastChk('R',1);
-      if((g.actR||[]).includes('sensor'))colR+=optHtml('senR',senOpts,g.senR==null?'':g.senR,'Sensor für Betätigung rechts');
+      if((g.actR||[]).some(a=>LINKACTS.has(a)))colR+=optHtml('senR',senOpts,g.senR==null?'':g.senR,'Endlagen-Geber rechts');
       body+=g.pos===3
         ?`<div class="cols"><div>${colL}</div><div>${patHtml(1)}</div><div>${colR}</div></div>`
         :`<div class="cols"><div>${colL}</div><div>${colR}</div></div>`;
     }else if(c.type==='zylinder'){
       const g=c.cfg,typ=g.typ==='vereinfacht'?'doppelt':g.typ;
       body+=optHtml('typ',[['einfach','einfachwirkend mit Feder'],['doppelt','doppeltwirkend'],['gleichlauf','Gleichlaufzylinder']],typ,'Bauart');
-      if(typ!=='einfach'){
-        body+=optHtml('daempf',[['keine','keine'],['kolben','kolbenseitig'],['stange','kolbenstangenseitig'],['beid','beidseitig']],g.daempf,'Dämpfung');
-        if(g.daempf!=='keine')
-          body+=`<label class="chk"><input type="checkbox" data-k="einst"${g.einstellbar?' checked':''}> Dämpfung einstellbar</label>`;
+      {
+        const D=zylDamp(g);
+        body+='<label>Endlagendämpfung</label>';
+        body+=`<label class="chk"><input type="checkbox" data-k="dL"${D.L?' checked':''}> kolbenseitig</label>`;
+        body+=`<label class="chk"><input type="checkbox" data-k="dR"${D.R?' checked':''}> kolbenstangenseitig</label>`;
+        if(D.L||D.R)body+=`<label class="chk"><input type="checkbox" data-k="einst"${D.e?' checked':''}> einstellbar</label>`;
       }
+      body+=`<label class="chk"><input type="checkbox" data-k="magnet"${g.magnet?' checked':''}> Kolben mit Magnet (für Endlagensensoren)</label>`;
+      {
+        const geo=zylGeo(g);
+        const r1=x=>Math.round(x*10)/10,r2=x=>Math.round(x*100)/100;
+        const lockBtn=key=>`<button type="button" class="lockbtn" data-lock="${key}" title="${(g.fix||'')===key?'Fixiert — eine Volumen-Eingabe ändert nur den anderen Wert. Klick löst die Fixierung.':'Fixieren: Eine Volumen-Eingabe ändert dann nur den anderen Wert.'}">${(g.fix||'')===key?ICO.lock:ICO.unlock}</button>`;
+        let adv='';
+        adv+=`<label>Hub (mm)</label><div class="lockrow"><input type="number" data-k="hub" value="${r1(geo.hub)}" min="10" max="2000" step="1">${lockBtn('hub')}</div>`;
+        adv+=`<label>Kolben-Ø (mm)</label><div class="lockrow"><input type="number" data-k="dk" value="${r1(geo.dk)}" min="5" max="500" step="0.5">${lockBtn('dk')}</div>`;
+        adv+=numHtml('flaeche',r2(geo.A),'Kolbenfläche (cm²)',0.2,2000,0.1);
+        adv+=numHtml('ds',r1(geo.ds),'Kolbenstangen-Ø (mm)',1,499,0.5);
+        adv+=numHtml('ring',r2(geo.Ar),'Ringfläche Stangenseite (cm²)',0.05,2000,0.1);
+        adv+=numHtml('vol',r1(geo.V),'Volumen (cm³)',1,200000,1);
+        adv+=numHtml('mindruck',g.mindruck!=null?g.mindruck:0.5,'Losbrechdruck / Reibung (bar)',0,6,0.1);
+        adv+='<p class="muted" style="font-size:11.5px">Druck wirkt auf die Flächen (kolbenseitig voll, stangenseitig Ringfläche); die Kräfte werden verglichen. Ohne Fixierung skaliert eine Volumen-Eingabe Hub und Durchmesser proportional; größeres Volumen macht den Kolben langsamer.</p>';
+        if(!simpleMode)body+=`<details class="adv"${advOpen?' open':''}><summary>Erweiterte Einstellungen (Geometrie &amp; Kraft)</summary>${adv}</details>`;
+      }
+    }else if(c.type==='behaelter'){
+      body+=numHtml('vol',c.cfg.vol!=null?c.cfg.vol:1,'Volumen (Liter)',0.1,100,0.1);
+      body+='<p class="muted" style="font-size:11.5px">Füllt sich über den anliegenden Druck und gibt seine Luft an tiefer liegende Verbraucher wieder ab — versorgt er mehrere, steigt er entsprechend langsamer. Eingeschlossene Luft hält er; entladen wird nur über offene Enden. Wirkt so als Zeitglied — z.&nbsp;B. mit Drossel und Druckschaltventil.</p>';
+    }else if(c.type==='quelle'){
+      const d=c.cfg.druck!=null?c.cfg.druck:6;
+      body+=comboHtml('druckc',barTxt(d),['6,0','4,0','2,5','1,0'],'Ausgangsdruck (bar)','Vorgabe wählen oder eigenen Wert eintragen (0–6 bar)');
+    }else if(c.type==='drossel'){
+      body+=numHtml('faktor',c.cfg.faktor!=null?c.cfg.faktor:50,'Durchlass in Drosselrichtung 2 → 1 (%)',5,100,5);
+      body+='<p class="muted" style="font-size:11.5px">In Pfeilrichtung 1 → 2 voller Durchfluss; in Gegenrichtung kommt nur der eingestellte Anteil des Drucks durch.</p>';
+    }else if(c.type==='drosselventil'){
+      body+=numHtml('faktor',c.cfg.faktor!=null?c.cfg.faktor:50,'Durchlass (%)',5,100,5);
+      body+=`<label class="chk"><input type="checkbox" data-k="einst"${c.cfg.einstellbar!==false?' checked':''}> einstellbar</label>`;
+      body+='<p class="muted" style="font-size:11.5px">Drosselt in beide Richtungen gleich stark.</p>';
+    }else if(c.type==='zeitventil'){
+      body+=numHtml('zeit',c.cfg.zeit!=null?c.cfg.zeit:2,'Verzögerungszeit (s)',0.1,60,0.1);
+      body+=`<label class="chk"><input type="checkbox" data-k="offen"${c.cfg.offen?' checked':''}> Ruhestellung geöffnet (abfallverzögert)</label>`;
+      body+=`<p class="muted" style="font-size:11.5px">${c.cfg.offen
+        ?'Ohne Signal an 10 ist 1 → 2 offen. Liegt das Signal an, sperrt das Ventil nach Ablauf der Zeit und entlüftet 2 über 3.'
+        :'Ohne Signal an 12 ist 2 über 3 entlüftet. Liegt das Signal an, schaltet das Ventil nach Ablauf der Zeit auf 1 → 2 durch.'} Fällt das Signal weg, geht es sofort in die Ruhestellung zurück.</p>`;
     }else if(c.type==='druckschalt'){
-      body+=optHtml('ansprech',[['jed','jedem anstehenden Druck (auch gedrosselt)'],['voll','erst vollem (ungedrosseltem) Druck']],c.cfg.ansprech||'jed','Schaltet bei Steuerdruck an 12 ab');
-      body+='<p class="muted" style="font-size:11.5px">Erreicht der Druck an 12 den eingestellten Wert, schaltet das eingebaute 3/2-Ventil durch (1 → 2); darunter ist 2 über 3 entlüftet.</p>';
-    }else if(c.type==='sensor'){
+      body+=numHtml('schwelle',dsSchwelle(c.cfg),'Schaltdruck an 12 (bar)',0,6,0.1);
+      body+='<p class="muted" style="font-size:11.5px">Erreicht der Steuerdruck an 12 den Schaltdruck, schaltet das eingebaute 3/2-Ventil durch (1 → 2); darunter ist 2 über 3 entlüftet.</p>';
+    }else if(c.type==='sensor'||c.type==='rollentaster'){
       const g=c.cfg,zyl=state.comps.filter(x=>x.type==='zylinder');
       body+=optHtml('target',[['','— wählen —']].concat(zyl.map(z=>[z.id,z.label||('Zylinder '+z.id)])),g.target==null?'':g.target,'Überwachter Aktor');
       body+=optHtml('mode',[['aus','ausgefahren (Endlage vorn)'],['ein','eingefahren (Endlage hinten)']],g.mode,'Schaltet bei Endlage');
-      body+='<p class="muted" style="font-size:11.5px">Auf einen Zylinder ziehen: rastet vorn (ausgefahren) oder hinten (eingefahren) ein und verknüpft sich selbst. Am Wegeventil die Betätigung „Pneumatisch (Sensor)" wählen und diesen Sensor zuordnen.</p>';
+      body+=c.type==='rollentaster'
+        ?'<p class="muted" style="font-size:11.5px">Mechanischer Grenztaster: rastet außen an der Kolbenstangen-Bahn ein. Am Wegeventil die Betätigung „Rollenhebel" (oder „Rollenstößel") wählen und diesen Taster als Endlagen-Geber zuordnen.</p>'
+        :'<p class="muted" style="font-size:11.5px">Näherungsschalter: rastet direkt auf dem Zylinderrohr über den Kolben-Endlagen ein und erkennt den Magnetkolben. Am Wegeventil die Betätigung „Elektromagnet / Näherungsschalter" wählen und diesen Schalter als Endlagen-Geber zuordnen.</p>';
     }else if(c.type==='text'){
       body+=`<label>Text</label><textarea data-txt rows="3">${esc(c.cfg.text||'')}</textarea>`;
       body+=optHtml('tsize',[[10,'klein'],[14,'mittel'],[20,'groß']],c.cfg.size||14,'Schriftgröße');
@@ -1146,6 +1867,16 @@ function renderProps(){
       if(!c)return;
       pushUndo();
       applyProp(c,inp.dataset.k,inp.type==='checkbox'?inp.checked:inp.value);
+      render();renderProps();
+    });
+  });
+  const dv=p.querySelector('details.adv');
+  if(dv)dv.addEventListener('toggle',()=>{advOpen=dv.open;});
+  p.querySelectorAll('[data-lock]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      if(!c)return;
+      pushUndo();
+      c.cfg.fix=(c.cfg.fix||'')===btn.dataset.lock?'':btn.dataset.lock;
       render();renderProps();
     });
   });
@@ -1209,6 +1940,7 @@ function applyProp(c,k,v){
     else if(k==='actR1')g.actR[1]=v;
     else if(k==='senL')g.senL=v?+v:null;
     else if(k==='senR')g.senR=v?+v:null;
+    else if(k==='pmin')g.pmin=Math.max(0,Math.min(6,parseFloat(v)||0));
     else if(/^rast[LR][01]$/.test(k)){
       const kk=k[4]==='L'?'rastL':'rastR';
       const a=Array.isArray(g[kk])?g[kk].slice():[!!g[kk],false];
@@ -1217,12 +1949,69 @@ function applyProp(c,k,v){
     }
   }else if(c.type==='zylinder'){
     const g=c.cfg;
+    const rd=x=>Math.round(x*10)/10;
     if(k==='typ')g.typ=v;
     else if(k==='daempf')g.daempf=v;
     else if(k==='einst')g.einstellbar=!!v;
+    else if(k==='magnet')g.magnet=!!v;
+    else if(k==='dL'||k==='dR'){
+      const D=zylDamp(g);
+      if(k==='dL')D.L=!!v;else D.R=!!v;
+      g.dL=D.L;g.dR=D.R;
+      if(!D.L&&!D.R)g.einstellbar=false;
+      /* Altfeld mitführen, damit Exporte/ältere Stände weiter passen */
+      g.daempf=D.L&&D.R?'beid':D.L?'kolben':D.R?'stange':'keine';
+    }
+    else if(k==='mindruck')g.mindruck=Math.max(0,Math.min(6,parseFloat(v)||0));
+    else if(k==='hub')g.hub=Math.max(10,Math.min(2000,parseFloat(v)||100));
+    else if(k==='dk'){
+      g.dk=Math.max(5,Math.min(500,parseFloat(v)||32));
+      if((g.ds!=null?g.ds:12)>=g.dk)g.ds=rd(g.dk*0.4);
+    }
+    else if(k==='ds')g.ds=Math.max(1,Math.min((g.dk!=null?g.dk:32)-0.5,parseFloat(v)||12));
+    else if(k==='flaeche'){
+      const A=Math.max(0.2,Math.min(2000,parseFloat(v)||8));
+      g.dk=rd(Math.sqrt(A*400/Math.PI));
+      if((g.ds!=null?g.ds:12)>=g.dk)g.ds=rd(g.dk*0.4);
+    }
+    else if(k==='ring'){
+      const geo=zylGeo(g);
+      const R=Math.max(0.05,Math.min(geo.A-0.05,parseFloat(v)||geo.Ar));
+      g.ds=rd(Math.sqrt((geo.A-R)*400/Math.PI));
+    }
+    else if(k==='vol'){
+      const geo=zylGeo(g);
+      const Vc=Math.max(1,Math.min(200000,parseFloat(v)||geo.V));
+      const fx=g.fix||'';
+      if(fx==='hub'){
+        g.dk=rd(Math.sqrt(Vc*10/geo.hub*400/Math.PI));
+        if((g.ds!=null?g.ds:12)>=g.dk)g.ds=rd(g.dk*0.4);
+      }else if(fx==='dk'){
+        g.hub=Math.max(10,Math.min(2000,Math.round(Vc*10/geo.A)));
+      }else{
+        /* nichts fixiert: proportional skalieren (Hub, Kolben- und Stangen-Ø gemeinsam) */
+        const kf=Math.cbrt(Vc/geo.V);
+        g.hub=Math.max(10,Math.min(2000,Math.round(geo.hub*kf)));
+        g.dk=rd(Math.max(5,Math.min(500,geo.dk*kf)));
+        g.ds=rd(Math.max(1,Math.min(g.dk-0.5,geo.ds*kf)));
+      }
+    }
+  }else if(c.type==='behaelter'){
+    if(k==='vol')c.cfg.vol=Math.max(0.1,Math.min(100,parseFloat(v)||1));
+  }else if(c.type==='quelle'){
+    if(k==='druck'||k==='druckc'){
+      const f=parseFloat(String(v).replace(',','.').replace(/[^\d.]/g,''));
+      c.cfg.druck=Math.max(0,Math.min(6,isFinite(f)?f:6));
+    }
+  }else if(c.type==='drossel'||c.type==='drosselventil'){
+    if(k==='faktor')c.cfg.faktor=Math.max(5,Math.min(100,parseFloat(v)||50));
+    else if(k==='einst')c.cfg.einstellbar=!!v;
+  }else if(c.type==='zeitventil'){
+    if(k==='zeit')c.cfg.zeit=Math.max(0.1,Math.min(60,parseFloat(v)||2));
+    else if(k==='offen')c.cfg.offen=!!v;
   }else if(c.type==='druckschalt'){
-    if(k==='ansprech')c.cfg.ansprech=v;
-  }else if(c.type==='sensor'){
+    if(k==='schwelle'){c.cfg.schwelle=Math.max(0,Math.min(6,parseFloat(v)||0));delete c.cfg.ansprech;}
+  }else if(c.type==='sensor'||c.type==='rollentaster'){
     if(k==='target')c.cfg.target=v?+v:null;
     else if(k==='mode')c.cfg.mode=v;
   }else if(c.type==='text'){
@@ -1280,7 +2069,7 @@ function pasteClip(){
     newSel.push({kind:'comp',id:nc.id});
   }
   for(const nc of newComps){
-    if(nc.type==='sensor'&&nc.cfg&&nc.cfg.target!=null&&map[nc.cfg.target]!=null)
+    if((nc.type==='sensor'||nc.type==='rollentaster')&&nc.cfg&&nc.cfg.target!=null&&map[nc.cfg.target]!=null)
       nc.cfg.target=map[nc.cfg.target];
     if(nc.type==='ventil'&&nc.cfg){
       if(nc.cfg.senL!=null&&map[nc.cfg.senL]!=null)nc.cfg.senL=map[nc.cfg.senL];
@@ -1306,6 +2095,14 @@ function delSel(){
   const wids=new Set(selArr.filter(s=>s.kind==='wire').map(s=>s.id));
   const cids=new Set(selArr.filter(s=>s.kind==='comp').map(s=>s.id));
   const conv=new Set([...cids].filter(id=>{const cc=comp(id);return cc&&cc.type!=='knoten';}));
+  /* Knoten: Leitungen bleiben erhalten — bei genau zwei wird durchverbunden, sonst offen gekürzt */
+  for(const id of cids){
+    const cc=comp(id);
+    if(!cc||cc.type!=='knoten')continue;
+    const ws=state.wires.filter(w=>!wids.has(w.id)&&(w.a.c===id||w.b.c===id));
+    if(ws.length===2&&mergeWiresAt(id,ws))continue;
+    for(const w of ws)openWireEnd(w,id);
+  }
   const kill=new Set(wids),jmap={};
   for(const w of state.wires){
     if(kill.has(w.id))continue;
@@ -1329,7 +2126,12 @@ function delSel(){
 }
 
 /* ---------- Simulation ---------- */
-let simOn=false,simTimer=null,simPaused=false,simSpeed=1,simInstant=false,simVals={},simPrevVals={},simPos={},simStroke={},simHeld={},simCtrlHeld={},simLatch={},simLeaks=new Set(),simPuffs=new Map(),simP=new Set(),simFill={},simHist=[];
+let simOn=false,simTimer=null,simPaused=false,simSpeed=1,simInstant=false,simVals={},simPrevVals={},simPos={},simStroke={},simHeld={},simCtrlHeld={},simLatch={},simLeaks=new Set(),simPuffs=new Map(),simP=new Set(),simFill={},simHist=[],simTime=0,simDrosMul={},simDrosT={},simTankP={},simCylDir={},simDelayT={},simDelayOn={};
+/* Zeitventil: leitet 1→2 durch, sonst 2→3 entlüftet */
+function zvFlow(c){
+  const on=!!simDelayOn[c.id];
+  return on?!c.cfg.offen:!!c.cfg.offen;
+}
 const MANUAL=new Set(['muskel','knopf','hebel','pedal','stoessel','rollenstoessel','rollenhebel','magnet']);
 const nk=(c,p)=>c+':'+p;
 function hasPilot(a){return(a||[]).some(k=>k==='druck'||k==='vorstufe');}
@@ -1345,20 +2147,24 @@ function sideForce(c,s){
   if(simCtrlHeld[c.id]&&simCtrlHeld[c.id][s])return true;
   if(simLatch[c.id]&&simLatch[c.id][s])return true;
   const acts=sideActs(c,s);
-  if(hasPilot(acts)&&(simVals[nk(c.id,s==='L'?'12':'14')]||0)>0)return true;
-  if(acts.includes('sensor')){
+  if(hasPilot(acts)){
+    const pv=simVals[nk(c.id,s==='L'?'12':'14')]||0;
+    if(pv>0&&pv>=(c.cfg.pmin!=null?c.cfg.pmin:0.5))return true;
+  }
+  if(acts.some(k=>LINKACTS.has(k))){
     const sc=comp(s==='L'?c.cfg.senL:c.cfg.senR);
-    if(sc&&sc.type==='sensor'&&sensorActive(sc.cfg))return true;
+    if(sc&&(sc.type==='sensor'||sc.type==='rollentaster')&&sensorActive(sc.cfg))return true;
   }
   return false;
 }
-/* Druckwerte je Anschluss: 0 = drucklos, 1 = Druck (gedrosselt), 2 = Druck */
-function simSolve(){
+/* Druckwerte je Anschluss in bar (0,0–6,0). exclTank = id eines Behälters, dessen eigener Druck
+   ausgeblendet wird — liefert den von außen an ihm anliegenden Druck zum Laden/Entladen. */
+function simSolve(exclTank){
   const val={};
   const get=n=>val[n]||0;
   let changed=true,guard=0;
-  const raise=(n,v)=>{if(v>get(n)){val[n]=v;changed=true;}};
-  for(const c of state.comps)if(c.type==='quelle')val[nk(c.id,'1')]=2;
+  const raise=(n,v)=>{if(v>get(n)+0.001){val[n]=v;changed=true;}};
+  for(const c of state.comps)if(c.type==='quelle')val[nk(c.id,'1')]=c.cfg&&c.cfg.druck!=null?c.cfg.druck:6;
   const co=[];
   {
     const buckets={};
@@ -1383,8 +2189,11 @@ function simSolve(){
     for(const c of state.comps){
       const id=c.id;
       if(c.type==='behaelter'){
-        const m=Math.max(get(nk(id,'1')),get(nk(id,'2')));
-        raise(nk(id,'1'),m);raise(nk(id,'2'),m);
+        /* Der Behälter verbindet seine Anschlüsse nicht mehr direkt — beide liegen auf Behälterdruck */
+        if(exclTank!==id){
+          const pT=simTankP[id]||0;
+          if(pT>0){raise(nk(id,'1'),pT);raise(nk(id,'2'),pT);}
+        }
       }else if(c.type==='ventil'){
         const act=Math.min(simPos[id]!=null?simPos[id]:c.cfg.rest,c.cfg.pos-1);
         const ps=valvePresets(c.cfg.pc);
@@ -1398,7 +2207,12 @@ function simSolve(){
         raise(nk(id,'2'),get(nk(id,'1')));
       }else if(c.type==='drossel'){
         raise(nk(id,'2'),get(nk(id,'1')));
-        raise(nk(id,'1'),get(nk(id,'2'))>0?1:0);
+        const f=(c.cfg&&c.cfg.faktor!=null?c.cfg.faktor:50)/100;
+        raise(nk(id,'1'),Math.min(get(nk(id,'2')),get(nk(id,'2'))*f*(simDrosMul[id]||1)));
+      }else if(c.type==='drosselventil'){
+        const f=(c.cfg&&c.cfg.faktor!=null?c.cfg.faktor:50)/100,m=simDrosMul[id]||1;
+        raise(nk(id,'2'),Math.min(get(nk(id,'1')),get(nk(id,'1'))*f*m));
+        raise(nk(id,'1'),Math.min(get(nk(id,'2')),get(nk(id,'2'))*f*m));
       }else if(c.type==='wechsel'){
         raise(nk(id,'2'),Math.max(get(nk(id,'1')),get(nk(id,'1*'))));
       }else if(c.type==='zweidruck'){
@@ -1406,11 +2220,14 @@ function simSolve(){
       }else if(c.type==='schnell'){
         if(get(nk(id,'1'))>0)raise(nk(id,'2'),get(nk(id,'1')));
       }else if(c.type==='druckschalt'){
-        const thr=(c.cfg&&c.cfg.ansprech)==='voll'?2:1;
+        const thr=Math.max(dsSchwelle(c.cfg),0.01);
         if(get(nk(id,'12'))>=thr){
           const m=Math.max(get(nk(id,'1')),get(nk(id,'2')));
           raise(nk(id,'1'),m);raise(nk(id,'2'),m);
         }
+      }else if(c.type==='zeitventil'&&zvFlow(c)){
+        const m=Math.max(get(nk(id,'1')),get(nk(id,'2')));
+        raise(nk(id,'1'),m);raise(nk(id,'2'),m);
       }
     }
   }
@@ -1440,17 +2257,64 @@ function buildVentAdj(){
       const pr=ps.find(p=>p.id===c.cfg.patterns[act])||ps[0];
       for(const[a,b]of pr.conns)both(nk(id,a),nk(id,b));
     }
-    else if(c.type==='drossel')both(nk(id,'1'),nk(id,'2'));
+    else if(c.type==='drossel'||c.type==='drosselventil')both(nk(id,'1'),nk(id,'2'));
     else if(c.type==='rueckschlag')add(nk(id,'1'),nk(id,'2'));
     else if(c.type==='wechsel'||c.type==='zweidruck'){add(nk(id,'1'),nk(id,'2'));add(nk(id,'1*'),nk(id,'2'));}
     else if(c.type==='schnell'){add(nk(id,'1'),nk(id,'2'));add(nk(id,'2'),nk(id,'3'));}
     else if(c.type==='druckschalt'){
-      const thr=(c.cfg&&c.cfg.ansprech)==='voll'?2:1;
+      const thr=Math.max(dsSchwelle(c.cfg),0.01);
       if((simVals[nk(id,'12')]||0)>=thr)both(nk(id,'1'),nk(id,'2'));
+      else both(nk(id,'2'),nk(id,'3'));
+    }
+    else if(c.type==='zeitventil'){
+      if(zvFlow(c))both(nk(id,'1'),nk(id,'2'));
       else both(nk(id,'2'),nk(id,'3'));
     }
   }
   return adj;
+}
+/* Leitungszüge: über Knoten verbundene Leitungen bilden einen "Zug"; die Füllzeit von 0,45 s gilt je Zug,
+   nicht je Teilstück — Abzweige/Knoten dürfen die Laufzeit nicht verlängern. Liefert je Leitung die
+   Kettenlänge (Durchmesser in Leitungsstücken) ihres Zugs. */
+function wireRunDia(){
+  /* Scheitelpunkt = gerundete Endpunkt-Position: alles, was am selben Punkt zusammenhängt
+     (Knoten-Referenz ODER deckungsgleiche Anschlüsse), gehört zum selben Zug. */
+  const vOf=(w,end)=>{
+    const P=absPort(w[end]);
+    return P?Math.round(P.x)+','+Math.round(P.y):'x'+w.id+end;
+  };
+  const adj={};
+  for(const w of state.wires){
+    const u=vOf(w,'a'),v=vOf(w,'b');
+    (adj[u]=adj[u]||[]).push([v,w.id]);
+    (adj[v]=adj[v]||[]).push([u,w.id]);
+  }
+  const bfs=start=>{
+    const dist={[start]:0},q=[start],wids=new Set();
+    let far=start;
+    while(q.length){
+      const u=q.shift();
+      for(const[v,id]of adj[u]||[]){
+        wids.add(id);
+        if(dist[v]==null){
+          dist[v]=dist[u]+1;
+          if(dist[v]>dist[far])far=v;
+          q.push(v);
+        }
+      }
+    }
+    return{far,d:dist[far]||0,nodes:Object.keys(dist),wids};
+  };
+  const dia={},seen=new Set();
+  for(const u in adj){
+    if(seen.has(u))continue;
+    const r1=bfs(u);
+    r1.nodes.forEach(n=>seen.add(n));
+    const r2=bfs(r1.far);
+    const D=Math.max(1,r2.d);
+    for(const id of r1.wids)dia[id]=D;
+  }
+  return dia;
 }
 function restPos(c){
   const sL=sideActs(c,'L').includes('feder'),sR=sideActs(c,'R').includes('feder');
@@ -1460,13 +2324,18 @@ function restPos(c){
   return c.cfg.rest;
 }
 function simSnapshot(){
-  return JSON.stringify({P:[...simP],fill:simFill,pos:simPos,stroke:simStroke,latch:simLatch,vals:simVals,prev:simPrevVals});
+  return JSON.stringify({P:[...simP],fill:simFill,pos:simPos,stroke:simStroke,latch:simLatch,vals:simVals,prev:simPrevVals,t:simTime,dm:simDrosMul,dq:simDrosT,tp:simTankP,zt:simDelayT,zo:simDelayOn});
 }
 function simRestore(str){
   const o=JSON.parse(str);
   simP=new Set(o.P);simFill=o.fill;simPos=o.pos;simStroke=o.stroke;simLatch=o.latch;simVals=o.vals;simPrevVals=o.prev;
+  simTime=o.t||0;simDrosMul=o.dm||{};simDrosT=o.dq||{};simTankP=o.tp||{};simDelayT=o.zt||{};simDelayOn=o.zo||{};
   simLeaks=new Set();simPuffs=new Map();
+  updClock();
   render();
+}
+function updClock(){
+  el('simClock').textContent=simOn?'t = '+simTime.toFixed(2).replace('.',',')+' s (simuliert)':'';
 }
 function simTick(){
   simHist.push(simSnapshot());
@@ -1482,7 +2351,7 @@ function simStep(){
   const tryAdd=n=>{if(steady[n]>0)simP.add(n);};
   for(const c of state.comps){
     const id=c.id;
-    if(c.type==='behaelter'||c.type==='drossel'){
+    if(c.type==='behaelter'||c.type==='drossel'||c.type==='drosselventil'){
       if(simP.has(nk(id,'1')))tryAdd(nk(id,'2'));
       if(simP.has(nk(id,'2')))tryAdd(nk(id,'1'));
     }else if(c.type==='ventil'){
@@ -1502,6 +2371,14 @@ function simStep(){
     }else if(c.type==='druckschalt'){
       if(simP.has(nk(id,'1')))tryAdd(nk(id,'2'));
       if(simP.has(nk(id,'2')))tryAdd(nk(id,'1'));
+    }else if(c.type==='zeitventil'){
+      if(zvFlow(c)){
+        if(simP.has(nk(id,'1')))tryAdd(nk(id,'2'));
+        if(simP.has(nk(id,'2')))tryAdd(nk(id,'1'));
+      }else{
+        if(simP.has(nk(id,'2')))tryAdd(nk(id,'3'));
+        if(simP.has(nk(id,'3')))tryAdd(nk(id,'2'));
+      }
     }
   }
   {
@@ -1516,7 +2393,8 @@ function simStep(){
       if(g.length>1&&g.some(n=>simP.has(n)))for(const n of g)tryAdd(n);
     }
   }
-  const vf=170*simSpeed*0.04;
+  const ff=0.04*simSpeed/0.45;
+  const runDia=wireRunDia();
   for(const w of state.wires){
     const A=absPort(w.a),B=absPort(w.b);
     if(!A||!B)continue;
@@ -1528,8 +2406,9 @@ function simStep(){
     const hasA=simP.has(na),hasB=simP.has(nb);
     if(hasA&&hasB){f.a=L;f.b=0;}
     else{
-      if(hasA)f.a=Math.min(L-f.b,f.a+vf);else f.a=0;
-      if(hasB)f.b=Math.min(L-f.a,f.b+vf);else f.b=0;
+      const adv=L*ff*(runDia[w.id]||1);
+      if(hasA)f.a=Math.min(L-f.b,f.a+adv);else f.a=0;
+      if(hasB)f.b=Math.min(L-f.a,f.b+adv);else f.b=0;
       if(f.a+f.b>=L-0.5){
         if(hasA)tryAdd(nb);
         if(hasB)tryAdd(na);
@@ -1538,6 +2417,50 @@ function simStep(){
   }
   simVals={};
   for(const n of simP)if(steady[n]>0)simVals[n]=steady[n];
+  /* Behälter dominiert seinen Leitungszug: alles, was ohne Bauteil dazwischen (nur Leitungen und
+     deckungsgleiche Anschlüsse) am Behälter hängt, liegt auf dessen Innendruck — der Druckabfall
+     sitzt damit an der Drossel/am Ventil davor, nicht auf der Leitung. */
+  if(state.comps.some(x=>x.type==='behaelter')){
+    const lineAdj={};
+    const link=(a,b)=>{(lineAdj[a]=lineAdj[a]||[]).push(b);(lineAdj[b]=lineAdj[b]||[]).push(a);};
+    for(const w of state.wires)link(nk(w.a.c,w.a.p),nk(w.b.c,w.b.p));
+    {
+      const bk={};
+      for(const c of state.comps)for(const p of DEFS[c.type].ports(c.cfg)){
+        const[px,py]=rotP(p.x,p.y,c.rot);
+        const kk=Math.round(c.x+px)+','+Math.round(c.y+py);
+        (bk[kk]=bk[kk]||[]).push(nk(c.id,p.n));
+      }
+      for(const kk in bk){
+        const g=bk[kk];
+        for(let i=1;i<g.length;i++)link(g[0],g[i]);
+      }
+    }
+    /* Je Leitungszug einmal: Der höchste Behälterdruck im Zug bestimmt den Leitungsdruck.
+       Hängt eine Quelle unmittelbar am selben Zug, hält sie den Druck — dann kein Angleichen. */
+    const done=new Set();
+    for(const c0 of state.comps){
+      if(c0.type!=='behaelter')continue;
+      for(const p0 of['1','2']){
+        const start=nk(c0.id,p0);
+        if(done.has(start))continue;
+        const zone=[start],stk=[start];
+        done.add(start);
+        let hasSource=false,mx=0;
+        while(stk.length){
+          const n=stk.pop();
+          const oc=comp(+n.slice(0,n.indexOf(':')));
+          if(oc){
+            if(oc.type==='quelle')hasSource=true;
+            else if(oc.type==='behaelter')mx=Math.max(mx,simTankP[oc.id]||0);
+          }
+          for(const m of lineAdj[n]||[])if(!done.has(m)){done.add(m);zone.push(m);stk.push(m);}
+        }
+        if(hasSource)continue;
+        for(const n of zone)if(simVals[n]!=null)simVals[n]=mx;
+      }
+    }
+  }
   simPrevVals=simVals;
   simLeaks=new Set();
   const wired=new Set();
@@ -1547,16 +2470,35 @@ function simStep(){
     const[px,py]=rotP(p.x,p.y,c.rot);
     aP.push({id:c.id,x:c.x+px,y:c.y+py});
   }
+  /* Offene Enden: unbelegte Anschlüsse UND lose Leitungsenden (Knoten mit höchstens einer Leitung) */
+  const wireDeg={};
+  for(const w of state.wires){
+    const a=nk(w.a.c,w.a.p),b=nk(w.b.c,w.b.p);
+    wireDeg[a]=(wireDeg[a]||0)+1;wireDeg[b]=(wireDeg[b]||0)+1;
+  }
+  const openNodes=new Set();
+  for(const c of state.comps)for(const p of DEFS[c.type].ports(c.cfg)){
+    const n=nk(c.id,p.n);
+    const[px,py]=rotP(p.x,p.y,c.rot);
+    const ax=c.x+px,ay=c.y+py;
+    if(aP.some(q=>q.id!==c.id&&Math.abs(q.x-ax)<6&&Math.abs(q.y-ay)<6))continue;
+    if(c.type==='knoten'){if((wireDeg[n]||0)<=1)openNodes.add(n);}
+    else if(!wired.has(n))openNodes.add(n);
+  }
+  /* vorgesehener Auslass (Schalldämpfer oder Auslassöffnung) — kein Leck */
+  const legalVent=n=>{
+    const oc=comp(+n.slice(0,n.indexOf(':')));
+    return!!oc&&VENTP.has(oc.type);
+  };
+  for(const n of openNodes){
+    if(legalVent(n))continue;
+    if((simVals[n]||0)>0)simLeaks.add(n);
+  }
+  /* Schalldämpfer und Auslassöffnungen dürfen kurz entlüften — steht dauerhaft Druck an, ist es ein Fehler */
   for(const c of state.comps){
-    if(c.type==='daempfer')continue;
-    for(const p of DEFS[c.type].ports(c.cfg)){
-      const k=nk(c.id,p.n);
-      if((simVals[k]||0)===0||wired.has(k))continue;
-      const[px,py]=rotP(p.x,p.y,c.rot);
-      const ax=c.x+px,ay=c.y+py;
-      if(aP.some(q=>q.id!==c.id&&Math.abs(q.x-ax)<6&&Math.abs(q.y-ay)<6))continue;
-      simLeaks.add(k);
-    }
+    if(!VENTP.has(c.type))continue;
+    const k=nk(c.id,'3');
+    if((simVals[k]||0)>0)simLeaks.add(k);
   }
   const now=performance.now();
   for(const[pk,tt]of[...simPuffs])if(tt<now)simPuffs.delete(pk);
@@ -1569,15 +2511,7 @@ function simStep(){
       for(const m of vAdj[n]||[])if(!seen.has(m)){seen.add(m);st.push(m);}
     }
     for(const n of seen){
-      if(wired.has(n))continue;
-      const ci=n.indexOf(':'),cid=+n.slice(0,ci),pn=n.slice(ci+1);
-      const oc=comp(cid);
-      if(!oc||oc.type==='daempfer')continue;
-      const pp=DEFS[oc.type].ports(oc.cfg).find(q=>q.n===pn);
-      if(!pp)continue;
-      const[px,py]=rotP(pp.x,pp.y,oc.rot);
-      const ax=oc.x+px,ay=oc.y+py;
-      if(aP.some(q=>q.id!==cid&&Math.abs(q.x-ax)<6&&Math.abs(q.y-ay)<6))continue;
+      if(!openNodes.has(n)||legalVent(n))continue;
       simPuffs.set(n,now+700);
     }
   };
@@ -1599,21 +2533,227 @@ function simStep(){
   }
   vAdj=null;
   const dt=0.04*simSpeed;
+  simTime+=dt;
+  /* Zeitverzögerungsventile: Speicher füllt sich über die Drossel, entleert über das Rückschlagventil sofort */
+  for(const c of state.comps)if(c.type==='zeitventil'){
+    const pv=simVals[nk(c.id,'12')]||0;
+    if(pv>=0.5){
+      simDelayT[c.id]=(simDelayT[c.id]||0)+dt;
+      if(simDelayT[c.id]>=(c.cfg.zeit!=null?c.cfg.zeit:2))simDelayOn[c.id]=true;
+    }else{simDelayT[c.id]=0;simDelayOn[c.id]=false;}
+  }
+  const movedCyl=new Set(),cylDraw=[];
   for(const c of state.comps)if(c.type==='zylinder'){
     const p1=simVals[nk(c.id,'1')]||0;
     const p2=c.cfg.typ==='einfach'?0:(simVals[nk(c.id,'2')]||0);
+    const minP=Math.max(c.cfg.mindruck!=null?c.cfg.mindruck:0.5,0.01);
+    const geo=zylGeo(c.cfg);
     let dir=0,drive=0;
-    if(c.cfg.typ==='einfach'){dir=p1>0?1:-1;drive=p1;}
-    else if(p1>0&&p2===0){dir=1;drive=p1;}
-    else if(p2>0&&p1===0){dir=-1;drive=p2;}
+    if(c.cfg.typ==='einfach'){dir=p1>=minP?1:-1;drive=p1;}
+    else if(c.cfg.typ==='gleichlauf'){
+      /* beidseitig Ringfläche: Kräfte proportional zur Druckdifferenz */
+      const dp=p1-p2;
+      if(Math.abs(dp)>=minP){dir=dp>0?1:-1;drive=Math.abs(dp);}
+    }else{
+      /* Kraftvergleich: F1 = p1·A(Kolben), F2 = p2·A(Ring); drive = kraftäquivalenter Druck auf Kolbenfläche */
+      const pe=p1-p2*(geo.Ar/geo.A);
+      if(pe>=minP){dir=1;drive=pe;}
+      else if(-pe>=minP){dir=-1;drive=-pe;}
+    }
+    simCylDir[c.id]=0;
     if(dir!==0){
       const s0=simStroke[c.id]||0;
-      const spd=(drive===1?0.35:1.1)*dt;
+      /* Volumenstrom Q = FLOW·Δp (l/s) füllt die Kammer: Hubanteil je Sekunde = Q / Kammervolumen */
+      const VL=Math.max(0.0005,geo.V/1000);
+      const dp=c.cfg.typ==='einfach'&&dir===-1?2:Math.min(drive,6);
+      const spd=Math.min(20,FLOW*dp/VL)*dt;
       const s1=Math.max(0,Math.min(1,s0+dir*spd));
       simStroke[c.id]=s1;
-      if(s1!==s0&&c.cfg.typ!=='einfach')openVent([nk(c.id,dir===1?'2':'1')]);
+      if(s1!==s0){
+        movedCyl.add(c.id);
+        simCylDir[c.id]=dir;
+        /* verbrauchte Luftmenge (bar·Liter) der füllenden Kammer */
+        const pCh=dir===1?p1:p2;
+        if(pCh>0)cylDraw.push({n:nk(c.id,dir===1?'1':'2'),q:Math.abs(s1-s0)*VL*pCh});
+        if(c.cfg.typ!=='einfach')openVent([nk(c.id,dir===1?'2':'1')]);
+      }
     }
   }
+  /* Drossel-Nachladen: steht die Zone hinter der Drossel (kein Verbrauch, keine offenen Enden, Front komplett),
+     steigt ihr Druck stetig auf den Eingangsdruck — Zeitkonstante = Zonenvolumen / (Drossel-Leitwert). */
+  for(const c of state.comps)if(c.type==='drossel'||c.type==='drosselventil'){
+    const id=c.id;
+    const f=(c.cfg&&c.cfg.faktor!=null?c.cfg.faktor:50)/100;
+    /* Eingang: beim Drosselrückschlag immer 2, beim Drosselventil die Seite mit dem höheren Druck */
+    const pA=simVals[nk(id,'1')]||0,pB=simVals[nk(id,'2')]||0;
+    const inP=c.type==='drossel'?'2':(pA>=pB?'1':'2'),outP=inP==='1'?'2':'1';
+    const pIn=simVals[nk(id,inP)]||0;
+    if(pIn<=0||f>=1){simDrosMul[id]=1;simDrosT[id]=0;continue;}
+    const maxM=1/f;
+    const m=simDrosMul[id]||1;
+    if(m>=maxM-0.0001){simDrosMul[id]=maxM;continue;}
+    if(!vAdj)vAdj=buildVentAdj();
+    const n0=nk(id,outP),zone=new Set([n0]),st2=[n0];
+    while(st2.length){
+      const n=st2.pop();
+      for(const q of vAdj[n]||[]){
+        if(n===n0&&q===nk(id,inP))continue;
+        if(!zone.has(q)){zone.add(q);st2.push(q);}
+      }
+    }
+    let ok=true,volL=0;
+    const beh=new Set();
+    for(const n of zone){
+      if(!(simVals[n]>0)||simLeaks.has(n)){ok=false;break;}
+      const ci=n.indexOf(':'),cid=+n.slice(0,ci),pn=n.slice(ci+1);
+      const oc=comp(cid);
+      if(!oc)continue;
+      if(oc.type==='daempfer'){ok=false;break;}
+      if(oc.type==='zylinder'){
+        if(movedCyl.has(cid)){ok=false;break;}
+        const gg=zylGeo(oc.cfg);
+        volL+=(pn==='1'?gg.A:gg.Ar)*gg.hub/10000;
+      }else if(oc.type==='behaelter'&&!beh.has(cid)){
+        beh.add(cid);
+        volL+=oc.cfg&&oc.cfg.vol!=null?oc.cfg.vol:0.5;
+      }
+    }
+    if(ok){
+      /* x = anteiliger Druck (f … 1) nähert sich exponentiell dem Eingangsdruck */
+      const tau=Math.max(0.15,(volL+0.02)/(f*FLOW));
+      const x=Math.min(1,f*m);
+      simDrosMul[id]=Math.min(maxM,(x+(1-x)*Math.min(1,dt/tau))/f);
+    }
+  }
+  /* --- Strömungsnetz der Kapazitäten ---------------------------------------------------------
+     Behälter (endliches Volumen), Quellen (unerschöpflich) und offene Enden (Umgebung, 0 bar)
+     tauschen je Takt die Menge Q = Leitwert · Δp · dt aus (in bar·Liter). Ein Behälter gewinnt
+     Q/Volumen an Druck, der Geber verliert entsprechend — dadurch hinkt ein Behälter, der mehrere
+     versorgt, hinterher, und ein fahrender Zylinder lässt den Druck seines Vorrats einbrechen. */
+  if(state.comps.some(x=>x.type==='behaelter')||cylDraw.length){
+    const adj={};
+    const add=(a,b,f)=>{(adj[a]=adj[a]||[]).push([b,f]);};
+    const both=(a,b,f)=>{add(a,b,f);add(b,a,f);};
+    for(const w of state.wires)both(nk(w.a.c,w.a.p),nk(w.b.c,w.b.p),1);
+    {
+      const bk={};
+      for(const c of state.comps)for(const p of DEFS[c.type].ports(c.cfg)){
+        const[px,py]=rotP(p.x,p.y,c.rot);
+        const kk=Math.round(c.x+px)+','+Math.round(c.y+py);
+        (bk[kk]=bk[kk]||[]).push(nk(c.id,p.n));
+      }
+      for(const kk in bk){const g=bk[kk];for(let i=1;i<g.length;i++)both(g[0],g[i],1);}
+    }
+    for(const c of state.comps){
+      const id=c.id;
+      if(c.type==='ventil'){
+        const act=Math.min(simPos[id]!=null?simPos[id]:c.cfg.rest,c.cfg.pos-1);
+        const ps=valvePresets(c.cfg.pc);
+        const pr=ps.find(p=>p.id===c.cfg.patterns[act])||ps[0];
+        for(const[a,b]of pr.conns)both(nk(id,a),nk(id,b),1);
+      }else if(c.type==='drossel'){
+        const f=(c.cfg&&c.cfg.faktor!=null?c.cfg.faktor:50)/100;
+        add(nk(id,'1'),nk(id,'2'),1);add(nk(id,'2'),nk(id,'1'),f);
+      }else if(c.type==='drosselventil'){
+        const f=(c.cfg&&c.cfg.faktor!=null?c.cfg.faktor:50)/100;
+        add(nk(id,'1'),nk(id,'2'),f);add(nk(id,'2'),nk(id,'1'),f);
+      }else if(c.type==='rueckschlag')add(nk(id,'1'),nk(id,'2'),1);
+      else if(c.type==='wechsel'||c.type==='zweidruck'){add(nk(id,'1'),nk(id,'2'),1);add(nk(id,'1*'),nk(id,'2'),1);}
+      else if(c.type==='schnell'){add(nk(id,'1'),nk(id,'2'),1);add(nk(id,'2'),nk(id,'3'),1);}
+      else if(c.type==='druckschalt'){
+        const thr=Math.max(dsSchwelle(c.cfg),0.01);
+        if((simVals[nk(id,'12')]||0)>=thr)both(nk(id,'1'),nk(id,'2'),1);
+        else both(nk(id,'2'),nk(id,'3'),1);
+      }
+      else if(c.type==='zeitventil'){
+        if(zvFlow(c))both(nk(id,'1'),nk(id,'2'),1);
+        else both(nk(id,'2'),nk(id,'3'),1);
+      }
+    }
+    /* Kapazitäten einsammeln */
+    const capOf={};
+    for(const c of state.comps){
+      if(c.type==='behaelter'){capOf[nk(c.id,'1')]='t'+c.id;capOf[nk(c.id,'2')]='t'+c.id;}
+      else if(c.type==='quelle')capOf[nk(c.id,'1')]='s'+c.id;
+    }
+    for(const c of state.comps)for(const p of DEFS[c.type].ports(c.cfg)){
+      const n=nk(c.id,p.n);
+      if(capOf[n])continue;
+      if(VENTP.has(c.type)||openNodes.has(n))capOf[n]='a'+n;
+    }
+    /* Wege zwischen benachbarten Kapazitäten suchen (bester Leitwert entlang des Weges) */
+    const edges={};
+    const noteEdge=(ka,kb,f,na,nb)=>{
+      if(ka===kb)return;
+      if(ka[0]==='a'&&kb[0]==='a')return;
+      if(ka[0]==='s'&&kb[0]==='s')return;
+      const key=ka<kb?ka+'|'+kb:kb+'|'+ka;
+      const e=edges[key];
+      if(!e||f>e.f)edges[key]={a:ka,b:kb,f,na,nb};
+    };
+    for(const start in capOf){
+      const best={},q=[start];
+      best[start]=1;
+      while(q.length){
+        const n=q.shift(),f0=best[n];
+        for(const[m,fm]of adj[n]||[]){
+          const nf=f0*fm;
+          if(capOf[m]){noteEdge(capOf[start],capOf[m],nf,start,m);continue;}
+          if(!(best[m]>=nf-1e-9)){best[m]=nf;q.push(m);}
+        }
+      }
+    }
+    const volOf=k=>k[0]==='t'?Math.max(0.02,(comp(+k.slice(1))||{cfg:{}}).cfg.vol!=null?comp(+k.slice(1)).cfg.vol:0.5):Infinity;
+    const pressOf=k=>{
+      if(k[0]==='t')return simTankP[+k.slice(1)]||0;
+      if(k[0]==='s'){const q=comp(+k.slice(1));return q&&q.cfg.druck!=null?q.cfg.druck:6;}
+      return 0;
+    };
+    const addQ=(k,Q)=>{
+      if(k[0]!=='t')return;
+      const id=+k.slice(1);
+      simTankP[id]=Math.max(0,Math.min(6,(simTankP[id]||0)+Q/volOf(k)));
+    };
+    for(const key in edges){
+      const e=edges[key];
+      if(!simP.has(e.na)&&!simP.has(e.nb))continue;
+      const pa=pressOf(e.a),pb=pressOf(e.b);
+      const dp=pa-pb;
+      if(Math.abs(dp)<1e-5)continue;
+      let Q=FLOW*e.f*dp*dt;
+      const Va=volOf(e.a),Vb=volOf(e.b);
+      const Vser=(isFinite(Va)&&isFinite(Vb))?Va*Vb/(Va+Vb):(isFinite(Va)?Va:(isFinite(Vb)?Vb:Infinity));
+      if(isFinite(Vser)){
+        const Qmax=dp*Vser;
+        if(Math.abs(Q)>Math.abs(Qmax))Q=Qmax;
+      }
+      addQ(e.a,-Q);addQ(e.b,Q);
+    }
+    /* Verbrauch fahrender Zylinder aus den erreichbaren Behältern decken (Quelle deckt selbst) */
+    for(const cd of cylDraw){
+      if(cd.q<=0)continue;
+      const seen=new Set([cd.n]),q=[cd.n],tanks=[];
+      let fromSource=false;
+      while(q.length&&!fromSource){
+        const n=q.shift();
+        for(const[m]of adj[n]||[]){
+          if(seen.has(m))continue;
+          seen.add(m);
+          const k=capOf[m];
+          if(k){
+            if(k[0]==='s'){fromSource=true;break;}
+            if(k[0]==='t'&&!tanks.includes(k))tanks.push(k);
+            continue;
+          }
+          q.push(m);
+        }
+      }
+      if(fromSource||!tanks.length)continue;
+      const vs=tanks.reduce((s,k)=>s+volOf(k),0);
+      for(const k of tanks)addQ(k,-cd.q*volOf(k)/vs,null);
+    }
+  }
+  updClock();
   render();
 }
 function startSim(){
@@ -1622,14 +2762,16 @@ function startSim(){
   document.querySelectorAll('.pal').forEach(x=>x.classList.remove('on'));
   simVals={};simPrevVals={};simPos={};simStroke={};simHeld={};simCtrlHeld={};simLatch={};simLeaks=new Set();simPuffs=new Map();
   simP=new Set();simFill={};simHist=[];simPaused=false;
+  simTime=0;simDrosMul={};simDrosT={};simTankP={};simCylDir={};simDelayT={};simDelayOn={};
+  simInfoId=null;simInfoPin=false;
   simTabIdx=activeTab;
   for(const c of state.comps)if(c.type==='ventil')simPos[c.id]=restPos(c);
   svg.classList.add('simming');
   renderTabs();
-  el('btnPlay').textContent='■ Simulation stoppen';
+  el('btnPlay').innerHTML=ICO.stop+'<span>Simulation stoppen</span>';
   el('btnPlay').classList.add('running');
   el('btnPause').disabled=false;el('btnStepF').disabled=false;el('btnStepB').disabled=false;
-  el('btnPause').textContent='⏸';
+  el('btnPause').innerHTML=ICO.pause;
   renderProps();
   simTimer=setInterval(simTick,40);
   simTick();
@@ -1640,13 +2782,17 @@ function stopSim(){
   clearInterval(simTimer);simTimer=null;
   simVals={};simPrevVals={};simHeld={};simCtrlHeld={};simLatch={};simLeaks=new Set();simPuffs=new Map();
   simP=new Set();simFill={};simHist=[];simPaused=false;
+  simTime=0;simDrosMul={};simDrosT={};simTankP={};simCylDir={};simDelayT={};simDelayOn={};
   simTabIdx=-1;
+  simInfoId=null;simInfoPin=false;el('float').style.display='none';
+  tipRef=null;el('tip').style.display='none';
+  updClock();
   svg.classList.remove('simming');
   renderTabs();
-  el('btnPlay').textContent='▶ Simulation starten';
+  el('btnPlay').innerHTML=ICO.play+'<span>Simulation starten</span>';
   el('btnPlay').classList.remove('running');
   el('btnPause').disabled=true;el('btnStepF').disabled=true;el('btnStepB').disabled=true;
-  el('btnPause').textContent='⏸';
+  el('btnPause').innerHTML=ICO.pause;
   render();
 }
 function setPaused(p){
@@ -1654,10 +2800,10 @@ function setPaused(p){
   simPaused=p;
   if(p){
     if(simTimer){clearInterval(simTimer);simTimer=null;}
-    el('btnPause').textContent='▶';el('btnPause').title='Weiter';
+    el('btnPause').innerHTML=ICO.play;el('btnPause').title='Weiter';
   }else{
     if(!simTimer)simTimer=setInterval(simTick,40);
-    el('btnPause').textContent='⏸';el('btnPause').title='Pause';
+    el('btnPause').innerHTML=ICO.pause;el('btnPause').title='Pause';
   }
 }
 
@@ -1666,6 +2812,7 @@ let view={x:-40,y:-40,w:1400,h:900},pan=null,hdrag=null;
 function applyView(){
   svg.setAttribute('viewBox',view.x+' '+view.y+' '+view.w+' '+view.h);
   positionFloat();
+  positionFrmBar();
 }
 svg.addEventListener('wheel',e=>{
   e.preventDefault();
@@ -1698,8 +2845,14 @@ svg.addEventListener('pointerdown',e=>{
   }
   if(simOn&&activeTab===simTabIdx){
     const gg=e.target.closest&&e.target.closest('[data-comp]');
-    if(gg){
+    if(!gg){
+      /* Klick ins Leere schließt das Info-Fenster — außer es ist angeheftet */
+      if(simInfoId!=null&&!simInfoPin){simInfoId=null;el('float').style.display='none';}
+      return;
+    }
+    {
       const c=comp(+gg.dataset.comp);
+      if(c){simInfoId=c.id;renderSimInfo();}
       if(c&&c.type==='ventil'){
         const[lx,ly]=rotP(mouse.x-c.x,mouse.y-c.y,(360-c.rot)%360);
         const side=lx<0?'L':'R';
@@ -1722,6 +2875,12 @@ svg.addEventListener('pointerdown',e=>{
     }
     return;
   }
+  const fh=e.target.closest&&e.target.closest('[data-frame]');
+  if(fh&&state.frame){
+    fdrag={mode:fh.dataset.frame,sx:mouse.x,sy:mouse.y,f0:Object.assign({},state.frame)};
+    try{svg.setPointerCapture(e.pointerId);}catch(err){}
+    return;
+  }
   const lblT=e.target.dataset&&e.target.dataset.lblComp!==undefined?comp(+e.target.dataset.lblComp):null;
   if(lblT){
     const lo=lblT.lblOff||{dx:0,dy:0};
@@ -1731,17 +2890,27 @@ svg.addEventListener('pointerdown',e=>{
   }
   if(placing&&placing!=='leitung'){
     pushUndo();
-    const cfg0=DEFS[placing].cfg();
-    const c={id:state.nextId++,type:placing,x:snap(mouse.x),y:snap(mouse.y),rot:0,cfg:cfg0,label:autoLabel(placing,cfg0)};
-    if(placing==='daempfer'){
-      const b=daempferSnap(mouse.x,mouse.y,-1);
+    const cfg0=cfgFor(placing,placingVar);
+    const c={id:state.nextId++,type:placing,x:snap(mouse.x),y:snap(mouse.y),rot:DEFS[placing].rot0||0,cfg:cfg0,label:autoLabel(placing,cfg0)};
+    if(VENTP.has(placing)){
+      const b=daempferSnap(mouse.x,mouse.y,-1,placing);
       if(b){c.x=b.x;c.y=b.y;c.rot=b.rot;}
     }
-    if(placing==='sensor'){
-      const b=sensorSnap(mouse.x,mouse.y,-1);
+    if(placing==='sensor'||placing==='rollentaster'){
+      const b=sensorSnap(mouse.x,mouse.y,-1,placing);
       if(b){c.x=b.x;c.y=b.y;c.rot=b.rot;c.cfg.target=b.target;c.cfg.mode=b.mode;}
     }
     state.comps.push(c);selArr=[{kind:'comp',id:c.id}];
+    /* Wegeventile bekommen an den Abluft-Anschlüssen gleich Auslassöffnungen (einzeln entfernbar) */
+    if(placing==='ventil'){
+      for(const pn of['3','5']){
+        const P=absPort({c:c.id,p:pn});
+        if(!P)continue;
+        const a0=DEFS.auslass.ports()[0];
+        const[ax,ay]=rotP(a0.x,a0.y,c.rot);
+        state.comps.push({id:state.nextId++,type:'auslass',x:P.x-ax,y:P.y-ay,rot:c.rot,cfg:{},label:''});
+      }
+    }
     if(!e.shiftKey){placing=null;document.querySelectorAll('.pal').forEach(x=>x.classList.remove('on'));}
     render();renderProps();return;
   }
@@ -1797,8 +2966,12 @@ svg.addEventListener('pointerdown',e=>{
       if(w){
         const pts=wirePts(absPort(w.a),absPort(w.b),w.adj,w.via);
         const i=nearestSegIdx(pts,mouse);
-        if(i>0&&i<pts.length-2){
-          wdrag={id,seg:i,sx:mouse.x,sy:mouse.y,on:false,snap0:JSON.stringify(state)};
+        const ca=comp(w.a.c),cb=comp(w.b.c);
+        let endK=null;
+        if(i===0&&ca&&ca.type==='knoten')endK={kid:ca.id,side:'a'};
+        else if(i===pts.length-2&&cb&&cb.type==='knoten')endK={kid:cb.id,side:'b'};
+        if(endK||(i>0&&i<pts.length-2)){
+          wdrag={id,seg:i,endK,sx:mouse.x,sy:mouse.y,on:false,snap0:JSON.stringify(state)};
           try{svg.setPointerCapture(e.pointerId);}catch(err){}
         }
       }
@@ -1818,7 +2991,22 @@ svg.addEventListener('pointerdown',e=>{
     for(const did of attachedExtras(idSet))idSet.add(did);
     drag={mx:mouse.x,my:mouse.y,snap0:JSON.stringify(state),items:[...idSet].map(id2=>{
       const cc=comp(id2);return{id:id2,ox:cc.x,oy:cc.y};
-    }),wires:state.wires.filter(w=>(w.adj||w.via)&&idSet.has(w.a.c)&&idSet.has(w.b.c)).map(w=>({id:w.id,mx0:w.adj?w.adj.mx:null,my0:w.adj?w.adj.my:null,via0:w.via?JSON.parse(JSON.stringify(w.via)):null}))};
+    }),wires:state.wires.filter(w=>(w.adj||w.via)&&idSet.has(w.a.c)&&idSet.has(w.b.c)).map(w=>({id:w.id,mx0:w.adj?w.adj.mx:null,my0:w.adj?w.adj.my:null,via0:w.via?JSON.parse(JSON.stringify(w.via)):null})),kfix:[]};
+    /* Ecke neben einem mitgezogenen Knoten mitführen, damit das letzte Stück rechtwinklig bleibt */
+    for(const kid of idSet){
+      const kc=comp(kid);
+      if(!kc||kc.type!=='knoten')continue;
+      for(const w of state.wires){
+        if(!w.via||!w.via.length)continue;
+        if(idSet.has(w.a.c)&&idSet.has(w.b.c))continue;
+        const atA=w.a.c===kid,atB=w.b.c===kid;
+        if(!atA&&!atB)continue;
+        const idx=atA?0:w.via.length-1;
+        const cor=w.via[idx];
+        const axis=Math.abs(cor.y-kc.y)<0.01?'h':(Math.abs(cor.x-kc.x)<0.01?'v':null);
+        if(axis)drag.kfix.push({id:w.id,kid,idx,axis});
+      }
+    }
     try{svg.setPointerCapture(e.pointerId);}catch(err){}
     render();renderProps();return;
   }
@@ -1839,6 +3027,59 @@ svg.addEventListener('pointerdown',e=>{
   try{svg.setPointerCapture(e.pointerId);}catch(err){}
   render();renderProps();
 });
+let tipRef=null;
+function tipText(){
+  if(!tipRef)return null;
+  if(tipRef.k==='port'){
+    const pv=simVals[nk(tipRef.c,tipRef.p)]||0;
+    return`Anschluss ${tipRef.lbl||tipRef.p} — ${pv>0?barTxt(pv)+' bar':'drucklos'}`;
+  }
+  if(tipRef.k==='wire'){
+    const w=state.wires.find(x=>x.id===tipRef.id);
+    if(!w)return null;
+    const a=simVals[nk(w.a.c,w.a.p)]||0,b=simVals[nk(w.b.c,w.b.p)]||0;
+    return(a>0&&b>0)?`${barTxt(Math.max(a,b))} bar`:'drucklos';
+  }
+  const cc=comp(tipRef.id);
+  if(!cc)return null;
+  if(cc.type==='zylinder'){
+    const q1=simVals[nk(cc.id,'1')]||0,q2=simVals[nk(cc.id,'2')]||0;
+    return cc.cfg.typ==='einfach'
+      ?`Zylinder — ${barTxt(q1)} bar`
+      :`Zylinder — 1: ${barTxt(q1)} bar · 2: ${barTxt(q2)} bar`;
+  }
+  if(cc.type==='behaelter')return`Behälter — ${barTxt(simTankP[cc.id]||0)} bar`;
+  return null;
+}
+function paintTip(){
+  const tip=el('tip');
+  const txt=simView?tipText():null;
+  if(txt==null){tip.style.display='none';return;}
+  tip.textContent=txt;
+  tip.style.display='block';
+}
+function updateTip(e){
+  if(!simView){tipRef=null;paintTip();return;}
+  const t=e.target;
+  tipRef=null;
+  if(t.classList&&t.classList.contains('port'))tipRef={k:'port',c:+t.dataset.c,p:t.dataset.p,lbl:t.dataset.lbl};
+  else{
+    const wh=t.closest&&t.closest('[data-wire]');
+    if(wh)tipRef={k:'wire',id:+wh.dataset.wire};
+    else{
+      const g2=t.closest&&t.closest('[data-comp]');
+      if(g2){
+        const cc=comp(+g2.dataset.comp);
+        if(cc&&(cc.type==='zylinder'||cc.type==='behaelter'))tipRef={k:'comp',id:cc.id};
+      }
+    }
+  }
+  const wrap=el('canvasWrap').getBoundingClientRect();
+  el('tip').style.left=(e.clientX-wrap.left+14)+'px';
+  el('tip').style.top=(e.clientY-wrap.top+14)+'px';
+  paintTip();
+}
+svg.addEventListener('pointerleave',()=>{tipRef=null;paintTip();});
 svg.addEventListener('pointermove',e=>{
   if(pan){
     view.x=pan.vx-(e.clientX-pan.mx)*pan.sc;
@@ -1846,6 +3087,24 @@ svg.addEventListener('pointermove',e=>{
     applyView();return;
   }
   mouse=svgPoint(e);
+  updateTip(e);
+  if(fdrag&&state.frame){
+    const f=state.frame,f0=fdrag.f0,dx=mouse.x-fdrag.sx,dy=mouse.y-fdrag.sy;
+    if(fdrag.mode==='move'){f.x=snap(f0.x+dx);f.y=snap(f0.y+dy);}
+    else{
+      /* Ecke ziehen: Seitenverhältnis bleibt, die gegenüberliegende Ecke steht fest */
+      const ratio=f0.h/f0.w;
+      const west=fdrag.mode[1]==='w',north=fdrag.mode[0]==='n';
+      const ax=west?f0.x+f0.w:f0.x,ay=north?f0.y+f0.h:f0.y;
+      let nw=Math.max(120,Math.abs(mouse.x-ax));
+      let nh=nw*ratio;
+      f.w=Math.round(nw);f.h=Math.round(nh);
+      f.x=Math.round(west?ax-f.w:ax);
+      f.y=Math.round(north?ay-f.h:ay);
+    }
+    render();
+    return;
+  }
   if(ldrag){
     const c=comp(ldrag.id);
     if(c){
@@ -1860,7 +3119,17 @@ svg.addEventListener('pointermove',e=>{
       wdrag.on=true;
       if(wdrag.snap0){pushUndo(wdrag.snap0);wdrag.snap0=null;}
       const w=state.wires.find(x=>x.id===wdrag.id);
-      if(w){
+      if(w&&wdrag.endK){
+        const A=absPort(w.a),B=absPort(w.b);
+        const pts=wirePts(A,B,w.adj,w.via);
+        const sa=(A.d[0]||A.d[1])?1:0,sb=(B.d[0]||B.d[1])?1:0;
+        const via=pts.slice(1+sa,pts.length-1-sb).map(p=>({x:p.x,y:p.y}));
+        delete w.adj;
+        if(via.length)w.via=via;else delete w.via;
+        wdrag.va=via.length?(wdrag.endK.side==='a'?0:via.length-1):-1;
+        const s0=pts[Math.min(wdrag.seg,pts.length-2)],s1=pts[Math.min(wdrag.seg+1,pts.length-1)];
+        wdrag.horiz=Math.abs(s0.y-s1.y)<0.01;
+      }else if(w){
         const pts=wirePts(absPort(w.a),absPort(w.b),w.adj,w.via);
         const i=Math.max(1,Math.min(wdrag.seg,pts.length-3));
         const anchors=pts.slice(1,pts.length-1).map(p=>({x:p.x,y:p.y}));
@@ -1872,6 +3141,20 @@ svg.addEventListener('pointermove',e=>{
         wdrag.va=li-1;wdrag.vb=ri-1;
         wdrag.horiz=Math.abs(anchors[li].y-anchors[ri].y)<0.01;
       }
+    }
+    if(wdrag.on&&wdrag.endK){
+      const w=state.wires.find(x=>x.id===wdrag.id),kc=comp(wdrag.endK.kid);
+      if(w&&kc){
+        if(wdrag.horiz){
+          const y=snap(mouse.y);kc.y=y;
+          if(w.via&&wdrag.va>=0&&w.via[wdrag.va])w.via[wdrag.va].y=y;
+        }else{
+          const x=snap(mouse.x);kc.x=x;
+          if(w.via&&wdrag.va>=0&&w.via[wdrag.va])w.via[wdrag.va].x=x;
+        }
+        render();
+      }
+      return;
     }
     if(wdrag.on){
       const w=state.wires.find(x=>x.id===wdrag.id);
@@ -1899,13 +3182,23 @@ svg.addEventListener('pointermove',e=>{
         if(wi.my0!=null)w.adj.my=wi.my0+ddy;
       }
     }
+    for(const kf of drag.kfix||[]){
+      const w=state.wires.find(x=>x.id===kf.id),kc=comp(kf.kid);
+      if(!w||!kc||!w.via||!w.via[kf.idx])continue;
+      if(kf.axis==='h')w.via[kf.idx].y=kc.y;else w.via[kf.idx].x=kc.x;
+    }
+    knotenSnapW=null;
     if(drag.items.length===1){
       const c=comp(drag.items[0].id);
-      if(c&&c.type==='daempfer'){
-        const b=daempferSnap(c.x,c.y,c.id);
+      if(c&&c.type==='knoten'){
+        const kw=wireNearKnoten(c);
+        knotenSnapW=kw?kw.id:null;
+      }
+      if(c&&VENTP.has(c.type)){
+        const b=daempferSnap(c.x,c.y,c.id,c.type);
         if(b){c.x=b.x;c.y=b.y;c.rot=b.rot;}
-      }else if(c&&c.type==='sensor'){
-        const b=sensorSnap(c.x,c.y,c.id);
+      }else if(c&&(c.type==='sensor'||c.type==='rollentaster')){
+        const b=sensorSnap(c.x,c.y,c.id,c.type);
         if(b){c.x=b.x;c.y=b.y;c.rot=b.rot;c.cfg.target=b.target;c.cfg.mode=b.mode;}
       }
     }
@@ -1922,7 +3215,26 @@ svg.addEventListener('pointermove',e=>{
   }
 });
 window.addEventListener('pointerup',()=>{
-  drag=null;pan=null;hdrag=null;wdrag=null;ldrag=null;simHeld={};
+  const dEnd=drag,wEnd=wdrag;
+  drag=null;pan=null;hdrag=null;wdrag=null;ldrag=null;fdrag=null;simHeld={};
+  if(wEnd&&wEnd.on){
+    const w=state.wires.find(x=>x.id===wEnd.id);
+    if(w)simplifyWire(w);
+    if(wEnd.endK)simplifyWiresOf(wEnd.endK.kid);
+    render();
+  }
+  if(dEnd&&dEnd.items){
+    const joinTo=knotenSnapW;
+    knotenSnapW=null;
+    for(const it of dEnd.items){
+      const c=comp(it.id);
+      if(c&&c.type==='knoten'&&joinTo!=null&&dEnd.items.length===1)joinKnotenToWire(c);
+    }
+    /* Leitungen an bewegten Bauteilen aufräumen (Selbstkreuzungen, überflüssige Ecken) */
+    const ids=new Set(dEnd.items.map(it=>it.id));
+    for(const w of state.wires)if(ids.has(w.a.c)||ids.has(w.b.c))simplifyWire(w);
+    render();renderProps();
+  }
   if(band){
     const x1=Math.min(band.x0,mouse.x),x2=Math.max(band.x0,mouse.x);
     const y1=Math.min(band.y0,mouse.y),y2=Math.max(band.y0,mouse.y);
@@ -2014,10 +3326,21 @@ applyTheme();
 /* ---------- Tabs ---------- */
 function renderTabs(){
   el('tabbar').innerHTML=tabs.map((t,i)=>
-    `<div class="tab${i===activeTab?' act':''}${simOn&&i===simTabIdx?' simtab':''}" data-tab="${i}" title="Doppelklick = umbenennen"><span>${esc(t.name)}</span><button class="tclose" data-tclose="${i}" title="Plan schließen">×</button></div>`
-  ).join('')+'<button id="tabAdd" title="Neuer Plan">＋</button><span class="spacer"></span>'+
-  `<button id="btnTheme" title="Design: ${themePref==='auto'?'automatisch':themePref==='dark'?'dunkel':'hell'} (klicken zum Wechseln)">${themePref==='auto'?'🌓 Auto':themePref==='dark'?'🌙 Dunkel':'☀️ Hell'}</button>`+
-  '<button id="btnLib">📚 Bibliothek</button>';
+    `<div class="tab${i===activeTab?' act':''}${simOn&&i===simTabIdx?' simtab':''}" data-tab="${i}" title="Doppelklick = umbenennen"><span>${esc(t.name)}</span><button class="tclose" data-tclose="${i}" title="Plan schließen">${ICO.x}</button></div>`
+  ).join('')+`<button id="tabAdd" title="Neuer Plan">${ICO.plus}</button><span class="spacer"></span>`+
+  `<button id="btnPrint" title="${state.frame?'Druckrahmen entfernen':'Druckrahmen im A4-Format aufs Blatt legen'}">${ICO.print}<span>Drucken</span></button>`+
+  `<button id="btnMode" title="${simpleMode?'Einfacher Modus: nur Grundbauteile, keine Detaileinstellungen — klicken für den vollständigen Modus':'Vollständiger Modus: alle Bauteile und Detaileinstellungen — klicken für den einfachen Modus'}">${simpleMode?ICO.modeS+'<span>Einfach</span>':ICO.modeF+'<span>Vollständig</span>'}</button>`+
+  `<button id="btnTheme" title="Design: ${themePref==='auto'?'automatisch':themePref==='dark'?'dunkel':'hell'} (klicken zum Wechseln)">${themePref==='auto'?ICO.auto+'<span>Auto</span>':themePref==='dark'?ICO.moon+'<span>Dunkel</span>':ICO.sun+'<span>Hell</span>'}</button>`+
+  `<button id="btnLib">${ICO.book}<span>Bibliothek</span></button>`;
+}
+function applyMode(){
+  document.querySelectorAll('#palParts [data-type]').forEach(b=>{
+    b.style.display=(simpleMode&&ADVPARTS.has(b.dataset.type))?'none':'';
+  });
+  if(simpleMode&&placing&&ADVPARTS.has(placing)){
+    placing=null;
+    document.querySelectorAll('.pal').forEach(x=>x.classList.remove('on'));
+  }
 }
 function switchTab(i){
   if(i<0||i>=tabs.length||i===activeTab)return;
@@ -2025,6 +3348,7 @@ function switchTab(i){
   activeTab=i;
   state=tabs[i].state;
   undoStack=tabs[i].undo;redoStack=tabs[i].redo;
+  ensureLabels();
   selArr=[];pending=null;placing=null;placingSnip=null;band=null;drag=null;
   document.querySelectorAll('.pal').forEach(x=>x.classList.remove('on'));
   svg.classList.toggle('simming',simOn&&activeTab===simTabIdx);
@@ -2060,9 +3384,15 @@ function closeTab(i){
 el('tabbar').addEventListener('click',e=>{
   const cl=e.target.closest('[data-tclose]');
   if(cl){closeTab(+cl.dataset.tclose);return;}
-  if(e.target.id==='tabAdd'){addTab();return;}
-  if(e.target.id==='btnLib'){el('lib').classList.toggle('open');applyLibW();return;}
-  if(e.target.id==='btnTheme'){
+  if(e.target.closest('#tabAdd')){addTab();return;}
+  if(e.target.closest('#btnPrint')){toggleFrame();renderTabs();return;}
+  if(e.target.closest('#btnLib')){el('lib').classList.toggle('open');applyLibW();return;}
+  if(e.target.closest('#btnMode')){
+    simpleMode=!simpleMode;
+    saveWS();applyMode();renderTabs();render();renderProps();
+    return;
+  }
+  if(e.target.closest('#btnTheme')){
     themePref=themePref==='auto'?'dark':themePref==='dark'?'light':'auto';
     try{localStorage.setItem('pneu-theme',themePref);}catch(err){}
     applyTheme();renderTabs();
@@ -2125,7 +3455,7 @@ function insertGroup(sn,X,Y){
     newSel.push({kind:'comp',id:nc.id});
   }
   for(const nc of newComps){
-    if(nc.type==='sensor'&&nc.cfg&&nc.cfg.target!=null)nc.cfg.target=map[nc.cfg.target]!=null?map[nc.cfg.target]:null;
+    if((nc.type==='sensor'||nc.type==='rollentaster')&&nc.cfg&&nc.cfg.target!=null)nc.cfg.target=map[nc.cfg.target]!=null?map[nc.cfg.target]:null;
     if(nc.type==='ventil'&&nc.cfg){
       if(nc.cfg.senL!=null)nc.cfg.senL=map[nc.cfg.senL]!=null?map[nc.cfg.senL]:null;
       if(nc.cfg.senR!=null)nc.cfg.senR=map[nc.cfg.senR]!=null?map[nc.cfg.senR]:null;
@@ -2137,6 +3467,7 @@ function insertGroup(sn,X,Y){
     if(w.via)nw.via=w.via.map(p=>({x:p.x+X,y:p.y+Y}));
     state.wires.push(nw);
   }
+  ensureLabels();
   selArr=newSel;
 }
 function exportLib(all){
@@ -2197,11 +3528,11 @@ function renderLib(){
     '<hr>'+
     libHead('p','Schaltpläne')+
     (libPlans.length?libPlans.map((p,i)=>
-      `<div class="libitem" draggable="true" data-item="p:${i}"><span class="grip" title="Ziehen zum Sortieren">⠿</span><input type="checkbox" data-sel="p:${i}" title="auswählen"><span class="lname" title="${esc(p.name)}">${esc(p.name)}</span><button data-open="${i}" title="In neuem Tab öffnen">⧉</button><button data-ren="p:${i}" title="Umbenennen">✎</button><button data-del="p:${i}" title="Löschen">×</button></div>`
+      `<div class="libitem" draggable="true" data-item="p:${i}"><span class="grip" title="Ziehen zum Sortieren">${ICO.grip}</span><input type="checkbox" data-sel="p:${i}" title="auswählen"><span class="lname" title="${esc(p.name)}">${esc(p.name)}</span><button data-open="${i}" title="In neuem Tab öffnen">${ICO.open}</button><button data-ren="p:${i}" title="Umbenennen">${ICO.pencil}</button><button data-del="p:${i}" title="Löschen">${ICO.x}</button></div>`
     ).join(''):'<p class="muted">Keine abgelegten oder importierten Pläne.</p>')+
     libHead('s','Schnellbausteine')+
     (snips.length?snips.map((s,i)=>
-      `<div class="libitem" draggable="true" data-item="s:${i}"><span class="grip" title="Ziehen zum Sortieren">⠿</span><input type="checkbox" data-sel="s:${i}" title="auswählen"><span class="lname" title="${esc(s.name)}">${esc(s.name)}</span><button data-place="${i}" title="Auf dem Blatt platzieren">➕</button><button data-ren="s:${i}" title="Umbenennen">✎</button><button data-del="s:${i}" title="Löschen">×</button></div>`
+      `<div class="libitem" draggable="true" data-item="s:${i}"><span class="grip" title="Ziehen zum Sortieren">${ICO.grip}</span><input type="checkbox" data-sel="s:${i}" title="auswählen"><span class="lname" title="${esc(s.name)}">${esc(s.name)}</span><button data-place="${i}" title="Auf dem Blatt platzieren">${ICO.plus}</button><button data-ren="s:${i}" title="Umbenennen">${ICO.pencil}</button><button data-del="s:${i}" title="Löschen">${ICO.x}</button></div>`
     ).join(''):'<p class="muted">Noch keine. Bauteile auswählen, dann „Schnellbaustein aus Auswahl erstellen".</p>');
 }
 function updateDelBtns(){
@@ -2212,7 +3543,7 @@ function updateDelBtns(){
   }
 }
 el('lib').addEventListener('click',e=>{
-  const t=e.target;
+  const t=(e.target.closest&&e.target.closest('button,input,[data-sel],[data-selall]'))||e.target;
   if(t.dataset&&t.dataset.selall){
     document.querySelectorAll(`#lib input[data-sel^="${t.dataset.selall}:"]`).forEach(cb=>{cb.checked=t.checked;});
     updateDelBtns();
@@ -2333,17 +3664,35 @@ el('libFile').addEventListener('change',e=>{
 });
 
 /* ---------- Palette & Werkzeugleiste ---------- */
-function palSvg(type){
+function palSvg(type,varr){
   if(type==='leitung')
     return'<svg viewBox="0 0 78 38"><g class="sym" style="stroke-width:2"><path d="M5,29 H73"/><path d="M39,29 V7 H62"/><circle cx="39" cy="29" r="3.5" style="fill:#1c1c1c;stroke:none"/></g></svg>';
-  const def=DEFS[type],cfg=def.cfg(),b=def.box(cfg),pad=6;
+  const def=DEFS[type],cfg=cfgFor(type,varr),b=def.box(cfg),pad=6;
   const body=def.draw(cfg).split('url(#arr)').join('url(#parr)');
   return`<svg viewBox="${b.x-pad} ${b.y-pad} ${b.w+2*pad} ${b.h+2*pad}" preserveAspectRatio="xMidYMid meet"><defs><marker id="parr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#1c1c1c" stroke="none"/></marker></defs><g class="sym">${body}</g></svg>`;
 }
 document.querySelectorAll('.pal').forEach(b=>{
   const name=b.textContent;
-  b.innerHTML=`${palSvg(b.dataset.type)}<span>${name}</span>`;
+  b.innerHTML=`${palSvg(b.dataset.type,b.dataset.var)}<span>${name}</span>`;
 });
+el('icSim').innerHTML=ICO.sim;
+el('frmRot').innerHTML=ICO.rotate;
+el('frmPrint').innerHTML=ICO.print;
+el('frmDel').innerHTML=ICO.x;
+el('frmRot').addEventListener('click',rotateFrame);
+el('frmPrint').addEventListener('click',doPrint);
+el('frmDel').addEventListener('click',()=>{state.frame=null;render();renderTabs();});
+el('spdCombo').querySelector('.cbtn').innerHTML=ICO.chev;
+el('spdCombo').querySelector('.copts').innerHTML=comboOpts(['0,25×','0,5×','1×','2×','5×','sofort'],'1×');
+el('btnPlay').innerHTML=ICO.play+'<span>Simulation starten</span>';
+el('btnPause').innerHTML=ICO.pause;
+el('btnStepF').innerHTML=ICO.stepF;
+el('btnStepB').innerHTML=ICO.stepB;
+el('btnUndo').innerHTML=ICO.undo+' Rückgängig';
+el('btnRedo').innerHTML=ICO.redo+' Wiederholen';
+el('btnNew').innerHTML=ICO.clear+' Blatt leeren';
+el('btnSave').innerHTML=ICO.save+' Plan in Bibliothek ablegen';
+el('btnHelp').innerHTML=ICO.help+' Bedienung';
 el('btnHelp').addEventListener('click',()=>el('helpBg').classList.add('open'));
 el('btnHelpClose').addEventListener('click',()=>el('helpBg').classList.remove('open'));
 el('helpBg').addEventListener('pointerdown',e=>{if(e.target===el('helpBg'))el('helpBg').classList.remove('open');});
@@ -2362,17 +3711,25 @@ el('btnStepB').addEventListener('click',()=>{
   setPaused(true);
   if(simHist.length)simRestore(simHist.pop());
 });
-el('selSpeed').addEventListener('change',()=>{
-  const v=el('selSpeed').value;
-  simInstant=v==='inst';
-  simSpeed=simInstant?1:(parseFloat(v)||1);
-});
+function applySpeed(){
+  const raw=el('selSpeed').value.trim().toLowerCase();
+  if(raw.startsWith('sofort')||raw.startsWith('inst')){simInstant=true;simSpeed=1;return;}
+  const f=parseFloat(raw.replace(',','.').replace('×','').replace('x',''));
+  simInstant=false;
+  simSpeed=isFinite(f)&&f>0?Math.min(20,Math.max(0.05,f)):1;
+}
+el('selSpeed').addEventListener('change',applySpeed);
+el('selSpeed').addEventListener('input',applySpeed);
 document.querySelectorAll('.pal').forEach(b=>{
   b.addEventListener('click',()=>{
     if(simOn)return;
-    placing=placing===b.dataset.type?null:b.dataset.type;
+    const v=b.dataset.var||null;
+    const same=placing===b.dataset.type&&placingVar===v;
+    placing=same?null:b.dataset.type;
+    placingVar=same?null:v;
     pending=null;
-    document.querySelectorAll('.pal').forEach(x=>x.classList.toggle('on',x.dataset.type===placing));
+    document.querySelectorAll('.pal').forEach(x=>
+      x.classList.toggle('on',placing!=null&&x.dataset.type===placing&&(x.dataset.var||null)===placingVar));
     render();
   });
 });
@@ -2410,6 +3767,7 @@ try{
       snips=Array.isArray(o.snippets)?o.snippets:[];
       libPlans=Array.isArray(o.plans)?o.plans:[];
       if(o.libW)libW=Math.max(240,Math.min(700,o.libW));
+      simpleMode=!!o.simple;
     }else if(o&&Array.isArray(o.comps)){
       freshUser=false;defV=1;
       tabs=[{name:'Plan 1',state:o,undo:[],redo:[]}];
@@ -2436,6 +3794,8 @@ undoStack=tabs[activeTab].undo;redoStack=tabs[activeTab].redo;
 ensureLabels();
 renderTabs();
 renderLib();
+applyMode();
+applySpeed();
 applyView();
 render();renderProps();
 </script>
