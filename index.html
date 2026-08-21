@@ -5,18 +5,30 @@
   --bg:#eef1f4; --panel:#fbfcfd; --text:#22303c; --muted:#6b7885;
   --border:#d3dae1; --accent:#0e6fb8; --sel:#e07400;
   --paper:#ffffff; --ink:#1c1c1c; --grid:#b9c4d0; --wire:#0e6fb8; --wireoff:#a7b2be; --hot:#0a2e6e; --hotw:2.6; --inkmuted:#8a8a8a; --lbl:#777777;
+  --link:#00875a;--frame:#2ea043;
   --arrow:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1.6 6 6.4 11 1.6' fill='none' stroke='%236b7885' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/></svg>");
 }
+/* Der Stromlaufplan bekommt eine eigene Akzentfarbe: Bernstein statt Blau. Damit ist
+   auf einen Blick klar, welche Seite gerade Strom führt und welche Luft. Die Auswahl
+   nimmt dort umgekehrt das Blau der pneumatischen Seite. */
+#paneR{--accent:#b45309;--sel:#0e6fb8;
+  --paper:#fffcf5;--grid:#cbbda3;--wire:#b5813a;--wireoff:#d3c8b4;--hot:#c2410c;--hotw:2.6;}
 @media (prefers-color-scheme: dark){
   :root{--bg:#161b20;--panel:#1f262d;--text:#e4e9ee;--muted:#94a0ab;--border:#38424c;
-    --paper:#161d27;--ink:#eef2f6;--grid:#93a0af;--wire:#5aa7e8;--wireoff:#55636f;--hot:#3be0ff;--hotw:3.4;--inkmuted:#b8c4d0;--lbl:#dde7f0;
+    --paper:#161d27;--ink:#eef2f6;--grid:#93a0af;--wire:#5aa7e8;--wireoff:#55636f;--hot:#3be0ff;--hotw:3.4;--inkmuted:#b8c4d0;--lbl:#dde7f0;--link:#3ddc84;--frame:#56d364;
   --arrow:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1.6 6 6.4 11 1.6' fill='none' stroke='%2394a0ab' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/></svg>");}
+  #paneR{--accent:#e8a33a;--sel:#5aa7e8;
+    --paper:#1a1813;--grid:#9d8f74;--wire:#b3873f;--wireoff:#5f574a;--hot:#ffc233;--hotw:3.4;}
 }
 :root[data-theme="light"]{--bg:#eef1f4;--panel:#fbfcfd;--text:#22303c;--muted:#6b7885;--border:#d3dae1;
-  --paper:#ffffff;--ink:#1c1c1c;--grid:#b9c4d0;--wire:#0e6fb8;--wireoff:#a7b2be;--hot:#0a2e6e;--hotw:2.6;--inkmuted:#8a8a8a;--lbl:#777777;}
+  --paper:#ffffff;--ink:#1c1c1c;--grid:#b9c4d0;--wire:#0e6fb8;--wireoff:#a7b2be;--hot:#0a2e6e;--hotw:2.6;--inkmuted:#8a8a8a;--lbl:#777777;--link:#00875a;--frame:#2ea043;}
+:root[data-theme="light"] #paneR{--accent:#b45309;--sel:#0e6fb8;
+  --paper:#fffcf5;--grid:#cbbda3;--wire:#b5813a;--wireoff:#d3c8b4;--hot:#c2410c;--hotw:2.6;}
 :root[data-theme="dark"]{--bg:#161b20;--panel:#1f262d;--text:#e4e9ee;--muted:#94a0ab;--border:#38424c;
-  --paper:#161d27;--ink:#eef2f6;--grid:#93a0af;--wire:#5aa7e8;--wireoff:#55636f;--hot:#3be0ff;--hotw:3.4;--inkmuted:#b8c4d0;--lbl:#dde7f0;
+  --paper:#161d27;--ink:#eef2f6;--grid:#93a0af;--wire:#5aa7e8;--wireoff:#55636f;--hot:#3be0ff;--hotw:3.4;--inkmuted:#b8c4d0;--lbl:#dde7f0;--link:#3ddc84;--frame:#56d364;
   --arrow:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1.6 6 6.4 11 1.6' fill='none' stroke='%2394a0ab' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/></svg>");}
+:root[data-theme="dark"] #paneR{--accent:#e8a33a;--sel:#5aa7e8;
+  --paper:#1a1813;--grid:#9d8f74;--wire:#b3873f;--wireoff:#5f574a;--hot:#ffc233;--hotw:3.4;}
 /* Symbol-Editor (Entwickler) */
 #symed{position:fixed;right:14px;top:64px;z-index:60;width:372px;max-height:80vh;display:none;flex-direction:column;
   background:var(--panel);border:1px solid var(--border);border-radius:10px;box-shadow:0 10px 32px rgba(0,0,0,.3);font-size:12px}
@@ -117,6 +129,22 @@ body{margin:0;font:13.5px/1.45 system-ui,"Segoe UI",sans-serif;background:var(--
 #btnMode{min-width:126px}
 #btnTheme{min-width:94px}
 #btnLib{min-width:112px}
+#btnEP{min-width:168px}
+#btnEP.picking{outline:2px solid #b45309;outline-offset:-1px}
+:root[data-theme="dark"] #btnEP.picking{outline-color:#e8a33a}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #btnEP.picking{outline-color:#e8a33a}}
+/* Die Palette folgt der Seite, auf der gerade gearbeitet wird */
+#palP,#palE{display:contents}
+/* Entwicklermodus: Kacheln und Überschriften lassen sich umsortieren */
+body.dev #palParts .pal,body.dev #palParts .grp{cursor:grab}
+#palParts .paldrag{opacity:.35}
+#palParts .pal.palbefore{box-shadow:-3px 0 0 var(--accent)}
+#palParts .pal.palafter{box-shadow:3px 0 0 var(--accent)}
+#palParts .grp.palbefore{box-shadow:0 -3px 0 var(--accent)}
+#palParts .grp.palafter{box-shadow:0 3px 0 var(--accent)}
+body:not(.ep) #palE{display:none}
+body.ep.pane-e #palP{display:none}
+body.ep:not(.pane-e) #palE{display:none}
 /* liegt ÜBER der Zeichenfläche — als Spalte würde sie das Blatt schmaler machen und
    die Zeichnung dadurch verschieben und zoomen */
 #lib{position:absolute;right:0;top:0;bottom:0;z-index:6;width:0;background:var(--panel);
@@ -137,8 +165,18 @@ body{margin:0;font:13.5px/1.45 system-ui,"Segoe UI",sans-serif;background:var(--
 .libitem.dropa{box-shadow:0 2.5px 0 var(--accent)}
 .libitem .lname{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}
 .libitem button{padding:2px 6px;font-size:12px}
-#canvasWrap{flex:1;overflow:hidden;position:relative}
-#svg{background:var(--paper);display:block;width:100%;height:100%;user-select:none;-webkit-user-select:none;touch-action:none}
+#canvasWrap{flex:1;overflow:hidden;position:relative;display:flex}
+#paneL{flex:1 1 auto;min-width:0;position:relative}
+#paneR{display:none;flex:1 1 0;min-width:0;position:relative;background:var(--paper)}
+#split{display:none;flex:0 0 7px;cursor:ew-resize;background:var(--border);position:relative}
+#split::after{content:"";position:absolute;left:2px;top:50%;width:3px;height:34px;margin-top:-17px;border-radius:2px;background:var(--muted);opacity:.55}
+#split:hover{background:var(--accent)}
+body.ep #paneR,body.ep #split{display:block}
+.panetag{position:absolute;left:8px;top:6px;z-index:2;pointer-events:none;font-size:10.5px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--muted);background:color-mix(in srgb,var(--paper) 80%,transparent);
+  border:1px solid var(--border);border-radius:5px;padding:2px 7px}
+body:not(.ep) .panetag{display:none}
+#svg,#svgE{background:var(--paper);display:block;width:100%;height:100%;user-select:none;-webkit-user-select:none;touch-action:none}
 #float{position:absolute;z-index:5;width:254px;background:var(--panel);border:1px solid var(--border);border-radius:9px;box-shadow:0 8px 28px rgba(0,0,0,.22);padding:12px;display:none;max-height:88%;overflow-y:auto}
 #float.wide{width:500px}
 #tip{position:absolute;z-index:6;pointer-events:none;background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:12px;display:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.25)}
@@ -284,6 +322,16 @@ details.adv summary:hover{color:var(--text)}
 .wire{fill:none;stroke:var(--wire);stroke-width:2}
 .wire.dry{stroke:var(--wireoff);stroke-width:1.7}
 .wire.hot{stroke:var(--hot);stroke-width:var(--hotw,2.6)}
+/* Stromlaufplan: dünner als eine Druckluftleitung, damit beide Kreise auf einem Blatt lesbar bleiben */
+.linkbox{fill:none;stroke:var(--link);stroke-width:2.4;stroke-dasharray:7 4;opacity:.95}
+.linkmark text{font:600 11px system-ui,"Segoe UI",sans-serif;fill:#ffffff;stroke:none}
+.wire.elw{stroke-width:1.4}
+.wire.elw.dry{stroke-width:1.2}
+/* Unter Spannung deutlich kräftiger — aber dünner als eine Druckluftleitung bei vollem Druck,
+   damit Steuerstromkreis und Lastkreis auch im Ausdruck auseinanderzuhalten sind. */
+.wire.elw.hot{stroke:var(--hot);stroke-width:2.3;opacity:1}
+/* Unter Spannung, aber ohne Stromfluss — der Zweig endet an einem offenen Kontakt */
+.wire.elw.span{stroke:var(--hot);stroke-width:1.5;opacity:.42}
 .band{fill:rgba(14,111,184,.08);stroke:var(--accent);stroke-width:1;stroke-dasharray:4 3}
 .atile{width:52px;height:34px}
 .wire.selw{stroke:var(--sel);stroke-width:3}
@@ -299,7 +347,7 @@ details.adv summary:hover{color:var(--text)}
 #btnPlay.running{background:#d32f2f;border-color:#d32f2f}
 #simClock{font-variant-numeric:tabular-nums;letter-spacing:.02em}
 #btnPlay{width:100%;margin-top:0;font-weight:600}
-#svg.simming g.comp{cursor:pointer}
+#svg.simming g.comp,#svgE.simming g.comp{cursor:pointer}
 .chk.dis{color:var(--muted);opacity:.55}
 .wirehit{fill:none;stroke:rgba(0,0,0,0);stroke-width:12;cursor:pointer}
 .pstub{stroke:var(--ink);stroke-width:1.5;fill:none;stroke-linecap:round;pointer-events:none}
@@ -307,10 +355,20 @@ details.adv summary:hover{color:var(--text)}
 .selbox{fill:none;stroke:var(--sel);stroke-width:1.2;stroke-dasharray:5 4}
 g.comp{cursor:move}
 /* --- Druckrahmen --- */
-.pframe{fill:none;stroke:var(--sel);stroke-width:1.6;stroke-dasharray:9 6;pointer-events:none;opacity:.85}
-.pflabel{fill:var(--sel);font:11px system-ui,sans-serif;stroke:none;pointer-events:none;opacity:.9}
+.pframe{fill:none;stroke:var(--frame);stroke-width:1.8;stroke-dasharray:10 6;pointer-events:none;opacity:.9}
+.pflabel{fill:var(--frame);font:11px system-ui,sans-serif;stroke:none;pointer-events:none;opacity:.95}
+/* Die beiden Teilflächen des Blattes: blau für den pneumatischen Plan, orange für den
+   Stromlaufplan. Feste Farben, damit sie auf beiden Seiten und in beiden Designs gleich lesen. */
+.pzone{fill:none;stroke-width:1.4;stroke-dasharray:7 5;pointer-events:none;opacity:.42}
+.pzone.on{opacity:.95;stroke-width:2}
+.pzone.zp{stroke:#3b8fe0}
+.pzone.ze{stroke:#e08a1a}
+.pdiv{stroke:var(--frame);stroke-width:1.4;stroke-dasharray:3 4;pointer-events:none;opacity:.75}
+.fdiv{stroke:rgba(0,0,0,0);stroke-width:14;fill:none;cursor:ew-resize}
+.fdivh{stroke:rgba(0,0,0,0);stroke-width:14;fill:none;cursor:ns-resize}
+.fgrip{fill:var(--frame);stroke:var(--paper);stroke-width:1.4;pointer-events:none}
 .fedge{stroke:rgba(0,0,0,0);stroke-width:14;fill:none;cursor:move}
-.fcorner{fill:var(--sel);stroke:var(--paper);stroke-width:1.5}
+.fcorner{fill:var(--frame);stroke:var(--paper);stroke-width:1.5}
 .fcorner.nw,.fcorner.se{cursor:nwse-resize}
 .fcorner.ne,.fcorner.sw{cursor:nesw-resize}
 #frmBar{position:absolute;z-index:6;display:none;gap:3px;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:3px;box-shadow:0 4px 14px rgba(0,0,0,.3)}
@@ -350,6 +408,7 @@ g.comp{cursor:move}
   </div>
   <button id="btnHelp" style="width:100%;margin-top:6px">Bedienung</button>
   <div id="palParts">
+  <div id="palP">
   <div class="grp">Leitungen</div>
   <button class="pal" data-type="leitung" title="Leitung zeichnen — Klick auf eine bestehende Leitung beginnt dort mit einem Knoten">Leitung / Abzweig</button>
   <div class="grp">Versorgung</div>
@@ -381,12 +440,41 @@ g.comp{cursor:move}
   <div class="grp">Beschriftung</div>
   <button class="pal" data-type="text">Textfeld</button>
   </div>
+  <div id="palE">
+  <div class="grp">Leitungen</div>
+  <button class="pal" data-type="leitung" title="Leitung zeichnen — Klick auf eine bestehende Leitung beginnt dort mit einem Knoten">Leitung / Abzweig</button>
+  <div class="grp">Energieversorgung</div>
+  <button class="pal" data-type="klemme" data-var="24" title="Speisepunkt 24 V — von hier läuft die obere Sammelschiene des Stromlaufplans">Klemme 24 V</button>
+  <button class="pal" data-type="klemme" data-var="0" title="Rückleitung 0 V — die untere Sammelschiene des Stromlaufplans">Klemme 0 V</button>
+  <div class="grp">Signalglieder (Eingabe)</div>
+  <button class="pal" data-type="eschalter" data-var="schliesser" title="Schließer 3/4 — Taster oder Rastschalter, Betätigungsart im Fenster">Schließer</button>
+  <button class="pal" data-type="eschalter" data-var="oeffner" title="Öffner 1/2 — unterbricht bei Betätigung">Öffner</button>
+  <button class="pal" data-type="eschalter" data-var="wechsler" title="Wechsler 2/4 oben, 1 unten — in Ruhe 1–2, betätigt 1–4">Wechsler</button>
+  <button class="pal" data-type="egrenz" title="Grenztaster am Zylinder mit elektrischem Kontakt — im Fenster Zylinder und Endlage zuordnen">Grenztaster</button>
+  <button class="pal" data-type="esensor" data-var="reed" title="Magnetischer Endschalter — braucht einen Zylinder mit Magnetkolben">Reedkontakt</button>
+  <button class="pal" data-type="esensor" data-var="induktiv" title="Induktiver Näherungsschalter — erkennt gut leitende Werkstoffe">Näherungsschalter induktiv</button>
+  <button class="pal" data-type="esensor" data-var="kapazitiv" title="Kapazitiver Näherungsschalter — erkennt auch Kunststoff, Glas, Holz">Näherungsschalter kapazitiv</button>
+  <button class="pal" data-type="esensor" data-var="optisch" title="Optischer Näherungsschalter">Näherungsschalter optisch</button>
+  <div class="grp">Verarbeitungsglieder</div>
+  <button class="pal" data-type="relais" data-var="keine" title="Relaisspule A1/A2 — schaltet alle Kontakte, die ihr zugeordnet sind">Relais</button>
+  <button class="pal" data-type="relais" data-var="anzug" title="Zieht um die eingestellte Zeit verzögert an, fällt sofort ab">Zeitrelais anzugsverzögert</button>
+  <button class="pal" data-type="relais" data-var="abfall" title="Zieht sofort an, fällt um die eingestellte Zeit verzögert ab">Zeitrelais abfallverzögert</button>
+  <button class="pal" data-type="ekontakt" data-var="schliesser" title="Kontakt eines Relais, Kontaktbahn im Fenster (13/14, 23/24 …)">Relaiskontakt Schließer</button>
+  <button class="pal" data-type="ekontakt" data-var="oeffner" title="Kontakt eines Relais (11/12, 21/22 …)">Relaiskontakt Öffner</button>
+  <button class="pal" data-type="ekontakt" data-var="wechsler" title="Wechslerkontakt eines Relais (12/14 oben, 11 unten)">Relaiskontakt Wechsler</button>
+  <div class="grp">Stellglieder und Melder</div>
+  <button class="pal" data-type="espule" title="Magnetspule des Wegeventils — am Ventil die Betätigung „Magnetspule“ wählen und diese Spule dort zuordnen">Magnetspule</button>
+  <button class="pal" data-type="elampe" title="Meldeleuchte — leuchtet, solange Strom fließt">Meldeleuchte</button>
+  <div class="grp">Beschriftung</div>
+  <button class="pal" data-type="text">Textfeld</button>
+  </div>
+  </div>
   <div id="symList"></div>
 </div>
 
 <div id="mid">
   <div id="tabbar"></div>
-  <div id="canvasWrap"><svg id="svg" xmlns="http://www.w3.org/2000/svg"></svg><div id="float"></div><div id="tip"></div><div id="symed"></div><div id="lib"></div><div id="aufgBg"><div id="aufgBox"></div></div>
+  <div id="canvasWrap"><div id="paneL"><svg id="svg" xmlns="http://www.w3.org/2000/svg"></svg><div class="panetag">Pneumatischer Plan</div></div><div id="split" title="Grenze verschieben"></div><div id="paneR"><svg id="svgE" xmlns="http://www.w3.org/2000/svg"></svg><div class="panetag">Stromlaufplan</div></div><div id="float"></div><div id="tip"></div><div id="symed"></div><div id="lib"></div><div id="aufgBg"><div id="aufgBox"></div></div>
     <div id="symTools">
       <b>Werkzeug</b>
       <button data-tool="sel" class="on" title="Formen anfassen, verschieben und an den Griffen ändern">Auswählen</button>
@@ -428,7 +516,7 @@ g.comp{cursor:move}
 
 <div id="helpBg">
   <div id="helpBox">
-    <header><span>Bedienung</span><span class="muted" style="font-size:11px;margin-left:8px">Stand 20.08.2026 &middot; 20:43</span><button class="close" id="btnHelpClose">×</button></header>
+    <header><span>Bedienung</span><span class="muted" style="font-size:11px;margin-left:8px">Stand 21.08.2026 &middot; 14:35</span><button class="close" id="btnHelpClose">×</button></header>
     <h4>Zeichnen</h4>
     <ul>
       <li><b>Tutorial:</b> Der Knopf „Aufgaben" oben rechts führt in 16 Schritten durch die Grundlagen. Im Tutorial zeigt die Palette nur die schon freigeschalteten Bauteile, und der Modus bleibt auf „einfach"; verlassen kannst du es im selben Fenster jederzeit. Der zweite Reiter enthält die Zusatzaufgaben.</li>
@@ -436,6 +524,10 @@ g.comp{cursor:move}
   <li>Liegt ein Anschluss des Schattens genau auf einer Leitung, hängt sich das Bauteil dort ein; liegen zwei gegenüberliegende Anschlüsse auf demselben Stück, wird es in die Leitung eingebaut. Das geht auch, wenn man ein noch unverdrahtetes Bauteil auf eine Leitung zieht.</li>
       <li>Bauteil anklicken: Das Fenster daneben konfiguriert es. Ziehen verschiebt, <kbd>R</kbd> dreht, <kbd>X</kbd> löscht.</li>
   <li><kbd>Strg</kbd>+<kbd>C</kbd> kopiert die Auswahl, <kbd>Strg</kbd>+<kbd>V</kbd> hängt sie als Schatten an den Mauszeiger — Klick setzt sie ab, <kbd>Shift</kbd> dabei behält sie für weitere Kopien, <kbd>Esc</kbd> verwirft.</li>
+      <li><b>Elektropneumatik:</b> Der Knopf oben rechts teilt das Blatt: links der pneumatische Lastkreis, rechts der Stromlaufplan. Beide Seiten lassen sich getrennt verschieben und zoomen, die Grenze dazwischen ist verschiebbar. Der Stromlaufplan hat eine eigene Akzentfarbe in Bernstein, damit auf einen Blick klar ist, welche Seite Strom führt und welche Luft. Die Palette links zeigt jeweils die Bauteile der Seite, in die du zuletzt geklickt hast. Den Knopf gibt es nur im vollständigen Modus.</li>
+      <li><b>Aufbau des Stromlaufplans:</b> oben eine Klemme 24 V, unten eine Klemme 0 V, dazwischen die Strompfade als Abzweige. Elektrische Leitungen sind dünner und lassen sich nur mit elektrischen Anschlüssen verbinden — beim Ziehen einer Leitung werden die Anschlusspunkte der anderen Art ausgeblendet. Das Wegeventil bekommt die Betätigung „Magnetspule mit Vorsteuerung“ und dort die Spule aus dem Stromlaufplan zugeordnet; Relaiskontakte werden ihrer Spule genauso zugeordnet. In der Simulation schaltet ein Klick auf den Schalter. Die Leitungen zeigen dabei drei Zustände: <b>kräftig</b> heißt, dass hier wirklich Strom fließt — das ist der geschlossene Kreis von der 24-V-Klemme über den Verbraucher zurück zur 0-V-Klemme; <b>blass</b> heißt, dass zwar Spannung anliegt, der Zweig aber an einem offenen Kontakt endet; <b>grau</b> heißt spannungsfrei. Beim Überfahren einer Leitung steht der Zustand als Text daneben.</li>
+      <li><b>Drucken:</b> „Drucken" legt einen grünen A4-Rahmen aufs Blatt — das ist die Seite. Ihn verschiebst du über den Rand, an den Ecken änderst du den Maßstab, der kleine Knopf daneben dreht auf Hoch- oder Querformat. Im Elektropneumatik-Modus liegt der Rahmen auf <b>beiden</b> Plänen und ist dort <b>gleich groß</b> — beide stehen also im selben Maßstab auf dem Papier. Er teilt sich in zwei Felder: <b>blau</b> für den pneumatischen Plan, <b>orange</b> für den Stromlaufplan, beim Hochformat übereinander, beim Querformat nebeneinander. Schiebe links den Rahmen so, dass die gewünschten pneumatischen Bauteile im blauen Feld liegen, und rechts so, dass die elektrischen im orangen liegen; die Grenze zwischen beiden Feldern lässt sich am grünen Griff verschieben. Gedruckt wird daraus <b>ein</b> Blatt.</li>
+      <li><b>Zusammengehörendes finden:</b> Zeigt die Maus auf ein Bauteil, das mit einem anderen verknüpft ist — Ventil und Magnetspule, Relaiskontakt und Spule, Geber und Zylinder —, werden beide grün umrandet. Liegt der Partner außerhalb des sichtbaren Ausschnitts, erscheint am Rand seines Plans ein grüner Wegweiser mit seiner Bezeichnung, der in seine Richtung zeigt.</li>
       <li>Schalldämpfer rasten direkt auf Anschlüssen ein. <b>Grenztaster</b> rasten am Zylinder ein (vorn = ausgefahren, hinten = eingefahren): der Näherungsschalter magnetisch auf dem Zylinderrohr, Stößel-, Rollenhebel- und Kipprollentaster außen an der Kolbenstangen-Bahn. Jeder betätigt am Wegeventil <b>nur</b> die zu ihm passende Betätigungsart („Näherungsschalter", „Stößel", „Rollenhebel", „Kipprolle") — dort den Geber zusätzlich als Grenztaster zuordnen. Die elektromagnetische Betätigung kommt erst mit der Elektropneumatik dazu.</li>
       <li>Der <b>Kipprollentaster</b> hat Leerrücklauf: er gibt nur beim Überfahren in Pfeilrichtung einen kurzen Impuls (Richtung im Fenster umschaltbar) und fällt sofort wieder ab — damit lassen sich Signalüberschneidungen an Impulsventilen auflösen.</li>
       <li>Bezeichnungen (1S1, 1A1 …) werden automatisch vergeben, sind im Fenster änderbar und lassen sich mit der Maus verschieben.</li>
@@ -531,6 +623,7 @@ const SVGI=p=>`<svg class="ic" viewBox="0 0 16 16" aria-hidden="true">${p}</svg>
 const ICO={
   book:SVGI('<path d="M2 3h3.6a2 2 0 0 1 2 2v8.2a2 2 0 0 0-2-1.6H2z"/><path d="M14 3h-3.6a2 2 0 0 0-2 2v8.2a2 2 0 0 1 2-1.6H14z"/>'),
   liste:SVGI('<path d="M6.4 3.6h7.4M6.4 8h7.4M6.4 12.4h7.4"/><path d="M2.1 3.7l1 1 1.7-2M2.1 8.1l1 1 1.7-2M2.1 12.5l1 1 1.7-2"/>'),
+  bolt:SVGI('<path d="M9.3 1.7 4.2 8.7h3.3l-.8 5.6 5.1-7H8.5z"/>'),
   sun:SVGI('<circle cx="8" cy="8" r="3.1"/><path d="M8 1.3v1.6M8 13.1v1.6M1.3 8h1.6M13.1 8h1.6M3.3 3.3l1.1 1.1M11.6 11.6l1.1 1.1M12.7 3.3l-1.1 1.1M4.4 11.6l-1.1 1.1"/>'),
   moon:SVGI('<path d="M13 9.6A5.6 5.6 0 0 1 6.4 3 5.6 5.6 0 1 0 13 9.6z"/>'),
   auto:SVGI('<circle cx="8" cy="8" r="5.6"/><path d="M8 2.4a5.6 5.6 0 0 1 0 11.2z" fill="currentColor" stroke="none"/>'),
@@ -561,10 +654,15 @@ const ICO={
 };
 /* Im einfachen Modus ausgeblendete Bauteile */
 const ADVPARTS=new Set(['auslass','druckschalt','rueckschlag|feder','sensor','zeitventil','zylinder|stangenlos']);
+/* Die Elektropneumatik ist durchweg Stoff des vollständigen Modus */
+for(const k of['klemme|24','klemme|0','eschalter|schliesser','eschalter|oeffner','eschalter|wechsler',
+  'egrenz','esensor|reed','esensor|induktiv','esensor|kapazitiv','esensor|optisch',
+  'relais|keine','relais|anzug','relais|abfall',
+  'ekontakt|schliesser','ekontakt|oeffner','ekontakt|wechsler','espule','elampe'])ADVPARTS.add(k);
 /* Im Entwicklermodus je Kachel umschaltbar: e = auch im einfachen Modus, v = nur vollständig.
    ADVV bei jeder fest eingebauten Änderung hochzählen — dann wird die im Browser
    gespeicherte Fassung verworfen und die neue Vorgabe gilt. */
-const ADVV='3';
+const ADVV='4';
 try{
   if(localStorage.getItem('pneu-advv')!==ADVV){
     localStorage.removeItem('pneu-adv');
@@ -574,12 +672,59 @@ try{
   if(Array.isArray(a)){ADVPARTS.clear();for(const t of a)ADVPARTS.add(t);}
 }catch(e){}
 function saveAdv(){try{localStorage.setItem('pneu-adv',JSON.stringify([...ADVPARTS]));}catch(e){}}
+/* ---------- Reihenfolge der Palette (Entwicklermodus) ----------
+   Gespeichert wird je Palettensatz eine Liste von Schlüsseln: Kacheln als „typ|variante",
+   Überschriften als „#Name". Neue Kacheln, die in der Liste fehlen, bleiben hinten stehen.
+   Der Knopf „Palette-Liste" gibt die Reihenfolge als Text aus, damit sie fest einziehen kann. */
+let palOrd=null,palDrag=null,palSuppress=false;
+try{palOrd=JSON.parse(localStorage.getItem('pneu-palord')||'null');}catch(e){}
+const palKey=b=>b.classList.contains('grp')?('#'+b.textContent.trim()):advKey(b.dataset.type,b.dataset.var);
+function palOrder(){
+  const o={};
+  for(const box of el('palParts').children)o[box.id]=[...box.children].map(palKey);
+  return o;
+}
+function palApplyOrd(){
+  if(!palOrd)return;
+  for(const box of el('palParts').children){
+    const want=palOrd[box.id];
+    if(!Array.isArray(want))continue;
+    const map=new Map();
+    for(const k of box.children)map.set(palKey(k),k);
+    const rest=[...box.children].filter(k=>want.indexOf(palKey(k))<0);
+    for(const k of want){const nd=map.get(k);if(nd)box.appendChild(nd);}
+    for(const k of rest)box.appendChild(k);
+  }
+}
+function palSaveOrd(){
+  palOrd=palOrder();
+  try{localStorage.setItem('pneu-palord',JSON.stringify(palOrd));}catch(e){}
+}
+/* Eine Überschrift nimmt ihre Kacheln mit — sonst müsste man jede einzeln umsetzen */
+function palBlock(nd){
+  if(!nd.classList.contains('grp'))return[nd];
+  const out=[nd];
+  let k=nd.nextElementSibling;
+  while(k&&!k.classList.contains('grp')){out.push(k);k=k.nextElementSibling;}
+  return out;
+}
+function palClearMarks(){
+  el('palParts').querySelectorAll('.palbefore,.palafter').forEach(k=>k.classList.remove('palbefore','palafter'));
+}
 /* Kachel-Schlüssel: Varianten (z. B. die Zylinder-Bauarten) sind einzeln umschaltbar */
 const advKey=(t,v)=>v?t+'|'+v:t;
 let simpleMode=false,autoDaempfer=false;
 /* Leitwert des Netzes: Volumenstrom je bar Druckdifferenz (l/(s·bar)) — Nennweite ~4 mm ≈ 0,3 l/s bei 6 bar */
 const FLOW=0.05;
-const svg=document.getElementById('svg');
+/* Zwei Zeichenflächen: links der pneumatische Plan, rechts der Stromlaufplan.
+   `svg` und `view` zeigen immer auf die gerade bediente Seite — dadurch arbeiten
+   Zoom, Verschieben, Platzieren und Ziehen unverändert auf der richtigen weiter. */
+const svgP=document.getElementById('svg'),svgE=document.getElementById('svgE');
+/* activePane = der Plan, in den zuletzt geklickt wurde (daran hängt die Palette links).
+   curPane = der Plan unter dem Mauszeiger — dort wirken Zoomen, Verschieben und der Schatten. */
+let svg=svgP,activePane=0,curPane=0,epSplit=0.58,splitDrag=null;
+const epOn=()=>!!(tabs[activeTab]&&tabs[activeTab].ep);
+const svgOf=p=>p?svgE:svgP;
 const el=id=>document.getElementById(id);
 const GRID=10;
 const snap=v=>Math.round(v/GRID)*GRID;
@@ -590,10 +735,12 @@ let tabs=[],activeTab=0,simTabIdx=-1,snips=[],libPlans=[],placingSnip=null,simVi
 let placeSnapW=null, placeSnapPt=null, placeRot=0, dragJoin=null;
 let selArr=[], placing=null, placingVar=null, pending=null, pendingVia=[], drag=null, band=null, wdrag=null, ldrag=null, mouse={x:0,y:0}, knotenSnapW=null;
 /* Palette-Variante (z. B. einfach-/doppeltwirkender Zylinder) auf die Grundkonfiguration anwenden */
+const ELVAR={klemme:'pol',eschalter:'art',egrenz:'art',esensor:'art',ekontakt:'art',relais:'zeit'};
 function cfgFor(type,varr){
   const g=DEFS[type].cfg();
   if(varr&&type==='zylinder')g.typ=varr;
   if(varr&&type==='rueckschlag')g.feder=(varr==='feder');
+  if(varr&&ELVAR[type])g[ELVAR[type]]=varr;
   return g;
 }
 let libW=310,libDrag=null;
@@ -602,7 +749,7 @@ let DEFAULT_SNIPS=[{"name":"5/2-Impulsventil","comps":[{"id":1,"type":"ventil","
 let DEFAULT_PLANS=[{"name":"Und-Schaltung","state":{"comps":[{"id":144,"type":"quelle","x":-40,"y":270,"rot":0,"cfg":{},"label":"-AZ1"},{"id":145,"type":"ventil","x":-160,"y":40,"rot":0,"cfg":{"pos":2,"pc":5,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[true,false]},"label":"-SJ1","lblOff":{"dx":23.39447021484375,"dy":12.38531494140625}},{"id":146,"type":"ventil","x":170,"y":40,"rot":0,"cfg":{"pos":2,"pc":5,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[true,false],"rastR":[false,false]},"label":"-SJ2","lblOff":{"dx":28.615509033203125,"dy":8.324493408203125}},{"id":150,"type":"knoten","x":-40,"y":160,"rot":0,"cfg":{},"label":""},{"id":151,"type":"zylinder","x":-30,"y":-280,"rot":0,"cfg":{"typ":"doppelt","daempf":"beid","einstellbar":false},"label":"-MM1"},{"id":153,"type":"knoten","x":20,"y":-110,"rot":0,"cfg":{},"label":""},{"id":154,"type":"knoten","x":100,"y":-110,"rot":0,"cfg":{},"label":""},{"id":155,"type":"knoten","x":60,"y":-140,"rot":0,"cfg":{},"label":""},{"id":156,"type":"knoten","x":-110,"y":-50,"rot":0,"cfg":{},"label":""},{"id":157,"type":"knoten","x":-30,"y":-50,"rot":0,"cfg":{},"label":""},{"id":158,"type":"knoten","x":-70,"y":-80,"rot":0,"cfg":{},"label":""},{"id":170,"type":"zweidruck","x":-70,"y":-50,"rot":0,"cfg":{},"label":"-KH1"},{"id":171,"type":"wechsel","x":60,"y":-110,"rot":0,"cfg":{},"label":"-KH2"},{"id":172,"type":"daempfer","x":-154,"y":102,"rot":0,"cfg":{},"label":"-RQ1"},{"id":173,"type":"daempfer","x":-126,"y":102,"rot":0,"cfg":{},"label":"-RQ2"},{"id":174,"type":"daempfer","x":176,"y":102,"rot":0,"cfg":{},"label":"-RQ3"},{"id":175,"type":"daempfer","x":204,"y":102,"rot":0,"cfg":{},"label":"-RQ4"}],"wires":[{"id":161,"a":{"c":144,"p":"1"},"b":{"c":150,"p":"1"}},{"id":162,"a":{"c":150,"p":"1"},"b":{"c":145,"p":"1"}},{"id":163,"a":{"c":146,"p":"1"},"b":{"c":150,"p":"1"}},{"id":164,"a":{"c":145,"p":"4"},"b":{"c":153,"p":"1"}},{"id":165,"a":{"c":146,"p":"4"},"b":{"c":154,"p":"1"},"adj":{"my":-110}},{"id":166,"a":{"c":145,"p":"2"},"b":{"c":156,"p":"1"},"adj":{"my":-50}},{"id":167,"a":{"c":146,"p":"2"},"b":{"c":157,"p":"1"}},{"id":168,"a":{"c":158,"p":"1"},"b":{"c":151,"p":"1"}},{"id":169,"a":{"c":155,"p":"1"},"b":{"c":151,"p":"2"},"adj":{"my":-200}}],"nextId":176}},{"name":"Oder-Schaltung","state":{"comps":[{"id":111,"type":"quelle","x":-40,"y":270,"rot":0,"cfg":{},"label":"-AZ1"},{"id":112,"type":"ventil","x":-160,"y":40,"rot":0,"cfg":{"pos":2,"pc":5,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[false,false]},"label":"-SJ1","lblOff":{"dx":26.14678955078125,"dy":12.38531494140625}},{"id":113,"type":"ventil","x":170,"y":40,"rot":0,"cfg":{"pos":2,"pc":5,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[false,false],"rastR":[false,false]},"label":"-SJ2","lblOff":{"dx":28.615509033203125,"dy":8.324493408203125}},{"id":118,"type":"knoten","x":-40,"y":160,"rot":0,"cfg":{},"label":""},{"id":128,"type":"zylinder","x":-30,"y":-280,"rot":0,"cfg":{"typ":"doppelt","daempf":"beid","einstellbar":false},"label":"-MM1"},{"id":135,"type":"knoten","x":20,"y":-110,"rot":0,"cfg":{},"label":""},{"id":136,"type":"knoten","x":100,"y":-110,"rot":0,"cfg":{},"label":""},{"id":137,"type":"knoten","x":60,"y":-140,"rot":0,"cfg":{},"label":""},{"id":139,"type":"knoten","x":-110,"y":-50,"rot":0,"cfg":{},"label":""},{"id":140,"type":"knoten","x":-30,"y":-50,"rot":0,"cfg":{},"label":""},{"id":141,"type":"knoten","x":-70,"y":-80,"rot":0,"cfg":{},"label":""},{"id":142,"type":"wechsel","x":-70,"y":-50,"rot":0,"cfg":{},"label":"-KH1"},{"id":143,"type":"zweidruck","x":60,"y":-110,"rot":0,"cfg":{},"label":"-KH2"},{"id":144,"type":"daempfer","x":-154,"y":102,"rot":0,"cfg":{},"label":"-RQ1"},{"id":145,"type":"daempfer","x":-126,"y":102,"rot":0,"cfg":{},"label":"-RQ2"},{"id":146,"type":"daempfer","x":176,"y":102,"rot":0,"cfg":{},"label":"-RQ3"},{"id":147,"type":"daempfer","x":204,"y":102,"rot":0,"cfg":{},"label":"-RQ4"}],"wires":[{"id":119,"a":{"c":111,"p":"1"},"b":{"c":118,"p":"1"}},{"id":120,"a":{"c":118,"p":"1"},"b":{"c":112,"p":"1"}},{"id":121,"a":{"c":113,"p":"1"},"b":{"c":118,"p":"1"}},{"id":124,"a":{"c":112,"p":"4"},"b":{"c":135,"p":"1"}},{"id":125,"a":{"c":113,"p":"4"},"b":{"c":136,"p":"1"},"adj":{"my":-110}},{"id":126,"a":{"c":112,"p":"2"},"b":{"c":139,"p":"1"},"adj":{"my":-50}},{"id":127,"a":{"c":113,"p":"2"},"b":{"c":140,"p":"1"}},{"id":129,"a":{"c":141,"p":"1"},"b":{"c":128,"p":"1"}},{"id":130,"a":{"c":137,"p":"1"},"b":{"c":128,"p":"2"},"adj":{"my":-200}}],"nextId":148}},{"name":"Direkt angesteuerter Zylinder","state":{"comps":[{"id":200,"type":"ventil","x":-30,"y":-20,"rot":0,"cfg":{"pos":2,"pc":3,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[false,false]},"label":"-SJ1"},{"id":201,"type":"quelle","x":-20,"y":150,"rot":0,"cfg":{},"label":"-AZ1","lblOff":{"dx":-15.858978271484375,"dy":11.792572021484375}},{"id":203,"type":"zylinder","x":30,"y":-190,"rot":0,"cfg":{"typ":"einfach","daempf":"keine","einstellbar":false},"label":"-MM1"},{"id":206,"type":"daempfer","x":0,"y":42,"rot":0,"cfg":{},"label":"-RQ1"}],"wires":[{"id":204,"a":{"c":201,"p":"1"},"b":{"c":200,"p":"1"}},{"id":205,"a":{"c":200,"p":"2"},"b":{"c":203,"p":"1"}}],"nextId":207}},{"name":"Indirekt angesteuerter Zylinder","state":{"comps":[{"id":200,"type":"ventil","x":-70,"y":0,"rot":0,"cfg":{"pos":2,"pc":3,"rest":1,"patterns":["a","b"],"actL":["knopf","none"],"actR":["feder","none"],"rastL":[false,false]},"label":"-SJ1"},{"id":201,"type":"quelle","x":-60,"y":170,"rot":0,"cfg":{},"label":"-AZ1","lblOff":{"dx":-15.858978271484375,"dy":11.792572021484375}},{"id":203,"type":"zylinder","x":110,"y":-240,"rot":0,"cfg":{"typ":"einfach","daempf":"keine","einstellbar":false},"label":"-MM1"},{"id":217,"type":"ventil","x":50,"y":-80,"rot":0,"cfg":{"pos":2,"pc":3,"rest":1,"patterns":["a","b"],"actL":["druck","none"],"actR":["feder","none"],"rastL":[false,false]},"label":"-QM1"},{"id":219,"type":"knoten","x":-60,"y":109,"rot":0,"cfg":{},"label":""},{"id":225,"type":"daempfer","x":-40,"y":62,"rot":0,"cfg":{},"label":"-RQ1"},{"id":226,"type":"daempfer","x":80,"y":-18,"rot":0,"cfg":{},"label":"-RQ2"}],"wires":[{"id":218,"a":{"c":200,"p":"2"},"b":{"c":217,"p":"12"}},{"id":220,"a":{"c":200,"p":"1"},"b":{"c":219,"p":"1"}},{"id":221,"a":{"c":219,"p":"1"},"b":{"c":201,"p":"1"}},{"id":222,"a":{"c":217,"p":"1"},"b":{"c":219,"p":"1"},"adj":{"my":110}},{"id":224,"a":{"c":217,"p":"2"},"b":{"c":203,"p":"1"}}],"nextId":227}}];
 function saveWS(){
   try{
-    localStorage.setItem(KEY,JSON.stringify({ws:1,defv:2,active:activeTab,libW,simple:simpleMode,autoD:autoDaempfer,tabs:tabs.map(t=>({name:t.name,state:t.state})),snippets:snips,plans:libPlans}));
+    localStorage.setItem(KEY,JSON.stringify({ws:1,defv:2,active:activeTab,libW,simple:simpleMode,autoD:autoDaempfer,epSplit,tabs:tabs.map(t=>({name:t.name,state:t.state,ep:!!t.ep})),snippets:snips,plans:libPlans}));
   }catch(e){}
 }
 function applyLibW(){
@@ -622,10 +769,17 @@ function labelPrefix(type,cfg){
        das Druckschaltventil zählt als Messgrößen-Umformer und heißt dort -BP */
     case'rueckschlag':case'wechsel':case'zweidruck':case'schnell':case'zeitventil':return'KH';
     case'druckschalt':return'BP';
+    /* Elektropneumatik-Skript S. 40: -SF Eingabeelemente, -KF Relais, -MB Magnetspulen,
+       -PF Meldegeräte, -BG Signalgeber */
+    case'eschalter':return'SF';
+    case'egrenz':case'esensor':return'BG';
+    case'relais':return'KF';
+    case'espule':return'MB';
+    case'elampe':return'PF';
     case'ventil':{
       const acts=[...((cfg&&cfg.actL)||[]),...((cfg&&cfg.actR)||[])];
-      if(acts.some(a=>LINKACTS.has(a)))return'BG';
-      if(acts.some(a=>a==='druck'||a==='vorstufe'))return'QM';
+      if(acts.some(a=>LINKACTS.has(a)&&!MAGACTS.has(a)))return'BG';
+      if(acts.some(a=>MAGACTS.has(a)||a==='druck'||a==='vorstufe'))return'QM';
       if(acts.some(a=>a==='muskel'||a==='knopf'||a==='hebel'||a==='pedal'))return'SJ';
       return'QM';
     }
@@ -702,15 +856,9 @@ function ensureLabels(){
         for(let i=0;i<arr.length;i++)if(arr[i]==='sensor')
           arr[i]=(li&&li.type==='rollentaster')?'rollenhebel':'naeherung';
       }
-      /* 19.08.2026: der Näherungsschalter wurde früher als Elektromagnet gezeichnet, der
-         Rollenstößel war ein zweites Rollensymbol — beide gehen in die neuen Zeichen über. */
-      for(const sd of['actL','actR']){
-        const arr=c.cfg[sd]||[];
-        for(let i=0;i<arr.length;i++){
-          if(arr[i]==='magnet')arr[i]='naeherung';
-          else if(arr[i]==='rollenstoessel')arr[i]='rollenhebel';
-        }
-      }
+      /* Die Umbenennung von 'magnet' und 'rollenstoessel' steht nicht mehr hier, sondern
+         läuft einmalig beim Start (siehe pneu-actv). Sie darf nicht bei jedem Laden greifen:
+         seit der Elektropneumatik ist 'magnet' die Magnetspule und keine Altlast mehr. */
       for(const rk of['rastL','rastR'])
         if(c.cfg[rk]!=null&&!Array.isArray(c.cfg[rk]))c.cfg[rk]=[!!c.cfg[rk],false];
     }
@@ -725,11 +873,25 @@ function bauWarn(c){
       if(!ga)continue;
       const sc=comp(sd==='L'?c.cfg.senL:c.cfg.senR);
       if(!sc||sc.type!==ACT_GEBER[ga])
-        return'Betätigung '+(sd==='L'?'links':'rechts')+' („'+(ACTS[ga]||ga)+'"): kein Grenztaster zugeordnet — diese Seite schaltet nie.';
+        return'Betätigung '+(sd==='L'?'links':'rechts')+' („'+(ACTS[ga]||ga)+'"): '+
+          (MAGACTS.has(ga)?'keine Magnetspule':'kein Grenztaster')+' zugeordnet — diese Seite schaltet nie.';
     }
   }
   if(GEBERTYP.has(c.type)&&(!c.cfg||c.cfg.target==null))
     return'Dieser Grenztaster überwacht keinen Zylinder — er meldet nie.';
+  if((c.type==='egrenz'||c.type==='esensor')&&(!c.cfg||c.cfg.target==null))
+    return'Dieser Geber überwacht keinen Zylinder — sein Kontakt schaltet nie.';
+  if(c.type==='esensor'&&c.cfg&&c.cfg.art==='reed'&&c.cfg.target!=null){
+    const z=comp(c.cfg.target);
+    if(z&&z.type==='zylinder'&&!(z.cfg&&(z.cfg.magnet||z.cfg.typ==='stangenlos')))
+      return'Der Reedkontakt braucht einen Zylinder mit Magnetkolben — im Zylinderfenster einschalten.';
+  }
+  if(c.type==='ekontakt'){
+    const r=comp(c.cfg&&c.cfg.target);
+    if(!r||r.type!=='relais')return'Dieser Kontakt gehört zu keinem Relais — er schaltet nie.';
+  }
+  if(c.type==='espule'&&!state.comps.some(v=>v.type==='ventil'&&v.cfg&&(v.cfg.senL===c.id||v.cfg.senR===c.id)))
+    return'Diese Magnetspule ist keinem Wegeventil zugeordnet — sie bewegt nichts.';
   return null;
 }
 function absBox(c,bx){
@@ -838,12 +1000,17 @@ const ACTS={none:'— keine —',muskel:'Muskelkraft (allgemein)',knopf:'Druckkn
   hebel:'Hebel',pedal:'Pedal',
   stoessel:'Stößel',rollenhebel:'Rollenhebel',kipprolle:'Kipprolle (Leerrücklauf)',
   naeherung:'Näherungsschalter',feder:'Feder',
-  druck:'Druck (direkt)',vorstufe:'Druck indirekt (Vorstufe)'};
+  druck:'Druck (direkt)',vorstufe:'Druck indirekt (Vorstufe)',
+  magnet:'Magnetspule (elektromagnetisch)',magnetvor:'Magnetspule mit Vorsteuerung'};
 /* Grenztaster („Geber“) und die Betätigungsart, die sie am Ventil auslösen — strikte 1:1-Paarung:
    jeder Gebertyp betätigt nur die zu ihm passende Betätigung, sonst nichts.
-   (Elektromagnetische Betätigung kommt erst mit der Elektropneumatik dazu.) */
-const ACT_GEBER={naeherung:'sensor',stoessel:'stoesseltaster',rollenhebel:'rollentaster',kipprolle:'kipptaster'};
+   Die elektromagnetische Betätigung hängt genauso an einem Bauteil: an der Magnetspule
+   im Stromlaufplan. Damit gilt für sie dieselbe Zuordnung wie für einen Grenztaster. */
+const ACT_GEBER={naeherung:'sensor',stoessel:'stoesseltaster',rollenhebel:'rollentaster',kipprolle:'kipptaster',
+  magnet:'espule',magnetvor:'espule'};
 const GEBERTYP=new Set(['sensor','stoesseltaster','rollentaster','kipptaster']);
+/* Betätigungen, die aus dem elektrischen Steuerkreis kommen */
+const MAGACTS=new Set(['magnet','magnetvor']);
 /* Bauform: magnetisch sitzt auf dem Zylinderrohr, alle mechanischen an der Kolbenstangen-Bahn */
 const geberFam=t=>t==='sensor'?'mag':'mech';
 const LINKACTS=new Set(Object.keys(ACT_GEBER));
@@ -863,6 +1030,11 @@ const ACT_DRAW={
   kipprolle:'<line x1="0" y1="-3" x2="7.35" y2="-3"/><line x1="0" y1="3" x2="7.35" y2="3"/><circle cx="10" cy="0" r="4"/>'+
     '<line x1="13.95" y1="0.65" x2="22.3" y2="-6.16"/><line x1="10.16" y1="-4" x2="18.51" y2="-10.81"/>'+
     '<circle cx="23" cy="-10.6" r="4.5"/><circle cx="23" cy="-10.6" r="0.8"/>',
+  /* Elektromagnetische Betätigung: Rechteck mit Schrägstrich. Mit Vorsteuerung kommt
+     das Dreieck des pneumatisch betätigten Hauptventils davor (Skript 1.5.3). */
+  magnet:'<line x1="0" y1="0" x2="4" y2="0"/><rect x="4" y="-7" width="16" height="14"/><line x1="4" y1="7" x2="20" y2="-7"/>',
+  magnetvor:'<line x1="0" y1="0" x2="6" y2="0"/><polygon points="15,-5 15,5 6,0"/>'+
+    '<rect x="16" y="-7" width="16" height="14"/><line x1="16" y1="7" x2="32" y2="-7"/>',
   feder:'<polyline points="0,0 4,-7 10,7 16,-7 21,0"/>',
   /* pneumatischer Näherungsschalter: Gehäuse mit Raute (Stößelventil) und Permanentmagnet */
   naeherung:'<rect x="0" y="-8" width="24" height="16"/>'+
@@ -884,6 +1056,117 @@ function actStack(kinds,side,W,rast){
     out+='</g>';
   });
   return out;
+}
+
+/* ---------- Elektropneumatik: Bausteine für den Stromlaufplan ----------
+   Der elektrische Steuerkreis wird auf dasselbe Blatt gezeichnet wie der pneumatische
+   Lastkreis. Elektrische Anschlüsse lassen sich nur untereinander verbinden; die
+   Leitungen werden dünner gezeichnet und führen in der Simulation Spannung statt Luft. */
+const ELPARTS=new Set(['klemme','eschalter','egrenz','esensor','relais','ekontakt','espule','elampe']);
+const ELLOAD=new Set(['relais','espule','elampe']);
+const ELKONT=new Set(['eschalter','egrenz','esensor','ekontakt']);
+const KONTART={schliesser:'Schließer',oeffner:'Öffner',wechsler:'Wechsler'};
+const senWort=acts=>MAGACTS.has(geberAct(acts))?'Magnetspule':'Grenztaster';
+/* Anschlussnummern nach DIN EN 60617: Schließer 3/4, Öffner 1/2, Wechsler 2 und 4 oben, 1 unten.
+   Bei Relaiskontakten steht die Kontaktbahn davor — 13/14, 23/24, 31/32 … */
+function kontNums(art,bahn){
+  const b=bahn?String(bahn):'';
+  if(art==='oeffner')return{o:[b+'1'],u:b+'2'};
+  if(art==='wechsler')return{o:[b+'2',b+'4'],u:b+'1'};
+  return{o:[b+'3'],u:b+'4'};
+}
+function kontPorts(art,bahn){
+  const K=kontNums(art,bahn),ps=[];
+  if(K.o.length===1)ps.push({n:K.o[0],x:0,y:-30,d:[0,-1]});
+  else{
+    ps.push({n:K.o[0],x:-16,y:-30,d:[0,-1]});
+    ps.push({n:K.o[1],x:16,y:-30,d:[0,-1]});
+  }
+  ps.push({n:K.u,x:0,y:30,d:[0,1]});
+  return ps;
+}
+/* Der bewegliche Kontakt hängt unten am Anschluss und schwenkt: der Schließer steht in
+   Ruhe schräg (offen) und wird beim Betätigen senkrecht, der Öffner umgekehrt. Der
+   Wechsler kippt von einem festen Kontakt auf den anderen. „an“ = betätigt. */
+function kontDraw(art,bahn,an,ver){
+  const K=kontNums(art,bahn);
+  let s='',blatt='<line x1="0" y1="9" x2="0" y2="-13"/>',w=0;
+  s+='<line x1="0" y1="30" x2="0" y2="9"/>';
+  if(art==='wechsler'){
+    s+='<line x1="-16" y1="-30" x2="-16" y2="-11"/><line x1="-16" y1="-11" x2="-6" y2="-11"/>';
+    s+='<line x1="16" y1="-30" x2="16" y2="-11"/><line x1="16" y1="-11" x2="6" y2="-11"/>';
+    w=an?22:-22;
+    s+='<text x="-20" y="-34" text-anchor="end">'+K.o[0]+'</text><text x="20" y="-34">'+K.o[1]+'</text>';
+  }else if(art==='oeffner'){
+    s+='<line x1="0" y1="-30" x2="0" y2="-11"/>';
+    blatt+='<line x1="-5" y1="-11" x2="5" y2="-11"/>';
+    w=an?22:0;
+    s+='<text x="5" y="-32">'+K.o[0]+'</text>';
+  }else{
+    s+='<line x1="0" y1="-30" x2="0" y2="-13"/>';
+    w=an?0:22;
+    s+='<text x="5" y="-32">'+K.o[0]+'</text>';
+  }
+  /* Fallschirm: zeigt an, in welche Richtung der Kontakt verzögert schaltet */
+  if(ver==='anzug')blatt+='<path d="M0,-5 A5,5 0 0 0 0,5"/>';
+  else if(ver==='abfall')blatt+='<path d="M0,-5 A5,5 0 0 1 0,5"/>';
+  s+='<g transform="rotate('+w+',0,9)">'+blatt+'</g>';
+  s+='<text x="5" y="26">'+K.u+'</text>';
+  return s;
+}
+/* Betätigungsarten elektrischer Schalter nach DIN EN 60617-2, links neben dem Kontakt
+   und gestrichelt mit ihm verbunden. Das „V“ dazwischen kennzeichnet den Rastschalter,
+   der Doppelpfeil einen Taster, der in Ruhestellung schon betätigt ist. */
+const BETS={allgemein:'allgemein',druecken:'Drücken',ziehen:'Ziehen',drehen:'Drehen',
+  schluessel:'Schlüssel',fuss:'Füße',nocken:'Nocken',pilz:'Pilzdrucktaster (Not-Halt)'};
+function betDraw(bet,rast,vorbet){
+  const G={
+    allgemein:'<line x1="-34" y1="-7" x2="-34" y2="7"/>',
+    druecken:'<path d="M-28,-7 H-34 V7 H-28"/>',
+    ziehen:'<path d="M-40,-7 H-34 V7 H-40"/>',
+    drehen:'<path d="M-40,-7 H-34 V7"/>',
+    schluessel:'<circle cx="-37" cy="-3.5" r="3.5"/><line x1="-37" y1="0" x2="-37" y2="7"/><line x1="-37" y1="4" x2="-33.5" y2="4"/>',
+    fuss:'<line x1="-41" y1="7" x2="-30" y2="-7"/>',
+    nocken:'<path d="M-30,-6.5 A6.5,6.5 0 1 0 -30,6.5"/><line x1="-30" y1="6.5" x2="-30" y2="1.5"/>',
+    pilz:'<line x1="-34" y1="-3" x2="-34" y2="7"/><path d="M-41,-3 A7,7 0 0 1 -27,-3 Z"/>'
+  };
+  let s=G[bet]||G.allgemein;
+  s+='<line x1="-27" y1="0" x2="-6" y2="0" style="stroke-dasharray:3 3"/>';
+  if(rast)s+='<polyline points="-23,-5 -19,1 -15,-5"/>';
+  if(vorbet)s+='<path d="M-52,10 V-3"/><path d="M-56,1 L-52,-4 L-48,1"/><path d="M-56,6 L-52,1 L-48,6"/>';
+  return s;
+}
+/* Bauform des elektrischen Grenztasters — das vereinfachte Symbol nach DIN EN 60617-7
+   sagt nichts über den Antrieb, Rolle und Stößel zeigen ihn ausdrücklich. */
+function grenzDraw(bau){
+  if(bau==='rollenhebel')
+    return'<circle cx="-40" cy="0" r="4.5"/><circle cx="-40" cy="0" r="0.8"/>'+
+      '<line x1="-35.5" y1="-3" x2="-27" y2="-3"/><line x1="-35.5" y1="3" x2="-27" y2="3"/>'+
+      '<line x1="-27" y1="0" x2="-6" y2="0" style="stroke-dasharray:3 3"/>';
+  if(bau==='stoessel')
+    return'<path d="M-27,-4 H-35 A4,4 0 0 0 -35,4 H-27 Z"/>'+
+      '<line x1="-27" y1="0" x2="-6" y2="0" style="stroke-dasharray:3 3"/>';
+  return'';
+}
+/* Kontaktstellung in der Simulation: gedrückter Taster, überfahrener Grenztaster,
+   angesprochener Sensor oder ein Relais, dessen Spule angezogen hat. */
+function kontAn(c){
+  if(!simView||!c)return false;
+  if(c.type==='eschalter'){
+    const a=!!((simHeld[c.id]&&simHeld[c.id].S)||(simCtrlHeld[c.id]&&simCtrlHeld[c.id].S)||(simLatch[c.id]&&simLatch[c.id].S));
+    return c.cfg&&c.cfg.vorbet?!a:a;
+  }
+  if(c.type==='egrenz'||c.type==='esensor')return sensorActive(c);
+  if(c.type==='ekontakt')return!!(c.cfg&&simElOn[c.cfg.target]);
+  return false;
+}
+/* Verzögerungsart des Relais, an dem ein Kontakt hängt — für den Fallschirm im Symbol */
+function kontVer(c){
+  if(!c||c.type!=='ekontakt'||!c.cfg)return null;
+  const r=comp(c.cfg.target);
+  if(!r||r.type!=='relais')return null;
+  const z=r.cfg&&r.cfg.zeit;
+  return(z==='anzug'||z==='abfall')?z:null;
 }
 
 /* ---------- Bauteil-Definitionen ---------- */
@@ -951,7 +1234,8 @@ const DEFS={
       return ps;
     },
     box(cfg){
-      const W=cfg.pos*40,eL=hasPilot(cfg.actL)?40:30,eR=hasPilot(cfg.actR)?40:30;
+      const ext=a=>hasPilot(a)?40:((a||[]).some(k=>MAGACTS.has(k))?44:30);
+      const W=cfg.pos*40,eL=ext(cfg.actL),eR=ext(cfg.actR);
       return{x:-W/2-eL,y:-42,w:W+eL+eR,h:84};
     },
     draw(cfg,c){
@@ -979,13 +1263,15 @@ const DEFS={
         const i=ks.findIndex(k=>LINKACTS.has(k));
         return(i<0||ks.length===1)?0:(i===0?-10:10);
       };
+      /* Der Name des Gebers steht neben der Betätigung — die Magnetspule braucht mehr Platz */
+      const senX=acts=>MAGACTS.has(geberAct(acts))?50:26;
       if(geberAct(cfg.actL)){
         const sc=comp(cfg.senL);
-        if(sc&&sc.type===ACT_GEBER[geberAct(cfg.actL)])s+=`<text x="${-W/2-26}" y="${senY(cfg.actL)+3.5}" text-anchor="end">${esc(sc.label||'')}</text>`;
+        if(sc&&sc.type===ACT_GEBER[geberAct(cfg.actL)])s+=`<text x="${-W/2-senX(cfg.actL)}" y="${senY(cfg.actL)+3.5}" text-anchor="end">${esc(sc.label||'')}</text>`;
       }
       if(geberAct(cfg.actR)){
         const sc=comp(cfg.senR);
-        if(sc&&sc.type===ACT_GEBER[geberAct(cfg.actR)])s+=`<text x="${W/2+26}" y="${senY(cfg.actR)+3.5}">${esc(sc.label||'')}</text>`;
+        if(sc&&sc.type===ACT_GEBER[geberAct(cfg.actR)])s+=`<text x="${W/2+senX(cfg.actR)}" y="${senY(cfg.actR)+3.5}">${esc(sc.label||'')}</text>`;
       }
       s+='</g>';
       const x0=L+cfg.rest*S;
@@ -1313,6 +1599,118 @@ const DEFS={
       s+=`<g style="stroke-width:1.4"><line x1="${-7*d}" y1="-21" x2="${5.5*d}" y2="-21"/>`+
          `<polyline points="${2*d},-24 ${6.5*d},-21 ${2*d},-18" style="fill:none"/></g>`;
       if(simView&&c&&sensorActive(c))s+='<circle cx="0" cy="-8" r="3" style="fill:var(--hot);stroke:none"/>';
+      return s;
+    }
+  },
+  /* ---------- Elektropneumatik ---------- */
+  klemme:{
+    label:'Anschlussklemme',
+    cfg:()=>({pol:'24'}),
+    ports:()=>[{n:'1',x:14,y:0,d:[1,0]}],
+    box:()=>({x:-34,y:-13,w:50,h:26}),
+    draw:cfg=>'<text x="0" y="4" text-anchor="end">'+(cfg&&cfg.pol==='0'?'0 V':'24 V')+'</text>'+
+      '<circle cx="6" cy="0" r="4.5"/><line x1="10.5" y1="0" x2="14" y2="0"/>'
+  },
+  eschalter:{
+    label:'Schalter',
+    cfg:()=>({art:'schliesser',halt:'taster',bet:'druecken',vorbet:false}),
+    ports:cfg=>kontPorts(cfg.art||'schliesser',0),
+    box(cfg){
+      const x0=cfg.vorbet?-60:-46;
+      return{x:x0,y:-40,w:(cfg.art==='wechsler'?26:20)-x0,h:80};
+    },
+    draw:(cfg,c)=>betDraw(cfg.bet,cfg.halt==='rast',cfg.vorbet)+
+      kontDraw(cfg.art||'schliesser',0,kontAn(c),null)
+  },
+  egrenz:{
+    label:'Grenztaster (elektrisch)',
+    cfg:()=>({art:'schliesser',bau:'rollenhebel',target:null,mode:'aus'}),
+    ports:cfg=>kontPorts(cfg.art||'schliesser',0),
+    box(cfg){
+      const x0=(cfg.bau&&cfg.bau!=='allgemein')?-46:-8;
+      return{x:x0,y:-40,w:(cfg.art==='wechsler'?26:20)-x0,h:80};
+    },
+    draw:(cfg,c)=>grenzDraw(cfg.bau)+kontDraw(cfg.art||'schliesser',0,kontAn(c),null)
+  },
+  esensor:{
+    label:'Näherungsschalter (elektronisch)',
+    cfg:()=>({art:'reed',target:null,mode:'aus'}),
+    ports:()=>[{n:'1',x:0,y:-30,d:[0,-1]},{n:'3',x:0,y:30,d:[0,1]},{n:'4',x:36,y:0,d:[1,0]}],
+    box:()=>({x:-20,y:-34,w:58,h:68}),
+    draw(cfg,c){
+      const an=kontAn(c);
+      let s='<rect x="-17" y="-17" width="34" height="34"/>';
+      s+='<line x1="0" y1="-30" x2="0" y2="-17"/><line x1="0" y1="30" x2="0" y2="17"/>';
+      s+='<line x1="17" y1="0" x2="36" y2="0"/>';
+      s+='<text x="5" y="-21">1</text><text x="5" y="27">3</text><text x="22" y="-4">4</text>';
+      s+='<polygon points="0,-14 6,-8 0,-2 -6,-8"/>';
+      const M={
+        reed:'<path d="M-6,3 H-1 V7 H-6 Z" style="fill:currentColor;stroke:none"/><line x1="-1" y1="5" x2="6" y2="5"/>',
+        induktiv:'<path d="M-7,5 A2,2 0 0 1 -3,5 A2,2 0 0 1 1,5 A2,2 0 0 1 5,5"/>',
+        kapazitiv:'<line x1="-3" y1="1" x2="-3" y2="9"/><line x1="1" y1="1" x2="1" y2="9"/><line x1="-7" y1="5" x2="-3" y2="5"/><line x1="1" y1="5" x2="5" y2="5"/>',
+        optisch:'<line x1="-7" y1="5" x2="5" y2="5"/><line x1="-1" y1="5" x2="3" y2="1"/><line x1="2" y1="5" x2="6" y2="1"/>'
+      };
+      s+=M[cfg.art]||M.reed;
+      s+='<g transform="rotate('+(an?0:20)+',-6,15)"><line x1="-6" y1="15" x2="6" y2="11"/></g>';
+      return s;
+    }
+  },
+  relais:{
+    label:'Relais / Schütz',
+    cfg:()=>({zeit:'keine',t:2}),
+    ports:()=>[{n:'A1',x:0,y:-30,d:[0,-1]},{n:'A2',x:0,y:30,d:[0,1]}],
+    box:()=>({x:-26,y:-34,w:52,h:68}),
+    draw(cfg,c){
+      let s='';
+      if(simView&&c&&simElOn[c.id])s+='<rect x="-22" y="-12" width="44" height="24" style="fill:var(--hot);stroke:none;opacity:0.3"/>';
+      s+='<rect x="-22" y="-12" width="44" height="24"/>';
+      s+='<line x1="0" y1="-30" x2="0" y2="-12"/><line x1="0" y1="30" x2="0" y2="12"/>';
+      s+='<text x="5" y="-16">A1</text><text x="5" y="24">A2</text>';
+      /* anzugsverzögert: Feld mit Schrägstrich — abfallverzögert: ausgefülltes Feld */
+      if(cfg.zeit==='anzug')s+='<rect x="-22" y="-12" width="12" height="24"/><line x1="-22" y1="-12" x2="-10" y2="12"/>';
+      else if(cfg.zeit==='abfall')s+='<rect x="-22" y="-12" width="12" height="24" style="fill:currentColor"/>';
+      return s;
+    }
+  },
+  ekontakt:{
+    label:'Relaiskontakt',
+    cfg:()=>({art:'schliesser',bahn:1,target:null}),
+    ports:cfg=>kontPorts(cfg.art||'schliesser',cfg.bahn||1),
+    box(cfg){
+      return{x:cfg.art==='wechsler'?-30:-26,y:-40,w:cfg.art==='wechsler'?56:52,h:80};
+    },
+    draw(cfg,c){
+      const r=c?comp(cfg.target):null;
+      let s=kontDraw(cfg.art||'schliesser',cfg.bahn||1,kontAn(c),kontVer(c));
+      if(r&&r.type==='relais')s+='<text x="-10" y="3" text-anchor="end">'+esc(r.label||'')+'</text>';
+      return s;
+    }
+  },
+  espule:{
+    label:'Magnetspule',
+    cfg:()=>({}),
+    ports:()=>[{n:'A1',x:0,y:-30,d:[0,-1]},{n:'A2',x:0,y:30,d:[0,1]}],
+    box:()=>({x:-24,y:-34,w:56,h:68}),
+    draw(cfg,c){
+      let s='';
+      if(simView&&c&&simElOn[c.id])s+='<rect x="-20" y="-11" width="34" height="22" style="fill:var(--hot);stroke:none;opacity:0.3"/>';
+      s+='<rect x="-20" y="-11" width="34" height="22"/><line x1="-20" y1="11" x2="14" y2="-11"/>';
+      s+='<line x1="0" y1="-30" x2="0" y2="-11"/><line x1="0" y1="30" x2="0" y2="11"/>';
+      /* der gestrichelte Abgang zeigt, dass die Spule ein Wegeventil betätigt */
+      s+='<line x1="14" y1="0" x2="24" y2="0" style="stroke-dasharray:3 3"/>';
+      s+='<line x1="24" y1="-6" x2="24" y2="6"/><line x1="21" y1="-6" x2="27" y2="-6"/>';
+      return s;
+    }
+  },
+  elampe:{
+    label:'Meldeleuchte',
+    cfg:()=>({}),
+    ports:()=>[{n:'A1',x:0,y:-30,d:[0,-1]},{n:'A2',x:0,y:30,d:[0,1]}],
+    box:()=>({x:-16,y:-34,w:32,h:68}),
+    draw(cfg,c){
+      let s=(simView&&c&&simElOn[c.id])?'<circle cx="0" cy="0" r="11.5" style="fill:var(--hot);stroke:none;opacity:0.45"/>':'';
+      s+='<circle cx="0" cy="0" r="12"/><line x1="-8.5" y1="-8.5" x2="8.5" y2="8.5"/><line x1="-8.5" y1="8.5" x2="8.5" y2="-8.5"/>';
+      s+='<line x1="0" y1="-30" x2="0" y2="-12"/><line x1="0" y1="30" x2="0" y2="12"/>';
       return s;
     }
   },
@@ -1850,19 +2248,19 @@ function symFit(){
   const ar=symPxW()/symPxH();
   let w=b.w+2*pad,h=b.h+2*pad;
   if(w/h<ar)w=h*ar;else h=w/ar;
-  view={x:b.x+b.w/2-w/2,y:b.y+b.h/2-h/2,w,h};
+  Object.assign(view,{x:b.x+b.w/2-w/2,y:b.y+b.h/2-h/2,w,h});
   applyView();render();
 }
 function symZoom(f){
   const cx=view.x+view.w/2,cy=view.y+view.h/2;
   const w=Math.max(6,Math.min(4000,view.w*f)),h=w*view.h/view.w;
-  view={x:cx-w/2,y:cy-h/2,w,h};
+  Object.assign(view,{x:cx-w/2,y:cy-h/2,w,h});
   applyView();render();
 }
 function symZoom1(){
   const w=symPxW(),h=symPxH();
   const cx=view.x+view.w/2,cy=view.y+view.h/2;
-  view={x:cx-w/2,y:cy-h/2,w,h};
+  Object.assign(view,{x:cx-w/2,y:cy-h/2,w,h});
   applyView();render();
 }
 function symMiniSvg(c){
@@ -2143,6 +2541,9 @@ function renderSymCanvas(){
   svg.innerHTML=s;
 }
 function sensorActive(c){
+  /* Die Magnetspule ist „betätigt“, solange sie Strom führt — damit gilt für sie am
+     Wegeventil genau dieselbe Mechanik wie für einen Grenztaster. */
+  if(c&&c.type==='espule')return!!simElOn[c.id];
   const cfg=c&&c.cfg;
   if(!cfg||cfg.target==null)return false;
   const t=comp(cfg.target);
@@ -2376,10 +2777,13 @@ function tidyKnoten(){
   pruneWires();
 }
 /* Naechster Punkt auf irgendeiner Leitung — schon aufs Raster gezogen, aber exakt auf der Leitung */
+/* Beim Einbauen in eine Leitung: null = beide Arten, true/false = nur Strom bzw. nur Luft */
+let joinEl=null;
 function wireProj(x,y,tol,skipC){
   let best=null;
   for(const w of state.wires){
     if(skipC!=null&&(w.a.c===skipC||w.b.c===skipC))continue;
+    if(joinEl!=null&&wireIsEl(w)!==joinEl)continue;
     const A=absPort(w.a),B=absPort(w.b);
     if(!A||!B)continue;
     const pts=wirePts(A,B,w.adj,w.via);
@@ -2408,6 +2812,10 @@ function placeJoin(typ,cfg,gx,gy,rot,skipC){
   if(!def||typ==='leitung'||VENTP.has(typ)||GEBERTYP.has(typ))return null;
   const ports=def.ports(cfg);
   if(!ports.length)return null;
+  /* Ein Schalter baut sich nur in einen Strompfad ein, eine Drossel nur in eine Luftleitung */
+  elRefresh();
+  joinEl=ELPARTS.has(typ);
+  try{
   if(ports.length>=2){
     const durch=placeJoin2(ports,gx,gy,rot,skipC);
     if(durch)return durch;
@@ -2436,6 +2844,7 @@ function placeJoin(typ,cfg,gx,gy,rot,skipC){
   }
   if(mehr.length)best.mehr=mehr;
   return best;
+  }finally{joinEl=null;}
 }
 /* Zwei gegenüberliegende Anschlüsse: liegen beide auf demselben Leitungsstück,
    wird das Bauteil dort in die Leitung eingebaut statt nur angehängt. */
@@ -2458,6 +2867,7 @@ function placeJoin2(ports,gx,gy,rot,skipC){
     if(senk&&e0.dx!==0)continue;
     for(const w of state.wires){
       if(skipC!=null&&(w.a.c===skipC||w.b.c===skipC))continue;
+      if(joinEl!=null&&wireIsEl(w)!==joinEl)continue;
       const A=absPort(w.a),B=absPort(w.b);
       if(!A||!B)continue;
       const pts=wirePts(A,B,w.adj,w.via);
@@ -2800,8 +3210,9 @@ function wireOverlaps(wid){
   if(!A||!B)return false;
   const root=wireRoot(),rm=root(me);
   const mine=wirePts(A,B,me.adj,me.via);
+  const dm=wireDom(me);
   for(const o of state.wires){
-    if(o.id===wid||root(o)===rm)continue;
+    if(o.id===wid||root(o)===rm||wireDom(o)!==dm)continue;
     const C=absPort(o.a),D=absPort(o.b);
     if(!C||!D)continue;
     const op=wirePts(C,D,o.adj,o.via);
@@ -2819,9 +3230,11 @@ function segHitsBox(p,q,b){
   return Math.min(p.x,q.x)<b.x2&&Math.max(p.x,q.x)>b.x1&&Math.min(p.y,q.y)<b.y2&&Math.max(p.y,q.y)>b.y1;
 }
 function blockBoxes(w,A,B){
-  const out=[],ends=[{ref:w.a,P:A},{ref:w.b,P:B}];
+  const out=[],ends=[{ref:w.a,P:A},{ref:w.b,P:B}],dm=wireDom(w);
   for(const c of state.comps){
     if(c.type==='knoten'||c.type==='text')continue;
+    /* Ein Bauteil des anderen Plans steht dieser Leitung nicht im Weg */
+    if(compDom(c)!==dm&&compDom(c)!=null)continue;
     const r=absBox(c);
     let b={x1:r.x1+3,y1:r.y1+3,x2:r.x2-3,y2:r.y2-3};
     /* Das eigene Bauteil bleibt Hindernis — nur an seinem Anschluss endet der Kasten,
@@ -2844,9 +3257,9 @@ function blockBoxes(w,A,B){
   return out;
 }
 function foreignSegs(w){
-  const root=wireRoot(),rm=root(w),out=[];
+  const root=wireRoot(),rm=root(w),out=[],dm=wireDom(w);
   for(const o of state.wires){
-    if(o.id===w.id||root(o)===rm)continue;
+    if(o.id===w.id||root(o)===rm||wireDom(o)!==dm)continue;
     const C=absPort(o.a),D=absPort(o.b);
     if(!C||!D)continue;
     const p=wirePts(C,D,o.adj,o.via);
@@ -2899,8 +3312,11 @@ function rerouteAround(idSet){
     boxes.push({x1:r.x1+3,y1:r.y1+3,x2:r.x2-3,y2:r.y2-3});
   }
   const todo=new Set();
+  const dmSet=new Set([...idSet].map(id=>compDom(comp(id))).filter(Boolean));
   for(const w of state.wires){
     if(idSet.has(w.a.c)||idSet.has(w.b.c)){todo.add(w.id);continue;}
+    /* nur Leitungen der Seite, auf der das bewegte Bauteil liegt */
+    if(dmSet.size&&!dmSet.has(wireDom(w)==='el'?'el':'pn'))continue;
     const A=absPort(w.a),B=absPort(w.b);
     if(!A||!B)continue;
     const p=wirePts(A,B,w.adj,w.via);
@@ -2915,8 +3331,10 @@ function simplifyWiresOf(cid){
 /* Leitung, auf der ein gezogener Knoten liegt (zum Verknüpfen) */
 function wireNearKnoten(j){
   let best=null;
+  const dj=compDom(j);
   for(const w of state.wires){
     if(w.a.c===j.id||w.b.c===j.id)continue;
+    if(dj&&wireDom(w)!==(dj==='el'?'el':'pn'))continue;
     const A=absPort(w.a),B=absPort(w.b);
     if(!A||!B)continue;
     const pts=wirePts(A,B,w.adj,w.via);
@@ -2971,41 +3389,125 @@ function hotStyle(pv){
   return` style="stroke-width:${(2.3+1.7*k).toFixed(2)};opacity:${(0.62+0.38*k).toFixed(2)}"`;
 }
 /* ---------- Rendern ---------- */
+/* ---------- Verknüpfte Bauteile ----------
+   Manche Bauteile gehören zusammen, ohne dass eine Leitung das zeigt: das Wegeventil und
+   seine Magnetspule, der Relaiskontakt und seine Spule, der Geber und sein Zylinder.
+   Beim Zeigen oder Auswählen werden beide grün markiert — auch auf der anderen Seite. */
+const ZIELTYP=new Set(['egrenz','esensor','ekontakt']);
+const hatZiel=c=>!!c&&(GEBERTYP.has(c.type)||ZIELTYP.has(c.type));
+function linkPartners(id){
+  const out=new Set(),c=comp(id);
+  if(!c)return out;
+  const add=x=>{if(x!=null&&comp(x))out.add(x);};
+  if(c.type==='ventil'&&c.cfg){add(c.cfg.senL);add(c.cfg.senR);}
+  if(hatZiel(c)&&c.cfg&&c.cfg.target!=null)add(c.cfg.target);
+  for(const o of state.comps){
+    if(o.id===id||!o.cfg)continue;
+    if(o.type==='ventil'&&(o.cfg.senL===id||o.cfg.senR===id))out.add(o.id);
+    else if(hatZiel(o)&&o.cfg.target===id)out.add(o.id);
+  }
+  return out;
+}
+let hoverComp=null;
+function linkHiSet(){
+  const out=new Set(),quellen=[];
+  if(hoverComp!=null)quellen.push(hoverComp);
+  for(const s0 of selArr)if(s0.kind==='comp')quellen.push(s0.id);
+  for(const id of quellen){
+    const p=linkPartners(id);
+    if(!p.size)continue;
+    out.add(id);
+    for(const q of p)out.add(q);
+  }
+  return out;
+}
+/* Wo am Rand der Ansicht liegt die Richtung zu einem Punkt außerhalb? */
+function randPunkt(v,tx,ty,m){
+  if(m==null)m=Math.min(v.w,v.h)*0.06;
+  const cx=v.x+v.w/2,cy=v.y+v.h/2;
+  const dx=tx-cx,dy=ty-cy;
+  if(!dx&&!dy)return null;
+  let tX=Infinity,tY=Infinity;
+  if(dx>0)tX=(v.x+v.w-m-cx)/dx;else if(dx<0)tX=(v.x+m-cx)/dx;
+  if(dy>0)tY=(v.y+v.h-m-cy)/dy;else if(dy<0)tY=(v.y+m-cy)/dy;
+  const t=Math.min(tX,tY);
+  if(!isFinite(t)||t<0)return null;
+  /* achse = an welcher Kante der Wegweiser sitzt: 'x' = links/rechts (dort wird
+     senkrecht gestapelt), 'y' = oben/unten (dort waagerecht) */
+  return{x:cx+dx*t,y:cy+dy*t,a:Math.atan2(dy,dx)*180/Math.PI,achse:tX<=tY?'x':'y'};
+}
+
+/* Welche Seite zeigt was: 1 = Stromlaufplan, 0 = pneumatischer Plan.
+   Ohne Elektropneumatik-Modus liegt alles zusammen auf einem Blatt. */
+function paneOf(c){return(epOn()&&compDom(c)==='el')?1:0;}
+function wirePane(w){return(epOn()&&wireIsEl(w))?1:0;}
 function render(){
   if(symMode){renderSymCanvas();return;}
   simView=simOn&&activeTab===simTabIdx;
   pruneWires();
+  elRefresh();
   if(pending&&!absPort(pending))pending=null;
+  document.body.classList.toggle('ep',epOn());
+  /* Fangpunkte gehören zur Geste, nicht zur Seite — einmal je Durchgang bestimmen */
+  if(placing&&placing!=='leitung')ghostSnap();
+  else if(dragJoin)snapMarks(dragJoin);
+  else{placeSnapW=null;placeSnapPt=null;}
+  svgP.innerHTML=renderPane(0);
+  svgE.innerHTML=epOn()?renderPane(1):'';
+  if(aufgOpen)aufgRender();else tutCheck();
+  if(simView&&simInfoId!=null)renderSimInfo();
+  else positionFloat();
+  positionFrmBar();
+  paintTip();
+  updTitle();
+  saveWS();
+}
+function renderPane(pane){
+  const aktiv=pane===curPane;
+  const hl=linkHiSet();
   /* Zwischenpunkte des Fangrasters erst zeigen, wenn sie weit genug auseinanderliegen */
-  const fein=gridFine=feinesRaster();
+  const fein=feinesRaster(pane);
+  if(aktiv)gridFine=fein;
+  const gid='grid'+pane;
   let s='<defs>'+
     '<marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" style="fill:var(--ink);stroke:none"/></marker>'+
     /* kräftige Punkte alle 2·GRID, blasse dazwischen — die Kachel beginnt bei (-1|-1),
        damit die Punkte (Kreis bei 1|1) auf glatten Vielfachen sitzen */
-    (fein?`<pattern id="gridF" width="${GRID}" height="${GRID}" patternUnits="userSpaceOnUse">`+
+    (fein?`<pattern id="${gid}F" width="${GRID}" height="${GRID}" patternUnits="userSpaceOnUse">`+
       `<circle cx="1" cy="1" r="0.75" style="fill:var(--grid)" opacity="0.38"/></pattern>`:'')+
-    `<pattern id="grid" x="-1" y="-1" width="${GRID*2}" height="${GRID*2}" patternUnits="userSpaceOnUse">`+
-      (fein?`<rect width="${GRID*2}" height="${GRID*2}" fill="url(#gridF)"/>`:'')+
+    `<pattern id="${gid}" x="-1" y="-1" width="${GRID*2}" height="${GRID*2}" patternUnits="userSpaceOnUse">`+
+      (fein?`<rect width="${GRID*2}" height="${GRID*2}" fill="url(#${gid}F)"/>`:'')+
       `<circle cx="1" cy="1" r="1.05" style="fill:var(--grid)"/></pattern>`+
     '</defs>';
-  s+='<rect id="gridBg" x="-5000" y="-5000" width="14000" height="14000" fill="url(#grid)"/>';
-  if(placing&&placing!=='leitung')ghostSnap();
-  else if(dragJoin)snapMarks(dragJoin);
-  else{placeSnapW=null;placeSnapPt=null;}
+  s+=`<rect id="gridBg${pane?'E':''}" x="-5000" y="-5000" width="14000" height="14000" fill="url(#${gid})"/>`;
   /* Während eines Zuges zeigt die Leitung schon die Form, die sie beim Loslassen bekommt */
   const dragIds=(drag&&!drag.snap0&&drag.items)?new Set(drag.items.map(i=>i.id)):null;
   const kurzId=(wdrag&&wdrag.on)?wdrag.id:null;
   const kurzK=(wdrag&&wdrag.on&&wdrag.endK)?wdrag.endK.kid:null;
   for(const w of state.wires){
+    if(wirePane(w)!==pane)continue;
     const wA=absPort(w.a),wB=absPort(w.b);
     const live=(dragIds&&(dragIds.has(w.a.c)||dragIds.has(w.b.c)))
       ||w.id===kurzId||(kurzK!=null&&(w.a.c===kurzK||w.b.c===kurzK));
     const pts=live?simplifyPts(wA,wB,w.adj,w.via):wirePts(wA,wB,w.adj,w.via);
     const d='M'+pts.map(p=>`${p.x},${p.y}`).join(' L');
+    const marked=isSel('wire',w.id)||knotenSnapW===w.id||(placeSnapW||[]).indexOf(w.id)>=0;
+    if(wireIsEl(w)){
+      /* Strom braucht keine Zeit — dafür sind drei Zustände zu unterscheiden:
+         stromführend (geschlossener Kreis), nur unter Spannung, spannungsfrei. */
+      const na=nk(w.a.c,w.a.p),nb=nk(w.b.c,w.b.p);
+      let kl=simView?' dry':'';
+      if(simView){
+        if(simElFluss.has(na)&&simElFluss.has(nb))kl=' hot';
+        else if(simElLive.has(na)||simElLive.has(nb))kl=' span';
+      }
+      s+=`<path d="${d}" class="wire elw${kl}${marked?' selw':''}"/>`;
+      s+=`<path d="${d}" class="wirehit" data-wire="${w.id}"/>`;
+      continue;
+    }
     const pva=simView?(simVals[nk(w.a.c,w.a.p)]||0):0,pvb=simView?(simVals[nk(w.b.c,w.b.p)]||0):0;
     const full=simView&&pva>0&&pvb>0;
     const hsty=hotStyle(Math.max(pva,pvb));
-    const marked=isSel('wire',w.id)||knotenSnapW===w.id||(placeSnapW||[]).indexOf(w.id)>=0;
     s+=`<path d="${d}" class="wire${full?' hot':(simView?' dry':'')}${marked?' selw':''}"${full&&!marked?hsty:''}/>`;
     if(simView&&!full){
       const f=simFill[w.id];
@@ -3025,10 +3527,11 @@ function render(){
   const portAt={};
   for(const c of state.comps)for(const p of DEFS[c.type].ports(c.cfg)){
     const[qx,qy]=rotP(p.x,p.y,c.rot);
-    const k=Math.round(c.x+qx)+'|'+Math.round(c.y+qy);
+    const k=domKey(c)+Math.round(c.x+qx)+'|'+Math.round(c.y+qy);
     (portAt[k]=portAt[k]||[]).push({id:c.id,t:c.type});
   }
-  const drawOrder=[...state.comps].sort((a,b)=>(VENTP.has(a.type)?0:1)-(VENTP.has(b.type)?0:1));
+  const drawOrder=state.comps.filter(c=>paneOf(c)===pane)
+    .sort((a,b)=>(VENTP.has(a.type)?0:1)-(VENTP.has(b.type)?0:1));
   for(const c of drawOrder){
     const def=DEFS[c.type],hb=def.box(c.cfg);
     let hx=hb.x,hw=hb.w;
@@ -3059,20 +3562,36 @@ function render(){
           '<text x="13" y="-14.5" text-anchor="middle" style="font:bold 9px sans-serif;fill:#4a3200;stroke:none">!</text>'+
           `<title>${c.type==='daempfer'?'Druckluft bläst dauerhaft über den Schalldämpfer ab — Quelle direkt mit der Abluft verbunden':c.type==='auslass'?'Druckluft bläst dauerhaft über die Auslassöffnung ab — die ist nur für kurze, kleine Entlüftungen gedacht':'Druckluft entweicht ungehindert — Schalldämpfer oder Leitung fehlt'}</title></g>`;
       }
+      /* Kurzschluss im Steuerstromkreis: 24 V liegt ohne Verbraucher dazwischen auf 0 V.
+         Angezeigt wird das an der Klemme — dort brennt in Wirklichkeit die Sicherung. */
+      if(simView&&c.type==='klemme'&&simElShort.has(pk)){
+        s+=`<g transform="translate(${p.x},${p.y}) rotate(${-c.rot})" pointer-events="none">`+
+          '<polygon points="13,-25 20,-12 6,-12" style="fill:#ffb300;stroke:#7a5200;stroke-width:1.2"/>'+
+          '<text x="13" y="-14.5" text-anchor="middle" style="font:bold 9px sans-serif;fill:#4a3200;stroke:none">!</text>'+
+          '<title>Kurzschluss — 24 V und 0 V sind ohne Verbraucher dazwischen verbunden</title></g>';
+      }
       /* Ein belegter Anschluss braucht keinen Punkt mehr — dort ist nichts mehr anzuschließen.
          Die unsichtbare Trefferfläche bleibt, damit Namen und Druck weiter angezeigt werden. */
       const[qx,qy]=rotP(p.x,p.y,c.rot);
-      const zus=portAt[Math.round(c.x+qx)+'|'+Math.round(c.y+qy)]||[];
+      const zus=portAt[domKey(c)+Math.round(c.x+qx)+'|'+Math.round(c.y+qy)]||[];
       const belegt=(portUse[pk]||0)>0||zus.some(q=>q.id!==c.id);
       /* Zwei Anschlüsse, die genau übereinander liegen, sind im Löser verbunden — ohne
          Leitung sieht man das sonst nicht. Aufgesteckte Schalldämpfer/Auslässe sind gewollt. */
       const still=!VENTP.has(c.type)&&c.type!=='knoten'
         &&zus.some(q=>q.id!==c.id&&q.t!=='knoten'&&!VENTP.has(q.t));
-      const zeig=c.type==='knoten'||act||!belegt;
+      /* Solange eine Leitung gezogen wird, sind nur Anschlüsse derselben Art anschließbar */
+      const zeig=(c.type==='knoten'||act||!belegt)&&(!pending||domPasst(pending,{c:c.id,p:p.n}));
       s+=`<circle class="port phit" data-c="${c.id}" data-p="${p.n}" data-lbl="${p.lbl||p.n}" cx="${p.x}" cy="${p.y}" r="8"/>`+
          (zeig?`<circle class="port${act?' active':''}" data-c="${c.id}" data-p="${p.n}" data-lbl="${p.lbl||p.n}" cx="${p.x}" cy="${p.y}" r="3.4">${simView?'':`<title>Anschluss ${p.lbl||p.n}</title>`}</circle>`:'');
-      if(c.type==='knoten'||(portUse[nk(c.id,p.n)]||0)>1||still)
-        s+=`<circle cx="${p.x}" cy="${p.y}" r="3" style="fill:var(--wire);stroke:none" pointer-events="none"/>`;
+      if(c.type==='knoten'||(portUse[nk(c.id,p.n)]||0)>1||still){
+        /* Der Verbindungspunkt zeigt denselben Zustand wie die Leitung, auf der er sitzt */
+        let pf='var(--wire)';
+        if(simView){
+          if(pane===1)pf=simElFluss.has(pk)?'var(--hot)':(simElLive.has(pk)?'var(--hot)':'var(--wireoff)');
+          else pf=(simVals[pk]||0)>0?'var(--hot)':'var(--wireoff)';
+        }
+        s+=`<circle cx="${p.x}" cy="${p.y}" r="3" style="fill:${pf};stroke:none" pointer-events="none"${simView&&pane===1&&!simElFluss.has(pk)&&simElLive.has(pk)?' opacity="0.45"':''}/>`;
+      }
     }
     s+='</g>';
     {
@@ -3103,27 +3622,79 @@ function render(){
       s+=`<text class="clabel" data-lbl-comp="${c.id}" text-anchor="${anch}" x="${lx+lo.dx}" y="${ly+lo.dy}">${esc(c.label)}</text>`;
     }
   }
+  if(hl.size){
+    const v=sichtRect(pane),u=v.u,belegt=[];
+    for(const id of hl){
+      const c=comp(id);
+      if(!c||paneOf(c)!==pane)continue;
+      const b=DEFS[c.type].box(c.cfg),bb=absBox(c);
+      const drin=bb.x2>v.x&&bb.x1<v.x+v.w&&bb.y2>v.y&&bb.y1<v.y+v.h;
+      if(drin){
+        s+=`<g transform="translate(${c.x},${c.y}) rotate(${c.rot})" pointer-events="none">`+
+          `<rect class="linkbox" x="${b.x-4}" y="${b.y-4}" width="${b.w+8}" height="${b.h+8}" rx="5"/></g>`;
+        continue;
+      }
+      /* Außerhalb der Ansicht: Wegweiser am Rand, wie eine Zielmarke auf der Karte */
+      const rp=randPunkt(v,(bb.x1+bb.x2)/2,(bb.y1+bb.y2)/2,52*u);
+      if(!rp)continue;
+      /* Zeigen mehrere Wegweiser in dieselbe Richtung, würden sie sich decken —
+         deshalb der Reihe nach an der Kante entlang weiterrücken. */
+      const luft=26*u;
+      for(let k=0;k<40&&belegt.some(q=>Math.hypot(q.x-rp.x,q.y-rp.y)<luft);k++){
+        if(rp.achse==='x')rp.y+=luft;else rp.x+=luft;
+      }
+      belegt.push({x:rp.x,y:rp.y});
+      const txt=esc(c.label||DEFS[c.type].label);
+      const bw=Math.max(34,txt.length*6.4+16);
+      s+=`<g class="linkmark" transform="translate(${rp.x},${rp.y}) scale(${u.toFixed(4)})" pointer-events="none">`+
+        `<g transform="rotate(${rp.a.toFixed(1)})"><polygon points="${(bw/2+2)},-7 ${(bw/2+15)},0 ${(bw/2+2)},7" style="fill:var(--link);stroke:none"/></g>`+
+        `<rect x="${-bw/2}" y="-10" width="${bw}" height="20" rx="10" style="fill:var(--link);stroke:none"/>`+
+        `<text x="0" y="4" text-anchor="middle">${txt}</text></g>`;
+    }
+  }
   for(const s0 of selArr)if(s0.kind==='comp'){
     const c=comp(s0.id);
-    if(c){const b=DEFS[c.type].box(c.cfg);
+    if(c&&paneOf(c)===pane){const b=DEFS[c.type].box(c.cfg);
       s+=`<g transform="translate(${c.x},${c.y}) rotate(${c.rot})" pointer-events="none"><rect class="selbox" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}"/></g>`;}
   }
-  if(band){
+  if(band&&aktiv){
     const bx=Math.min(band.x0,mouse.x),by=Math.min(band.y0,mouse.y);
     s+=`<rect class="band" x="${bx}" y="${by}" width="${Math.abs(mouse.x-band.x0)}" height="${Math.abs(mouse.y-band.y0)}" pointer-events="none"/>`;
   }
-  if(state.frame&&!simView){
-    const f=state.frame,hs=7;
-    s+=`<g id="printFrame"><rect class="pframe" x="${f.x}" y="${f.y}" width="${f.w}" height="${f.h}"/>`+
-      `<text class="pflabel" x="${f.x+4}" y="${f.y-6}">A4 ${f.w>=f.h?'quer':'hoch'}</text>`+
+  if(state.frame&&!simView&&(pane===0||epOn())){
+    const f=frameOf(pane),hs=7;
+    s+=`<g id="printFrame${pane}"><rect class="pframe" x="${f.x}" y="${f.y}" width="${f.w}" height="${f.h}"/>`;
+    if(epOn()){
+      /* Beide Teilflächen sind auf beiden Seiten zu sehen — hervorgehoben die eigene.
+         So sieht man beim Verschieben, wie das Blatt am Ende aussieht. */
+      const zp=frameZone(0),ze=frameZone(1);
+      s+=`<rect class="pzone zp${pane===0?' on':''}" x="${f.x+zp.x+2}" y="${f.y+zp.y+2}" width="${Math.max(1,zp.w-4)}" height="${Math.max(1,zp.h-4)}"/>`;
+      s+=`<rect class="pzone ze${pane===1?' on':''}" x="${f.x+ze.x+2}" y="${f.y+ze.y+2}" width="${Math.max(1,ze.w-4)}" height="${Math.max(1,ze.h-4)}"/>`;
+    }
+    s+=`<text class="pflabel" x="${f.x+4}" y="${f.y-6}">A4 ${frameQuer()?'quer':'hoch'}${epOn()?(pane===1?' · Stromlaufplan':' · pneumatischer Plan'):''}</text>`+
       `<path class="fedge" data-frame="move" d="M${f.x},${f.y} H${f.x+f.w} V${f.y+f.h} H${f.x} Z"/>`;
     const cs=[['nw',f.x,f.y],['ne',f.x+f.w,f.y],['sw',f.x,f.y+f.h],['se',f.x+f.w,f.y+f.h]];
     for(const[k,cx,cy]of cs)
       s+=`<rect class="fcorner ${k}" data-frame="${k}" x="${cx-hs}" y="${cy-hs}" width="${hs*2}" height="${hs*2}" rx="2"/>`;
+    if(epOn()){
+      /* Die Grenze zwischen den beiden Feldern lässt sich ziehen */
+      const t=frameTeil();
+      if(frameQuer()){
+        const dx=f.x+f.w*t;
+        s+=`<line class="pdiv" x1="${dx}" y1="${f.y}" x2="${dx}" y2="${f.y+f.h}"/>`+
+          `<rect class="fgrip" x="${dx-3.5}" y="${f.y+f.h/2-13}" width="7" height="26" rx="3.5"/>`+
+          `<line class="fdiv" data-frame="split" x1="${dx}" y1="${f.y}" x2="${dx}" y2="${f.y+f.h}"/>`;
+      }else{
+        const dy=f.y+f.h*t;
+        s+=`<line class="pdiv" x1="${f.x}" y1="${dy}" x2="${f.x+f.w}" y2="${dy}"/>`+
+          `<rect class="fgrip" x="${f.x+f.w/2-13}" y="${dy-3.5}" width="26" height="7" rx="3.5"/>`+
+          `<line class="fdivh" data-frame="split" x1="${f.x}" y1="${dy}" x2="${f.x+f.w}" y2="${dy}"/>`;
+      }
+    }
     s+='</g>';
   }
-  s+=`<path id="temppath" class="temp" d="${pending?tempD():''}"/>`;
-  {
+  if(aktiv)s+=`<path id="temppath" class="temp" d="${pending?tempD():''}"/>`;
+  if(pane===0){
     const sdComp=(drag&&drag.items&&drag.items.length===1)?comp(drag.items[0].id):null;
     const senTyp=GEBERTYP.has(placing)?placing
       :(sdComp&&GEBERTYP.has(sdComp.type)?sdComp.type:null);
@@ -3133,7 +3704,7 @@ function render(){
         s+=`<g transform="translate(${sl.x},${sl.y}) rotate(${sl.rot})" pointer-events="none" opacity="0.55">${mr} fill="none" style="stroke:var(--accent);stroke-width:1.5;stroke-dasharray:4 3"/></g>`;
     }
   }
-  if(placing&&placing!=='leitung'){
+  if(placing&&placing!=='leitung'&&aktiv&&werkzeugHier(placing,pane)){
     const gp=ghostSnap(),gc=cfgFor(placing,placingVar);
     /* die Anschlusspunkte gehoeren in den Schatten — sonst zielt man blind */
     let gs=`<g class="sym">${symDraw(placing,gc)}</g>`;
@@ -3145,36 +3716,56 @@ function render(){
     for(const q of placeSnapPt||[])
       s+=`<circle cx="${q.x}" cy="${q.y}" r="6" fill="none" pointer-events="none" style="stroke:var(--sel);stroke-width:1.6"/>`;
   }
-  if(placingSnip){
+  if(placingSnip&&aktiv){
     s+=`<g opacity="0.45" pointer-events="none" transform="translate(${snap(mouse.x)},${snap(mouse.y)})">`;
     for(const c of placingSnip.comps)
       s+=`<g transform="translate(${c.x},${c.y}) rotate(${c.rot})"><g class="sym">${symDraw(c.type,c.cfg)}</g></g>`;
     s+='</g>';
   }
-  svg.innerHTML=s;
-  if(aufgOpen)aufgRender();else tutCheck();
-  if(simView&&simInfoId!=null)renderSimInfo();
-  else positionFloat();
-  positionFrmBar();
-  paintTip();
-  saveWS();
+  return s;
 }
 
-/* ---------- Druckrahmen (A4) ---------- */
+/* ---------- Druckrahmen (A4) ----------
+   Der grüne Rahmen ist das Blatt. Im Elektropneumatik-Modus liegt er auf beiden Plänen in
+   derselben Größe — also im selben Maßstab — und teilt sich in zwei Flächen: blau für den
+   pneumatischen Plan, orange für den Stromlaufplan. Beim Hochformat liegen sie übereinander,
+   beim Querformat nebeneinander. Jede Seite wird für sich verschoben: links so, dass die
+   gewünschten Bauteile im blauen Feld liegen, rechts so, dass sie im orangen liegen. */
 const A4R=210/297;
 let fdrag=null;
+function frameOf(pane){
+  const f=state.frame;
+  if(!f)return null;
+  if(pane===1){
+    if(!state.frameE)state.frameE={x:f.x,y:f.y};
+    return{x:state.frameE.x,y:state.frameE.y,w:f.w,h:f.h};
+  }
+  return{x:f.x,y:f.y,w:f.w,h:f.h};
+}
+const frameQuer=()=>!!state.frame&&state.frame.w>=state.frame.h;
+const frameTeil=()=>Math.max(0.15,Math.min(0.85,state.frameSplit!=null?state.frameSplit:0.55));
+/* Teilfläche einer Seite, in Koordinaten des Blattes (0…w, 0…h) */
+function frameZone(pane){
+  const f=state.frame,t=frameTeil();
+  if(!f)return null;
+  if(!epOn())return{x:0,y:0,w:f.w,h:f.h};
+  if(frameQuer())return pane===1?{x:f.w*t,y:0,w:f.w*(1-t),h:f.h}:{x:0,y:0,w:f.w*t,h:f.h};
+  return pane===1?{x:0,y:f.h*t,w:f.w,h:f.h*(1-t)}:{x:0,y:0,w:f.w,h:f.h*t};
+}
 function toggleFrame(){
-  if(state.frame){state.frame=null;render();return;}
-  /* Vorgabe: Hochformat — Querformat per Drehen-Schaltfläche */
-  const h=Math.round(Math.min(1500,Math.max(500,view.h*0.8)));
+  if(state.frame){state.frame=null;state.frameE=null;render();return;}
+  const h=Math.round(Math.min(1500,Math.max(500,viewP.h*0.8)));
   const w=Math.round(h*A4R);
-  state.frame={x:Math.round(view.x+view.w/2-w/2),y:Math.round(view.y+view.h/2-h/2),w,h};
+  state.frame={x:Math.round(viewP.x+viewP.w/2-w/2),y:Math.round(viewP.y+viewP.h/2-h/2),w,h};
+  state.frameE={x:Math.round(viewE.x+viewE.w/2-w/2),y:Math.round(viewE.y+viewE.h/2-h/2)};
+  if(state.frameSplit==null)state.frameSplit=0.55;
   render();
 }
 function positionFrmBar(){
   const b=el('frmBar');
   if(!state.frame||simView){b.style.display='none';return;}
-  const f=state.frame,m=svg.getScreenCTM();
+  const pane=epOn()?activePane:0;
+  const f=frameOf(pane),m=svgOf(pane).getScreenCTM();
   if(!m){b.style.display='none';return;}
   const wrap=el('canvasWrap').getBoundingClientRect();
   b.style.display='flex';
@@ -3185,23 +3776,41 @@ function positionFrmBar(){
 }
 function rotateFrame(){
   const f=state.frame;if(!f)return;
+  const e=state.frameE;
   const cx=f.x+f.w/2,cy=f.y+f.h/2;
+  const ex=e?e.x+f.w/2:0,ey=e?e.y+f.h/2:0;
   const nw=f.h,nh=f.w;
   f.w=Math.round(nw);f.h=Math.round(nh);
   f.x=Math.round(cx-f.w/2);f.y=Math.round(cy-f.h/2);
+  /* Die zweite Seite behält ihre Mitte — sonst wandert der Ausschnitt beim Drehen weg */
+  if(e){e.x=Math.round(ex-f.w/2);e.y=Math.round(ey-f.h/2);}
   render();
 }
+/* Inhalt einer Zeichenfläche ohne Bedienhilfen */
+function printBody(sv){
+  const c=sv.cloneNode(true);
+  c.querySelectorAll('.port,.band,.selbox,.temp,.wirehit,#ghost,#printFrame0,#printFrame1,#gridBg,#gridBgE,.linkbox,.linkmark').forEach(x=>x.remove());
+  c.querySelectorAll('.selw').forEach(x=>x.classList.remove('selw'));
+  return c.innerHTML;
+}
+/* Gedruckt wird ein A4-Blatt. Im Elektropneumatik-Modus setzt es sich aus beiden Plänen
+   zusammen: aus dem linken der Ausschnitt im blauen Feld, aus dem rechten der im orangen.
+   Beide Rahmen sind gleich groß, also steht beides im selben Maßstab auf dem Papier. */
 function doPrint(){
   const f=state.frame;
   if(!f)return;
-  const clone=svg.cloneNode(true);
-  clone.removeAttribute('id');
-  clone.setAttribute('viewBox',`${f.x} ${f.y} ${f.w} ${f.h}`);
+  const seiten=epOn()?[0,1]:[0];
+  let defs='',body='';
+  for(const pane of seiten){
+    const fp=frameOf(pane),z=frameZone(pane);
+    defs+=`<clipPath id="pzc${pane}"><rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}"/></clipPath>`;
+    body+=`<g clip-path="url(#pzc${pane})"><g transform="translate(${-fp.x},${-fp.y})">${printBody(svgOf(pane))}</g></g>`;
+  }
+  const clone=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  clone.setAttribute('viewBox',`0 0 ${f.w} ${f.h}`);
   clone.setAttribute('preserveAspectRatio','xMidYMid meet');
-  clone.querySelectorAll('.port,.band,.selbox,.temp,.wirehit,#ghost,#printFrame,#gridBg').forEach(n=>n.remove());
-  clone.querySelectorAll('.selw').forEach(n=>n.classList.remove('selw'));
   /* eigene Kennungen, damit Marker/Schraffuren nicht mit der Arbeitsfläche kollidieren */
-  clone.innerHTML=clone.innerHTML
+  clone.innerHTML=(`<defs>${defs}</defs>`+body)
     .split('id="arr"').join('id="arrPR"').split('url(#arr)').join('url(#arrPR)')
     .replace(/id="tk(\d+)"/g,'id="tkPR$1"').replace(/url\(#tk(\d+)\)/g,'url(#tkPR$1)');
   clone.setAttribute('style','--paper:#fff;--ink:#000;--wire:#000;--hot:#000;--inkmuted:#333;--lbl:#333;--sel:#000;--hotw:2.6;background:#fff');
@@ -3300,7 +3909,7 @@ function actTiles(side,arr,slot){
   const cur=(arr||[])[slot]||'none';
   const mir=side==='L';
   return`<label>Betätigung ${side==='L'?'links':'rechts'} — ${slot+1}${slot===1?'. (zusätzlich)':'.'}</label><div class="tiles">`+
-    Object.keys(ACTS).filter(k=>k==='none'||k===cur||!tutOn||tutFrei().akte.has(k)).map(k=>k==='none'
+    Object.keys(ACTS).filter(k=>k==='none'||k===cur||((!tutOn||tutFrei().akte.has(k))&&!(simpleMode&&MAGACTS.has(k)))).map(k=>k==='none'
       ?`<button type="button" class="tile atile none${cur==='none'?' on':''}" data-act="${side}" data-slot="${slot}" data-v="none" title="keine Betätigung">—</button>`
       :`<button type="button" class="tile atile${cur===k?' on':''}" data-act="${side}" data-slot="${slot}" data-v="${k}" title="${ACTS[k]}">${actSvg(k,mir)}</button>`).join('')+
     `</div><div class="tilecap">${cur==='none'?'— keine —':ACTS[cur]}</div>`;
@@ -3349,6 +3958,40 @@ function simInfoBody(c){
     row('Druck',bar(pT));
     row('Füllstand',`${Math.round(pT/6*100)} %`);
     row('Luftinhalt',`${(pT*vol).toFixed(2)} bar·l`);
+  }else if(ELPARTS.has(c.type)){
+    const spg=p=>simElLive.has(nk(c.id,p));
+    if(c.type==='klemme'){
+      row('Potenzial',(c.cfg&&c.cfg.pol==='0')?'0 V':'24 V');
+      if(simElShort.has(nk(c.id,'1')))row('Achtung','Kurzschluss — 24 V liegt ohne Verbraucher auf 0 V');
+      if(simElFlack)row('Achtung','Die Schaltung kommt nicht zur Ruhe — ein Relais schaltet sich selbst ab');
+    }
+    else if(ELLOAD.has(c.type)){
+      row('Zustand',simElOn[c.id]?'erregt (Strom fließt)':'stromlos');
+      row('A1',spg('A1')?'24 V':(simElGnd.has(nk(c.id,'A1'))?'0 V':'ohne Verbindung'));
+      row('A2',spg('A2')?'24 V':(simElGnd.has(nk(c.id,'A2'))?'0 V':'ohne Verbindung'));
+      if(c.type==='relais'){
+        const z=(c.cfg&&c.cfg.zeit)||'keine';
+        row('Art',z==='anzug'?'anzugsverzögert':z==='abfall'?'abfallverzögert':'ohne Zeitverhalten');
+        if(z!=='keine'){
+          row('Verzögerungszeit',`${String((c.cfg&&c.cfg.t!=null)?c.cfg.t:2).replace('.',',')} s`);
+          row('Abgelaufen',`${(simElT[c.id]||0).toFixed(1).replace('.',',')} s`);
+        }
+        const kk=state.comps.filter(x=>x.type==='ekontakt'&&x.cfg&&x.cfg.target===c.id);
+        row('Kontakte',kk.length?kk.map(x=>KONTART[(x.cfg.art)||'schliesser']).join(', '):'— keine —');
+      }
+    }else{
+      row('Kontaktart',KONTART[(c.cfg&&c.cfg.art)||'schliesser']);
+      row('Stellung',kontAn(c)?'betätigt':'in Ruhestellung');
+      if(c.type==='ekontakt'){
+        const r=comp(c.cfg&&c.cfg.target);
+        row('Gehört zu',r?esc(r.label||('#'+r.id)):'— nicht zugeordnet —');
+      }
+      if(c.type==='egrenz'||c.type==='esensor'){
+        const t=comp(c.cfg&&c.cfg.target);
+        row('Überwacht',t?esc(t.label||('#'+t.id)):'— nicht zugeordnet —');
+        row('Schaltet bei',(c.cfg&&c.cfg.mode)==='ein'?'eingefahren':'ausgefahren');
+      }
+    }
   }else if(c.type==='quelle'){
     row('Eingestellt',bar(c.cfg.druck!=null?c.cfg.druck:6));
   }else if(c.type==='drossel'){
@@ -3370,7 +4013,10 @@ function simInfoBody(c){
     row('Bauart',DEFS[c.type].label);
     row('Überwacht',t?esc(t.label||('Zylinder '+t.id)):'— nicht zugeordnet —');
     row('Endlage',c.cfg.mode==='ein'?'eingefahren (hinten)':'ausgefahren (vorn)');
-    if(c.type==='kipptaster')row('Betätigt',(c.cfg.rich||'zu')!=='weg'?'beim Anfahren':'beim Verlassen');
+    if(c.type==='kipptaster'){
+      row('Betätigt',(c.cfg.rich||'zu')!=='weg'?'beim Anfahren':'beim Verlassen');
+      row('Impulsdauer',barTxt(c.cfg.imp!=null?c.cfg.imp:0.7)+' s');
+    }
     row('Zustand',sensorActive(c)?'betätigt':'frei');
   }
   const ports=DEFS[c.type].ports(c.cfg);
@@ -3398,19 +4044,23 @@ function positionFloat(){
   if(p.style.display==='none')return;
   const s0=(simView&&simInfoId!=null)?{kind:'comp',id:simInfoId}:selArr[0];
   if(!s0)return;
-  let ax,ay;
+  let ax,ay,pane=0;
   if(s0.kind==='comp'){
     const c=comp(s0.id);if(!c)return;
+    pane=paneOf(c);
     const b=DEFS[c.type].box(c.cfg);
     const pts=[[b.x,b.y],[b.x+b.w,b.y],[b.x,b.y+b.h],[b.x+b.w,b.y+b.h]].map(q=>rotP(q[0],q[1],c.rot));
     ax=c.x+Math.max(...pts.map(q=>q[0]))+16;
     ay=c.y+Math.min(...pts.map(q=>q[1]));
   }else{
     const w=state.wires.find(x=>x.id===s0.id);if(!w)return;
+    pane=wirePane(w);
     const A=absPort(w.a),B=absPort(w.b);if(!A||!B)return;
     ax=(A.x+B.x)/2+16;ay=(A.y+B.y)/2;
   }
-  const m=svg.getScreenCTM(),wrap=el('canvasWrap').getBoundingClientRect();
+  /* Das Fenster gehört zur Seite des Bauteils — sonst stünde es über dem falschen Plan */
+  const m=svgOf(pane).getScreenCTM(),wrap=el('canvasWrap').getBoundingClientRect();
+  if(!m)return;
   let left=m.a*ax+m.c*ay+m.e-wrap.left+floatOff.dx;
   let top=m.b*ax+m.d*ay+m.f-wrap.top+floatOff.dy;
   left=Math.max(4,Math.min(left,wrap.width-p.offsetWidth-4));
@@ -3472,11 +4122,11 @@ function renderProps(){
       let colL=patHtml(0);
       colL+=actTiles('L',g.actL,0)+rastChk('L',0);
       colL+=actTiles('L',g.actL,1)+rastChk('L',1);
-      if(geberAct(g.actL))colL+=optHtml('senL',senOptsFor(g.actL),g.senL==null?'':g.senL,`Grenztaster links (${ACTS[geberAct(g.actL)]})`);
+      if(geberAct(g.actL))colL+=optHtml('senL',senOptsFor(g.actL),g.senL==null?'':g.senL,`${senWort(g.actL)} links (${ACTS[geberAct(g.actL)]})`);
       let colR=patHtml(g.pos-1);
       colR+=actTiles('R',g.actR,0)+rastChk('R',0);
       colR+=actTiles('R',g.actR,1)+rastChk('R',1);
-      if(geberAct(g.actR))colR+=optHtml('senR',senOptsFor(g.actR),g.senR==null?'':g.senR,`Grenztaster rechts (${ACTS[geberAct(g.actR)]})`);
+      if(geberAct(g.actR))colR+=optHtml('senR',senOptsFor(g.actR),g.senR==null?'':g.senR,`${senWort(g.actR)} rechts (${ACTS[geberAct(g.actR)]})`);
       body+=g.pos===3
         ?`<div class="cols"><div>${colL}</div><div>${patHtml(1)}</div><div>${colR}</div></div>`
         :`<div class="cols"><div>${colL}</div><div>${colR}</div></div>`;
@@ -3546,14 +4196,58 @@ function renderProps(){
       const g=c.cfg,zyl=state.comps.filter(x=>x.type==='zylinder');
       body+=optHtml('target',[['','— wählen —']].concat(zyl.map(z=>[z.id,z.label||('Zylinder '+z.id)])),g.target==null?'':g.target,'Überwachter Aktor');
       body+=optHtml('mode',[['aus','ausgefahren (Endlage vorn)'],['ein','eingefahren (Endlage hinten)']],g.mode,c.type==='kipptaster'?'Sitzt an Endlage':'Schaltet bei Endlage');
-      if(c.type==='kipptaster')
+      if(c.type==='kipptaster'){
         body+=optHtml('rich',[['zu','beim Anfahren der Endlage'],['weg','beim Verlassen der Endlage']],g.rich||'zu','Betätigt in Fahrtrichtung');
+        body+=numHtml('imp',g.imp!=null?g.imp:0.7,'Impulsdauer (s)',0.05,5,0.05);
+      }
       const GHINT={
         sensor:'Näherungsschalter (magnetisch): rastet direkt auf dem Zylinderrohr über den Kolben-Endlagen ein und erkennt den Magnetkolben. Betätigt am Ventil nur die Betätigung „Näherungsschalter".',
         stoesseltaster:'Stößeltaster: rastet an der Kolbenstangen-Bahn ein. Betätigt am Ventil nur die Betätigungsart „Stößel“.',
         rollentaster:'Rollenhebeltaster: rastet an der Kolbenstangen-Bahn ein. Betätigt am Ventil nur die Betätigung „Rollenhebel".',
-        kipptaster:'Kipprollentaster mit Leerrücklauf: gibt nur beim Überfahren in Pfeilrichtung einen kurzen Impuls und fällt sofort wieder ab — damit lassen sich Signalüberschneidungen an Impulsventilen vermeiden. Betätigt am Ventil nur „Kipprolle“.'};
+        kipptaster:'Kipprollentaster mit Leerrücklauf: gibt nur beim Überfahren in Pfeilrichtung einen kurzen Impuls und fällt danach wieder ab — damit lassen sich Signalüberschneidungen an Impulsventilen vermeiden. Der Impuls muss länger stehen als die Luft für einen Leitungszug braucht (0,45 s), sonst kommt er am Steueranschluss nicht an. Betätigt am Ventil nur „Kipprolle“.'};
       body+=`<p class="muted" style="font-size:11.5px">${GHINT[c.type]} Am Wegeventil die passende Betätigung wählen und diesen Geber dort als Grenztaster zuordnen.</p>`;
+    }else if(c.type==='klemme'){
+      body+=optHtml('pol',[['24','24 V — Versorgung'],['0','0 V — Rückleitung']],c.cfg.pol||'24','Potenzial');
+      body+='<p class="muted" style="font-size:11.5px">Speisepunkt des Stromlaufplans. Von hier läuft die Sammelschiene waagerecht; die einzelnen Strompfade hängen als Abzweige daran. Die Steuerspannung beträgt 24 V Gleichspannung.</p>';
+    }else if(c.type==='eschalter'||c.type==='egrenz'||c.type==='ekontakt'){
+      const g=c.cfg;
+      body+=optHtml('art',[['schliesser','Schließer'],['oeffner','Öffner'],['wechsler','Wechsler']],g.art||'schliesser','Kontaktart');
+      if(c.type==='eschalter'){
+        body+=optHtml('halt',[['taster','Tastschalter — nur solange betätigt'],['rast','Rastschalter — bleibt stehen']],g.halt||'taster','Schaltverhalten');
+        body+=optHtml('bet',Object.keys(BETS).map(k=>[k,BETS[k]]),g.bet||'druecken','Betätigungsart');
+        body+=`<label class="chk"><input type="checkbox" data-k="vorbet"${g.vorbet?' checked':''}> in Ruhestellung schon betätigt</label>`;
+        body+='<p class="muted" style="font-size:11.5px">Schalter werden immer in Ruhestellung gezeichnet. Ist ein Taster dort schon betätigt, tauschen Schließer und Öffner ihr Bild — der Doppelpfeil zeigt es an. In der Simulation den Schalter anklicken; mit Strg bleibt er gedrückt, bis Strg losgelassen wird.</p>';
+      }else if(c.type==='egrenz'){
+        body+=optHtml('bau',[['rollenhebel','Rollenhebel'],['stoessel','Stößel'],['allgemein','ohne Antriebsangabe']],g.bau||'rollenhebel','Bauform');
+        const zyl=state.comps.filter(x=>x.type==='zylinder');
+        body+=optHtml('target',[['','— wählen —']].concat(zyl.map(z=>[z.id,z.label||('Zylinder '+z.id)])),g.target==null?'':g.target,'Überwachter Zylinder');
+        body+=optHtml('mode',[['aus','ausgefahren (Endlage vorn)'],['ein','eingefahren (Endlage hinten)']],g.mode||'aus','Schaltet bei Endlage');
+        body+='<p class="muted" style="font-size:11.5px">Der Grenztaster wird vom Nocken der Kolbenstange betätigt und gibt sein Signal an den Stromlaufplan weiter. Gezeichnet wird er auf der Signaleingabe-Ebene, nicht an seinem Einbauort.</p>';
+      }else{
+        const rel=state.comps.filter(x=>x.type==='relais');
+        body+=optHtml('target',[['','— wählen —']].concat(rel.map(r=>[r.id,r.label||('Relais '+r.id)])),g.target==null?'':g.target,'Gehört zum Relais');
+        body+=optHtml('bahn',[[1,'1 — 13/14 bzw. 11/12'],[2,'2 — 23/24 bzw. 21/22'],[3,'3 — 33/34 bzw. 31/32'],[4,'4 — 43/44 bzw. 41/42']],g.bahn||1,'Kontaktbahn');
+        body+='<p class="muted" style="font-size:11.5px">Eine Relaisspule schaltet alle ihre Kontakte gleichzeitig. Die erste Ziffer der Anschlussnummer gibt die Kontaktbahn an, die zweite die Kontaktart. Bei einem Zeitrelais bekommt der Kontakt automatisch das Verzögerungszeichen.</p>';
+      }
+    }else if(c.type==='esensor'){
+      const g=c.cfg,zyl=state.comps.filter(x=>x.type==='zylinder');
+      body+=optHtml('art',[['reed','Reedkontakt (magnetisch)'],['induktiv','induktiv'],['kapazitiv','kapazitiv'],['optisch','optisch']],g.art||'reed','Wirkprinzip');
+      body+=optHtml('target',[['','— wählen —']].concat(zyl.map(z=>[z.id,z.label||('Zylinder '+z.id)])),g.target==null?'':g.target,'Überwachter Zylinder');
+      body+=optHtml('mode',[['aus','ausgefahren (Endlage vorn)'],['ein','eingefahren (Endlage hinten)']],g.mode||'aus','Schaltet bei Endlage');
+      body+='<p class="muted" style="font-size:11.5px">Elektronische Näherungsschalter schalten berührungslos: 1 ist die Versorgung, 3 die Masse, 4 der Ausgang. Bei Ansprechen legt der Sensor 4 auf 1. Der Reedkontakt setzt einen Zylinder mit Magnetkolben voraus.</p>';
+    }else if(c.type==='relais'){
+      const g=c.cfg;
+      body+=optHtml('zeit',[['keine','ohne Zeitverhalten'],['anzug','anzugsverzögert'],['abfall','abfallverzögert']],g.zeit||'keine','Zeitverhalten');
+      if((g.zeit||'keine')!=='keine')body+=numHtml('t',g.t!=null?g.t:2,'Verzögerungszeit (s)',0.1,60,0.1);
+      body+='<p class="muted" style="font-size:11.5px">'+((g.zeit||'keine')==='anzug'
+        ?'Der Anker zieht um die eingestellte Zeit verzögert an; das Abfallen geschieht ohne Verzögerung.'
+        :(g.zeit==='abfall'?'Der Anker zieht sofort an und fällt um die eingestellte Zeit verzögert ab.'
+        :'Mit geringer Steuerenergie werden über die Kontakte größere Leistungen geschaltet. Die Kontakte werden getrennt gezeichnet und über die Bezeichnung zugeordnet.'))+'</p>';
+    }else if(c.type==='espule'){
+      const v=state.comps.filter(x=>x.type==='ventil'&&x.cfg&&(x.cfg.senL===c.id||x.cfg.senR===c.id));
+      body+='<p class="muted" style="font-size:11.5px">Zugeordnet: '+(v.length?v.map(x=>esc(x.label||('#'+x.id))).join(', ')
+        :'<b>noch keinem Wegeventil</b> — dort die Betätigung „Magnetspule mit Vorsteuerung“ wählen und diese Spule als Betätigung eintragen.')+
+        ' Ein federrückgestelltes Ventil braucht ein Dauersignal, ein Impulsventil mit zwei Spulen nur einen kurzen Impuls.</p>';
     }else if(c.type==='text'){
       body+=`<label>Text</label><textarea data-txt rows="3">${esc(c.cfg.text||'')}</textarea>`;
       body+=optHtml('tsize',[[10,'klein'],[14,'mittel'],[20,'groß']],c.cfg.size||14,'Schriftgröße');
@@ -3738,6 +4432,30 @@ function applyProp(c,k,v){
     if(k==='target')c.cfg.target=v?+v:null;
     else if(k==='mode')c.cfg.mode=v;
     else if(k==='rich')c.cfg.rich=v;
+    else if(k==='imp')c.cfg.imp=Math.max(0.05,Math.min(5,parseFloat(v)||0.7));
+  }else if(c.type==='klemme'){
+    if(k==='pol')c.cfg.pol=v;
+  }else if(c.type==='eschalter'){
+    if(k==='art')c.cfg.art=v;
+    else if(k==='halt')c.cfg.halt=v;
+    else if(k==='bet')c.cfg.bet=v;
+    else if(k==='vorbet')c.cfg.vorbet=!!v;
+  }else if(c.type==='egrenz'){
+    if(k==='art')c.cfg.art=v;
+    else if(k==='bau')c.cfg.bau=v;
+    else if(k==='target')c.cfg.target=v?+v:null;
+    else if(k==='mode')c.cfg.mode=v;
+  }else if(c.type==='esensor'){
+    if(k==='art')c.cfg.art=v;
+    else if(k==='target')c.cfg.target=v?+v:null;
+    else if(k==='mode')c.cfg.mode=v;
+  }else if(c.type==='relais'){
+    if(k==='zeit')c.cfg.zeit=v;
+    else if(k==='t')c.cfg.t=Math.max(0.1,Math.min(60,parseFloat(v)||2));
+  }else if(c.type==='ekontakt'){
+    if(k==='art')c.cfg.art=v;
+    else if(k==='bahn')c.cfg.bahn=Math.max(1,Math.min(4,parseInt(v,10)||1));
+    else if(k==='target')c.cfg.target=v?+v:null;
   }else if(c.type==='text'){
     if(k==='tsize')c.cfg.size=+v;
   }
@@ -3859,7 +4577,8 @@ function delSel(){
 }
 
 /* ---------- Simulation ---------- */
-let simOn=false,simTimer=null,simPaused=false,simSpeed=1,simInstant=false,simVals={},simPrevVals={},simPos={},simStroke={},simHeld={},simCtrlHeld={},simLatch={},simLeaks=new Set(),simPuffs=new Map(),simP=new Set(),simFill={},simHist=[],simTime=0,simDrosMul={},simDrosT={},simTankP={},simCylDir={},simDelayT={},simDelayOn={},simKipp={},simCylP={};
+let simOn=false,simTimer=null,simPaused=false,simSpeed=1,simInstant=false,simVals={},simPrevVals={},simPos={},simStroke={},simHeld={},simCtrlHeld={},simLatch={},simLeaks=new Set(),simPuffs=new Map(),simP=new Set(),simFill={},simHist=[],simTime=0,simDrosMul={},simDrosT={},simTankP={},simCylDir={},simDelayT={},simDelayOn={},simKipp={},simCylP={},simCylRef={},
+  simElOn={},simElT={},simElLive=new Set(),simElGnd=new Set(),simElShort=new Set(),simElFluss=new Set(),simElFlack=false,elKn=new Set();
 /* Zeitventil: leitet 1→2 durch, sonst 2→3 entlüftet */
 function zvFlow(c){
   const on=!!simDelayOn[c.id];
@@ -3891,6 +4610,46 @@ function sideForce(c,s){
   }
   return false;
 }
+/* ---------- Strom oder Luft: welcher Anschluss gehört wohin ----------
+   Knotenpunkte sind neutral — sie gehören zu der Seite, mit der sie verbunden sind.
+   Deshalb wird die elektrische Zugehörigkeit einmal über die Knotenketten weitergereicht. */
+function elRefresh(){
+  const adj={};
+  const add=(a,b)=>{(adj[a]=adj[a]||[]).push(b);(adj[b]=adj[b]||[]).push(a);};
+  for(const w of state.wires)add(w.a.c,w.b.c);
+  const st=[];
+  for(const c of state.comps)if(ELPARTS.has(c.type))st.push(c.id);
+  const seen=new Set(st);
+  elKn=new Set();
+  while(st.length){
+    const id=st.pop();
+    for(const o of adj[id]||[]){
+      if(seen.has(o))continue;
+      const oc=comp(o);
+      if(!oc||oc.type!=='knoten')continue;
+      seen.add(o);elKn.add(o);st.push(o);
+    }
+  }
+}
+function compDom(c){
+  if(!c)return null;
+  if(ELPARTS.has(c.type))return'el';
+  if(c.type!=='knoten')return'pn';
+  if(elKn.has(c.id))return'el';
+  return state.wires.some(w=>w.a.c===c.id||w.b.c===c.id)?'pn':null;
+}
+const refDom=r=>compDom(comp(r.c));
+const wireIsEl=w=>refDom(w.a)==='el'||refDom(w.b)==='el';
+/* Beide Pläne teilen sich das Koordinatensystem — deckungsgleich sind zwei Anschlüsse
+   deshalb nur, wenn sie auch zur selben Seite gehören. Der Schlüssel trägt die Seite mit. */
+const domKey=c=>compDom(c)==='el'?'e':'p';
+const wireDom=w=>wireIsEl(w)?'el':'pn';
+/* Strom und Luft lassen sich nicht miteinander verbinden */
+function domPasst(a,b){
+  const x=refDom(a),y=refDom(b);
+  return!x||!y||x===y;
+}
+
 /* Druckwerte je Anschluss in bar (0,0–6,0). exclTank = id eines Behälters, dessen eigener Druck
    ausgeblendet wird — liefert den von außen an ihm anliegenden Druck zum Laden/Entladen. */
 function simSolve(exclTank){
@@ -3904,7 +4663,7 @@ function simSolve(exclTank){
     const buckets={};
     for(const c of state.comps)for(const p of DEFS[c.type].ports(c.cfg)){
       const[px,py]=rotP(p.x,p.y,c.rot);
-      const kk=Math.round(c.x+px)+','+Math.round(c.y+py);
+      const kk=domKey(c)+Math.round(c.x+px)+','+Math.round(c.y+py);
       (buckets[kk]=buckets[kk]||[]).push(nk(c.id,p.n));
     }
     for(const kk in buckets)if(buckets[kk].length>1)co.push(buckets[kk]);
@@ -3987,7 +4746,7 @@ function buildLeakAdj(){
   const bk={};
   for(const c of state.comps)for(const p of DEFS[c.type].ports(c.cfg)){
     const[px,py]=rotP(p.x,p.y,c.rot);
-    const kk=Math.round(c.x+px)+','+Math.round(c.y+py);
+    const kk=domKey(c)+Math.round(c.x+px)+','+Math.round(c.y+py);
     (bk[kk]=bk[kk]||[]).push(nk(c.id,p.n));
   }
   for(const kk in bk){
@@ -4026,7 +4785,7 @@ function buildVentAdj(){
   const buckets={};
   for(const c of state.comps)for(const p of DEFS[c.type].ports(c.cfg)){
     const[px,py]=rotP(p.x,p.y,c.rot);
-    const kk=Math.round(c.x+px)+','+Math.round(c.y+py);
+    const kk=domKey(c)+Math.round(c.x+px)+','+Math.round(c.y+py);
     (buckets[kk]=buckets[kk]||[]).push(nk(c.id,p.n));
   }
   for(const kk in buckets){
@@ -4113,12 +4872,14 @@ function restPos(c){
   return c.cfg.rest;
 }
 function simSnapshot(){
-  return JSON.stringify({P:[...simP],fill:simFill,pos:simPos,stroke:simStroke,latch:simLatch,vals:simVals,prev:simPrevVals,t:simTime,dm:simDrosMul,dq:simDrosT,tp:simTankP,zt:simDelayT,zo:simDelayOn,kp:simKipp,cp:simCylP});
+  return JSON.stringify({P:[...simP],fill:simFill,pos:simPos,stroke:simStroke,latch:simLatch,vals:simVals,prev:simPrevVals,t:simTime,dm:simDrosMul,dq:simDrosT,tp:simTankP,zt:simDelayT,zo:simDelayOn,kp:simKipp,cp:simCylP,cr:simCylRef,eo:simElOn,et:simElT,
+    ev:[...simElLive],eg:[...simElGnd],ef:[...simElFluss],ek:[...simElShort]});
 }
 function simRestore(str){
   const o=JSON.parse(str);
   simP=new Set(o.P);simFill=o.fill;simPos=o.pos;simStroke=o.stroke;simLatch=o.latch;simVals=o.vals;simPrevVals=o.prev;
-  simTime=o.t||0;simDrosMul=o.dm||{};simDrosT=o.dq||{};simTankP=o.tp||{};simDelayT=o.zt||{};simDelayOn=o.zo||{};simKipp=o.kp||{};simCylP=o.cp||{};
+  simTime=o.t||0;simDrosMul=o.dm||{};simDrosT=o.dq||{};simTankP=o.tp||{};simDelayT=o.zt||{};simDelayOn=o.zo||{};simKipp=o.kp||{};simCylP=o.cp||{};simCylRef=o.cr||{};simElOn=o.eo||{};simElT=o.et||{};
+  simElLive=new Set(o.ev||[]);simElGnd=new Set(o.eg||[]);simElFluss=new Set(o.ef||[]);simElShort=new Set(o.ek||[]);
   simLeaks=new Set();simPuffs=new Map();
   updClock();
   render();
@@ -4126,12 +4887,156 @@ function simRestore(str){
 function updClock(){
   el('simClock').textContent=simOn?'t = '+simTime.toFixed(2).replace('.',',')+' s (simuliert)':'';
 }
+/* ---------- Elektrischer Steuerkreis ----------
+   24-V-Klemmen speisen, 0-V-Klemmen sind die Rückleitung. Kontakte verbinden oder trennen,
+   Verbraucher (Relaisspulen, Magnetspulen, Meldeleuchten) liegen dazwischen: erregt ist,
+   wer auf der einen Seite Spannung hat und auf der anderen Masse.
+   Relaiskontakte hängen wieder an Relais, deshalb wird bis zum festen Zustand
+   durchgerechnet — genau das ist die Selbsthaltung. */
+function elNetAdj(){
+  const adj={};
+  const add=(a,b)=>{(adj[a]=adj[a]||[]).push(b);(adj[b]=adj[b]||[]).push(a);};
+  for(const w of state.wires){
+    if(!wireIsEl(w))continue;
+    add(nk(w.a.c,w.a.p),nk(w.b.c,w.b.p));
+  }
+  /* deckungsgleiche Anschlüsse gelten auch hier als verbunden */
+  const bk={};
+  for(const c of state.comps){
+    if(compDom(c)!=='el')continue;
+    for(const p of DEFS[c.type].ports(c.cfg)){
+      const[px,py]=rotP(p.x,p.y,c.rot);
+      const kk=domKey(c)+Math.round(c.x+px)+','+Math.round(c.y+py);
+      (bk[kk]=bk[kk]||[]).push(nk(c.id,p.n));
+    }
+  }
+  for(const kk in bk){const g=bk[kk];for(let i=1;i<g.length;i++)add(g[0],g[i]);}
+  return adj;
+}
+function simElectric(){
+  elRefresh();
+  simElLive=new Set();simElGnd=new Set();simElShort=new Set();simElFluss=new Set();simElFlack=false;
+  const cs=state.comps.filter(c=>ELPARTS.has(c.type));
+  if(!cs.length){simElOn={};return;}
+  const base=elNetAdj();
+  const src=[],gnd=[];
+  for(const c of cs)if(c.type==='klemme')(c.cfg&&c.cfg.pol==='0'?gnd:src).push(nk(c.id,'1'));
+  const dt=0.04*simSpeed;
+  let live=new Set(),grd=new Set(),roh={},stabil=false,netz=null;
+  for(let it=0;it<40;it++){
+    const adj={};
+    for(const k in base)adj[k]=base[k].slice();
+    const add=(a,b)=>{(adj[a]=adj[a]||[]).push(b);(adj[b]=adj[b]||[]).push(a);};
+    for(const c of cs){
+      if(!ELKONT.has(c.type))continue;
+      const an=kontAn(c);
+      if(c.type==='esensor'){
+        /* Dreidraht-Sensor: der Ausgang 4 wird bei Ansprechen auf Anschluss 1 gelegt */
+        if(an)add(nk(c.id,'1'),nk(c.id,'4'));
+        continue;
+      }
+      const art=(c.cfg&&c.cfg.art)||'schliesser';
+      const K=kontNums(art,c.type==='ekontakt'?((c.cfg&&c.cfg.bahn)||1):0);
+      if(art==='wechsler')add(nk(c.id,K.u),nk(c.id,an?K.o[1]:K.o[0]));
+      else if(art==='oeffner'){if(!an)add(nk(c.id,K.o[0]),nk(c.id,K.u));}
+      else if(an)add(nk(c.id,K.o[0]),nk(c.id,K.u));
+    }
+    netz=adj;
+    const spread=starts=>{
+      const seen=new Set(starts),st=[...starts];
+      while(st.length){const x=st.pop();for(const y of adj[x]||[])if(!seen.has(y)){seen.add(y);st.push(y);}}
+      return seen;
+    };
+    live=spread(src);grd=spread(gnd);
+    roh={};
+    for(const c of cs){
+      if(!ELLOAD.has(c.type))continue;
+      const a=nk(c.id,'A1'),b=nk(c.id,'A2');
+      roh[c.id]=(live.has(a)&&grd.has(b))||(live.has(b)&&grd.has(a));
+    }
+    /* Nur unverzögerte Relais wirken sofort auf ihre eigenen Kontakte zurück. */
+    let aend=false;
+    for(const c of cs){
+      if(c.type!=='relais')continue;
+      const z=(c.cfg&&c.cfg.zeit)||'keine';
+      if(z!=='keine')continue;
+      if(!!simElOn[c.id]!==!!roh[c.id]){simElOn[c.id]=!!roh[c.id];aend=true;}
+    }
+    if(!aend){stabil=true;break;}
+  }
+  /* Kommt die Schaltung nicht zur Ruhe (z. B. ein Relais, das seinen eigenen Öffner
+     abschaltet), prellt sie in Wirklichkeit — hier wird der letzte Stand gehalten. */
+  simElFlack=!stabil;
+  for(const c of cs){
+    if(c.type!=='relais'){if(ELLOAD.has(c.type))simElOn[c.id]=!!roh[c.id];continue;}
+    const z=(c.cfg&&c.cfg.zeit)||'keine';
+    if(z==='keine'){simElOn[c.id]=!!roh[c.id];continue;}
+    const T=Math.max(0.05,(c.cfg&&c.cfg.t!=null)?c.cfg.t:2),ein=!!roh[c.id];
+    if(z==='anzug'){
+      /* der Anker zieht verzögert an, fällt aber sofort ab */
+      if(ein){simElT[c.id]=(simElT[c.id]||0)+dt;if(simElT[c.id]>=T)simElOn[c.id]=true;}
+      else{simElT[c.id]=0;simElOn[c.id]=false;}
+    }else{
+      /* abfallverzögert: zieht sofort an, fällt verzögert ab */
+      if(ein){simElT[c.id]=0;simElOn[c.id]=true;}
+      else if(simElOn[c.id]){simElT[c.id]=(simElT[c.id]||0)+dt;if(simElT[c.id]>=T)simElOn[c.id]=false;}
+    }
+  }
+  simElLive=live;simElGnd=grd;
+  for(const x of live)if(grd.has(x))simElShort.add(x);
+  /* ---------- Wo fließt wirklich Strom? ----------
+     Unter Spannung stehen heißt nicht, dass etwas fließt: ein Zweig, der an einem offenen
+     Kontakt endet, ist stromlos. Umgekehrt führt die Rückleitung eines erregten Verbrauchers
+     Strom, obwohl sie auf 0 V liegt — ohne sie wäre der Kreis auf dem Bild nie geschlossen.
+     Das Netz ohne Verbraucher zerfällt in Inseln; in jeder Insel, die eine Klemme UND einen
+     erregten Verbraucher berührt, werden die Sackgassen abgeschnitten. Was übrig bleibt,
+     verbindet Quelle und Verbraucher — dort fließt Strom. */
+  if(netz){
+    const besucht=new Set();
+    for(const start in netz){
+      if(besucht.has(start))continue;
+      const insel=[start],st=[start];
+      besucht.add(start);
+      while(st.length){
+        const x=st.pop();
+        for(const y of netz[x]||[])if(!besucht.has(y)){besucht.add(y);insel.push(y);st.push(y);}
+      }
+      const drin=new Set(insel);
+      const halt=new Set();
+      let hatKlemme=false,hatVerbraucher=false;
+      for(const c of cs){
+        if(c.type==='klemme'){
+          const k=nk(c.id,'1');
+          if(drin.has(k)){halt.add(k);hatKlemme=true;}
+        }else if(ELLOAD.has(c.type)&&simElOn[c.id]){
+          for(const pn of['A1','A2']){
+            const k=nk(c.id,pn);
+            if(drin.has(k)){halt.add(k);hatVerbraucher=true;}
+          }
+        }
+      }
+      if(!hatKlemme||!hatVerbraucher)continue;
+      const raus=new Set();
+      for(let aend=true;aend;){
+        aend=false;
+        for(const x of insel){
+          if(raus.has(x)||halt.has(x))continue;
+          let grad=0;
+          for(const y of netz[x]||[])if(!raus.has(y))grad++;
+          if(grad<=1){raus.add(x);aend=true;}
+        }
+      }
+      for(const x of insel)if(!raus.has(x))simElFluss.add(x);
+    }
+  }
+}
 function simTick(){
   simHist.push(simSnapshot());
   if(simHist.length>400)simHist.shift();
   simStep();
 }
 function simStep(){
+  elRefresh();
   const prevVals=simPrevVals;
   const steady=simSolve();
   for(const n of[...simP])if(!(steady[n]>0))simP.delete(n);
@@ -4175,7 +5080,7 @@ function simStep(){
     const buckets={};
     for(const c of state.comps)for(const p of DEFS[c.type].ports(c.cfg)){
       const[px,py]=rotP(p.x,p.y,c.rot);
-      const kk=Math.round(c.x+px)+','+Math.round(c.y+py);
+      const kk=domKey(c)+Math.round(c.x+px)+','+Math.round(c.y+py);
       (buckets[kk]=buckets[kk]||[]).push(nk(c.id,p.n));
     }
     for(const kk in buckets){
@@ -4218,7 +5123,7 @@ function simStep(){
       const bk={};
       for(const c of state.comps)for(const p of DEFS[c.type].ports(c.cfg)){
         const[px,py]=rotP(p.x,p.y,c.rot);
-        const kk=Math.round(c.x+px)+','+Math.round(c.y+py);
+        const kk=domKey(c)+Math.round(c.x+px)+','+Math.round(c.y+py);
         (bk[kk]=bk[kk]||[]).push(nk(c.id,p.n));
       }
       for(const kk in bk){
@@ -4258,7 +5163,7 @@ function simStep(){
   const aP=[];
   for(const c of state.comps)for(const p of DEFS[c.type].ports(c.cfg)){
     const[px,py]=rotP(p.x,p.y,c.rot);
-    aP.push({id:c.id,x:c.x+px,y:c.y+py});
+    aP.push({id:c.id,d:domKey(c),x:c.x+px,y:c.y+py});
   }
   /* Offene Enden: unbelegte Anschlüsse UND lose Leitungsenden (Knoten mit höchstens einer Leitung) */
   const wireDeg={};
@@ -4271,7 +5176,7 @@ function simStep(){
     const n=nk(c.id,p.n);
     const[px,py]=rotP(p.x,p.y,c.rot);
     const ax=c.x+px,ay=c.y+py;
-    if(aP.some(q=>q.id!==c.id&&Math.abs(q.x-ax)<6&&Math.abs(q.y-ay)<6))continue;
+    if(aP.some(q=>q.id!==c.id&&q.d===domKey(c)&&Math.abs(q.x-ax)<6&&Math.abs(q.y-ay)<6))continue;
     if(c.type==='knoten'){if((wireDeg[n]||0)<=1)openNodes.add(n);}
     else if(!wired.has(n))openNodes.add(n);
   }
@@ -4338,6 +5243,9 @@ function simStep(){
   const released=[];
   for(const pk in prevVals)if(prevVals[pk]>0&&!(simVals[pk]>0))released.push(pk);
   if(released.length)openVent(released);
+  /* Erst den Steuerstromkreis: Relais, Zeitrelais und Magnetspulen bestimmen mit,
+     welche Wegeventile in dieser Runde umschalten. */
+  simElectric();
   for(const c of state.comps)if(c.type==='ventil'){
     const L=sideForce(c,'L'),R=sideForce(c,'R');
     const sL=sideActs(c,'L').includes('feder'),sR=sideActs(c,'R').includes('feder');
@@ -4385,10 +5293,23 @@ function simStep(){
     };
     for(const c of state.comps){
       if(c.type!=='zylinder')continue;
+      const g=zylGeo(c.cfg),st=simStroke[c.id]||0;
       for(const p of DEFS.zylinder.ports(c.cfg)){
         const nn=nk(c.id,p.n),offen=offenVon(nn);
         zylZu[nn]=!offen;
-        if(offen||simCylP[nn]==null)simCylP[nn]=simVals[nn]||0;
+        /* Kammervolumen bei der aktuellen Kolbenstellung, mit 5 % Totraum */
+        const vol=Math.max(0.02,g.V*(0.05+0.95*(p.n==='1'?st:1-st)));
+        if(offen){
+          simCylP[nn]=simVals[nn]||0;
+          delete simCylRef[nn];
+        }else{
+          /* Abgesperrt heißt nicht starr: der Kolben drückt die eingeschlossene Luft
+             zusammen, bis ihr Druck die treibende Kraft aufwiegt (p · V = konstant,
+             gerechnet in Absolutdruck mit 1 bar Umgebung). */
+          if(!simCylRef[nn])simCylRef[nn]={p:(simCylP[nn]!=null?simCylP[nn]:(simVals[nn]||0))+1,v:vol};
+          const r=simCylRef[nn];
+          simCylP[nn]=Math.max(0,Math.min(60,r.p*r.v/vol-1));
+        }
         simVals[nn]=simCylP[nn];
       }
     }
@@ -4411,11 +5332,10 @@ function simStep(){
       if(pe>=minP){dir=1;drive=pe;}
       else if(-pe>=minP){dir=-1;drive=-pe;}
     }
-    /* Wohin die Luft beim Fahren müsste — ist diese Kammer abgesperrt, geht nichts.
-       Beim einfachwirkenden Zylinder atmet die Federseite über die eigene Bohrung ab. */
-    if(dir!==0&&!(c.cfg.typ==='einfach'&&dir===1)){
-      if(zylZu[nk(c.id,dir===1?'2':'1')])dir=0;
-    }
+    /* Beim einfachwirkenden Zylinder ist die Federkraft im Modell fest angesetzt; dort
+       würde die zusammengedrückte Luft nur hin- und herschwingen. Deshalb dort weiterhin
+       hart sperren, bei allen anderen erledigt das der steigende Gegendruck von selbst. */
+    if(dir===-1&&c.cfg.typ==='einfach'&&zylZu[nk(c.id,'1')])dir=0;
     simCylDir[c.id]=0;
     if(dir!==0){
       const s0=simStroke[c.id]||0;
@@ -4435,7 +5355,9 @@ function simStep(){
           if(g.type!=='kipptaster'||!g.cfg||g.cfg.target!==c.id)continue;
           const tp=g.cfg.mode==='ein'?0.08:0.92;
           const wd=(g.cfg.mode==='ein'?-1:1)*((g.cfg.rich||'zu')!=='weg'?1:-1);
-          if(dir===wd&&(s0-tp)*(s1-tp)<=0)simKipp[g.id]=simTime+0.25;
+          /* Der Impuls muss länger stehen als die Luft für einen Leitungszug braucht
+             (0,45 s), sonst ist er weg, bevor er am Steueranschluss ankommt */
+          if(dir===wd&&(s0-tp)*(s1-tp)<=0)simKipp[g.id]=simTime+Math.max(0.05,g.cfg.imp!=null?g.cfg.imp:0.7);
         }
         /* verbrauchte Luftmenge (bar·Liter) der füllenden Kammer */
         const pCh=dir===1?p1:p2;
@@ -4519,7 +5441,7 @@ function simStep(){
       const bk={};
       for(const c of state.comps)for(const p of DEFS[c.type].ports(c.cfg)){
         const[px,py]=rotP(p.x,p.y,c.rot);
-        const kk=Math.round(c.x+px)+','+Math.round(c.y+py);
+        const kk=domKey(c)+Math.round(c.x+px)+','+Math.round(c.y+py);
         (bk[kk]=bk[kk]||[]).push(nk(c.id,p.n));
       }
       for(const kk in bk){const g=bk[kk];for(let i=1;i<g.length;i++)both(g[0],g[i],1);}
@@ -4563,11 +5485,14 @@ function simStep(){
     }
     /* Wege zwischen benachbarten Kapazitäten suchen (bester Leitwert entlang des Weges) */
     const edges={};
+    /* Gerichtet: der Weg wurde von ka nach kb gefunden, also darf auch nur in diese
+       Richtung Luft fließen. Sonst entleert sich ein Behälter rückwärts durch ein
+       Rückschlagventil, nur weil der Hinweg von der Umgebung aus offen war. */
     const noteEdge=(ka,kb,f,na,nb)=>{
       if(ka===kb)return;
       if(ka[0]==='a'&&kb[0]==='a')return;
       if(ka[0]==='s'&&kb[0]==='s')return;
-      const key=ka<kb?ka+'|'+kb:kb+'|'+ka;
+      const key=ka+'>'+kb;
       const e=edges[key];
       if(!e||f>e.f)edges[key]={a:ka,b:kb,f,na,nb};
     };
@@ -4597,16 +5522,13 @@ function simStep(){
     for(const key in edges){
       const e=edges[key];
       if(!simP.has(e.na)&&!simP.has(e.nb))continue;
-      const pa=pressOf(e.a),pb=pressOf(e.b);
-      const dp=pa-pb;
-      if(Math.abs(dp)<1e-5)continue;
+      const dp=pressOf(e.a)-pressOf(e.b);
+      /* nur bergab und nur in Entdeckungsrichtung */
+      if(dp<=1e-5)continue;
       let Q=FLOW*e.f*dp*dt;
       const Va=volOf(e.a),Vb=volOf(e.b);
       const Vser=(isFinite(Va)&&isFinite(Vb))?Va*Vb/(Va+Vb):(isFinite(Va)?Va:(isFinite(Vb)?Vb:Infinity));
-      if(isFinite(Vser)){
-        const Qmax=dp*Vser;
-        if(Math.abs(Q)>Math.abs(Qmax))Q=Qmax;
-      }
+      if(isFinite(Vser)&&Q>dp*Vser)Q=dp*Vser;
       addQ(e.a,-Q);addQ(e.b,Q);
     }
     /* Verbrauch fahrender Zylinder aus den erreichbaren Behältern decken (Quelle deckt selbst) */
@@ -4644,12 +5566,13 @@ function startSim(){
   document.querySelectorAll('.pal').forEach(x=>x.classList.remove('on'));
   simVals={};simPrevVals={};simPos={};simStroke={};simHeld={};simCtrlHeld={};simLatch={};simLeaks=new Set();simPuffs=new Map();
   simP=new Set();simFill={};simHist=[];simPaused=false;
-  simTime=0;simDrosMul={};simDrosT={};simTankP={};simCylDir={};simDelayT={};simDelayOn={};simKipp={};simCylP={};
+  simTime=0;simDrosMul={};simDrosT={};simTankP={};simCylDir={};simDelayT={};simDelayOn={};simKipp={};simCylP={};simCylRef={};
+  simElOn={};simElT={};simElLive=new Set();simElGnd=new Set();simElShort=new Set();simElFluss=new Set();simElFlack=false;
   simInfoId=null;simInfoPin=false;
   simLogReset();
   simTabIdx=activeTab;
   for(const c of state.comps)if(c.type==='ventil')simPos[c.id]=restPos(c);
-  svg.classList.add('simming');
+  for(const sv of[svgP,svgE])sv.classList.add('simming');
   renderTabs();
   el('btnPlay').innerHTML=ICO.stop+'<span>Simulation stoppen</span>';
   el('btnPlay').classList.add('running');
@@ -4666,12 +5589,13 @@ function stopSim(){
   clearInterval(simTimer);simTimer=null;
   simVals={};simPrevVals={};simHeld={};simCtrlHeld={};simLatch={};simLeaks=new Set();simPuffs=new Map();
   simP=new Set();simFill={};simHist=[];simPaused=false;
-  simTime=0;simDrosMul={};simDrosT={};simTankP={};simCylDir={};simDelayT={};simDelayOn={};simKipp={};simCylP={};
+  simTime=0;simDrosMul={};simDrosT={};simTankP={};simCylDir={};simDelayT={};simDelayOn={};simKipp={};simCylP={};simCylRef={};
+  simElOn={};simElT={};simElLive=new Set();simElGnd=new Set();simElShort=new Set();simElFluss=new Set();simElFlack=false;
   simTabIdx=-1;
   simInfoId=null;simInfoPin=false;el('float').style.display='none';
   tipRef=null;el('tip').style.display='none';
   updClock();
-  svg.classList.remove('simming');
+  for(const sv of[svgP,svgE])sv.classList.remove('simming');
   renderTabs();
   el('btnPlay').innerHTML=ICO.play+'<span>Simulation starten</span>';
   el('btnPlay').classList.remove('running');
@@ -4682,6 +5606,7 @@ function stopSim(){
 function setPaused(p){
   if(!simOn)return;
   simPaused=p;
+  updTitle();
   if(p){
     if(simTimer){clearInterval(simTimer);simTimer=null;}
     el('btnPause').innerHTML=ICO.play;el('btnPause').title='Weiter';
@@ -4692,20 +5617,109 @@ function setPaused(p){
 }
 
 /* ---------- Zoom & Pan ---------- */
-let view={x:-40,y:-40,w:1400,h:900},pan=null,hdrag=null,gridFine=null;
+/* Beide Seiten haben denselben Koordinatenursprung — sie liegen nicht nebeneinander
+   auf einem Blatt, sondern sind zwei Blätter. Getrennt werden sie über die Zugehörigkeit
+   der Bauteile, nicht über die Lage. */
+let viewP={x:-40,y:-40,w:1400,h:900},viewE={x:-40,y:-40,w:1400,h:900};
+let view=viewP,pan=null,hdrag=null,gridFine=null;
+/* Der wirklich sichtbare Weltausschnitt einer Seite. Die Zeichenfläche passt ihre viewBox
+   mit „meet" ein — quer dazu ist also mehr zu sehen, als die viewBox angibt. Wer beides
+   verwechselt, hält sichtbare Bauteile für außerhalb und setzt Marken zu weit innen.
+   u = Weltmaß je Bildschirmpunkt, damit Aufsätze am Bildschirm gleich groß bleiben. */
+function sichtRect(pane){
+  const p=pane==null?activePane:pane,v=p?viewE:viewP;
+  const r=svgOf(p).getBoundingClientRect();
+  const pw=Math.max(1,r.width||900),ph=Math.max(1,r.height||600);
+  const sc=Math.min(pw/v.w,ph/v.h)||1;
+  const w=pw/sc,h=ph/sc;
+  const out={x:v.x+v.w/2-w/2,y:v.y+v.h/2-h/2,w,h,u:1/sc};
+  /* Bibliothek und Aufgabenleiste liegen ÜBER der Zeichenfläche und verdecken sie rechts.
+     Für die Seite, die dort anstößt, gehört dieser Streifen nicht zum Sichtbaren — sonst
+     landet ein Wegweiser darunter und ist gar nicht zu sehen. */
+  let deckt=0;
+  for(const id of['lib','aufgBg']){
+    const e=el(id);
+    if(e&&e.classList.contains('open'))deckt=Math.max(deckt,e.getBoundingClientRect().width||0);
+  }
+  if(deckt>0){
+    const wrap=el('canvasWrap').getBoundingClientRect();
+    if(r.right>=wrap.right-2)out.w=Math.max(60*out.u,out.w-deckt*out.u);
+  }
+  return out;
+}
 /* Zwischenpunkte lohnen erst, wenn sie mindestens 20 Bildschirmpunkte auseinanderliegen */
-function feinesRaster(){
-  const px=Math.max(200,svg.getBoundingClientRect().width||900);
-  return GRID/(view.w/px)>=20;
+function feinesRaster(pane){
+  return GRID/sichtRect(pane).u>=20;
+}
+function applySplit(){
+  el('paneL').style.flex=epOn()?('0 0 '+(epSplit*100).toFixed(2)+'%'):'1 1 auto';
+}
+/* Bauteile, die auf beide Seiten gehören */
+const BEIDE=new Set(['leitung','text']);
+/* Gehört ein Werkzeug auf diese Seite? */
+const werkzeugHier=(typ,pane)=>!epOn()||!typ||BEIDE.has(typ)||ELPARTS.has(typ)===(pane===1);
+function applyPalPane(){
+  /* Beide Klassen hier setzen — dann stimmt die Palette auch ohne vorheriges Zeichnen */
+  document.body.classList.toggle('ep',epOn());
+  document.body.classList.toggle('pane-e',epOn()&&activePane===1);
+  /* Ein Werkzeug der anderen Seite lässt sich dort nicht setzen — also fallen lassen */
+  if(epOn()&&placing&&!BEIDE.has(placing)&&ELPARTS.has(placing)!==(activePane===1)){
+    placing=null;placingVar=null;
+    document.querySelectorAll('.pal').forEach(x=>x.classList.remove('on'));
+  }
+}
+/* Elektropneumatik für das aktuelle Blatt ein- oder ausschalten */
+function toggleEP(){
+  const t=tabs[activeTab];
+  if(!t||simpleMode||tutOn)return;
+  t.ep=!t.ep;
+  if(t.ep){
+    /* Die rechte Seite auf das legen, was dort schon liegt — sonst auf den Ursprung */
+    const es=state.comps.filter(c=>ELPARTS.has(c.type));
+    if(es.length){
+      let x1=1e9,y1=1e9,x2=-1e9,y2=-1e9;
+      for(const c of es){const b=absBox(c);x1=Math.min(x1,b.x1);y1=Math.min(y1,b.y1);x2=Math.max(x2,b.x2);y2=Math.max(y2,b.y2);}
+      const w=Math.max(700,(x2-x1)*1.35),h=w*viewE.h/viewE.w;
+      Object.assign(viewE,{x:(x1+x2)/2-w/2,y:(y1+y2)/2-h/2,w,h});
+    }else Object.assign(viewE,{x:-40,y:-40,w:1400,h:900});
+  }else{activePane=curPane=0;svg=svgP;view=viewP;}
+  selArr=[];pending=null;
+  document.body.classList.toggle('ep',!!t.ep);
+  applySplit();applyPalPane();applyMode();
+  renderTabs();applyView();render();renderProps();saveWS();
+}
+/* `svg` und `view` auf den Plan unter dem Mauszeiger umhängen, damit alles Weitere
+   unverändert greift. Während einer Geste bleibt die Seite stehen — sonst reißt der Zug ab. */
+function usePane(p){
+  if(!epOn())p=0;
+  if(p===curPane)return;
+  if(drag||band||wdrag||ldrag||fdrag||pan||pending||splitDrag)return;
+  curPane=p;svg=svgOf(p);view=p?viewE:viewP;
+}
+/* Angeklickt heißt aktiv: erst dann wechselt die Palette links die Seite. */
+function setActivePane(p){
+  if(!epOn())p=0;
+  if(p===activePane)return;
+  activePane=p;applyPalPane();
 }
 function applyView(){
-  svg.setAttribute('viewBox',view.x+' '+view.y+' '+view.w+' '+view.h);
+  svgP.setAttribute('viewBox',viewP.x+' '+viewP.y+' '+viewP.w+' '+viewP.h);
+  svgE.setAttribute('viewBox',viewE.x+' '+viewE.y+' '+viewE.w+' '+viewE.h);
   positionFloat();
   positionFrmBar();
   /* Zoomen zeichnet sonst nicht neu — beim Wechsel der Rasterstufe muss es aber sein */
   if(!symMode&&gridFine!==null&&feinesRaster()!==gridFine)render();
 }
-svg.addEventListener('wheel',e=>{
+/* Beide Zeichenflächen hören auf dieselben Handler; welche gerade gemeint ist,
+   entscheidet sich beim Eintreffen des Ereignisses. */
+function onCanvas(ev,fn){
+  for(const sv of[svgP,svgE])sv.addEventListener(ev,function(e){
+    usePane(sv===svgE?1:0);
+    if(ev==='pointerdown')setActivePane(curPane);
+    return fn.call(this,e);
+  });
+}
+onCanvas('wheel',e=>{
   e.preventDefault();
   const m=svgPoint(e);
   const f=e.deltaY>0?1.15:1/1.15;
@@ -4716,10 +5730,10 @@ svg.addEventListener('wheel',e=>{
   view.w=nw;view.h=view.h*sc;
   applyView();
 },{passive:false});
-svg.addEventListener('mousedown',e=>{if(e.button===1)e.preventDefault();});
+onCanvas('mousedown',e=>{if(e.button===1)e.preventDefault();});
 
 /* ---------- Interaktion ---------- */
-svg.addEventListener('pointerdown',e=>{
+onCanvas('pointerdown',e=>{
   if(e.button===1){
     e.preventDefault();
     pan={mx:e.clientX,my:e.clientY,vx:view.x,vy:view.y,sc:1/svg.getScreenCTM().a};
@@ -4766,6 +5780,14 @@ svg.addEventListener('pointerdown',e=>{
           }
         }
       }
+      if(c&&c.type==='eschalter'){
+        if((c.cfg&&c.cfg.halt)==='rast'){
+          const cur=!!(simLatch[c.id]&&simLatch[c.id].S);
+          simLatch[c.id]=Object.assign({},simLatch[c.id],{S:!cur});
+        }else if(e.ctrlKey||e.metaKey)simCtrlHeld[c.id]=Object.assign({},simCtrlHeld[c.id],{S:true});
+        else simHeld[c.id]=Object.assign({},simHeld[c.id],{S:true});
+        betaetigt=true;
+      }
       if(betaetigt)simLog.akt++;
       /* wer nur schaltet, will kein Info-Fenster aufgehen sehen */
       if(c&&!betaetigt){simInfoId=c.id;simInfoPin=false;renderSimInfo();}
@@ -4774,7 +5796,7 @@ svg.addEventListener('pointerdown',e=>{
   }
   const fh=e.target.closest&&e.target.closest('[data-frame]');
   if(fh&&state.frame){
-    fdrag={mode:fh.dataset.frame,sx:mouse.x,sy:mouse.y,f0:Object.assign({},state.frame)};
+    fdrag={mode:fh.dataset.frame,pane:(epOn()?curPane:0),sx:mouse.x,sy:mouse.y,f0:frameOf(epOn()?curPane:0)};
     try{svg.setPointerCapture(e.pointerId);}catch(err){}
     return;
   }
@@ -4786,6 +5808,8 @@ svg.addEventListener('pointerdown',e=>{
     return;
   }
   if(placing&&placing!=='leitung'){
+    /* Ein pneumatisches Bauteil gehört nicht in den Stromlaufplan und umgekehrt */
+    if(!werkzeugHier(placing,curPane))return;
     pushUndo();
     const cfg0=cfgFor(placing,placingVar);
     const c={id:state.nextId++,type:placing,x:snap(mouse.x),y:snap(mouse.y),rot:(((DEFS[placing].rot0||0)+placeRot)%360+360)%360,cfg:cfg0,label:autoLabel(placing,cfg0)};
@@ -4841,6 +5865,7 @@ svg.addEventListener('pointerdown',e=>{
       }else if(pending.c===ref.c&&pending.p===ref.p)pending=null;
       else{
         if(busy)return;
+        if(!domPasst(pending,ref))return;
         pushUndo();
         const nw={id:state.nextId++,a:pending,b:ref};
         if(pendingVia.length)nw.via=pendingVia.slice();
@@ -4857,6 +5882,7 @@ svg.addEventListener('pointerdown',e=>{
   if(wh&&pending){
     const w=state.wires.find(x=>x.id===+wh.dataset.wire);
     if(w){
+      if(!domPasst(pending,w.a)||!domPasst(pending,w.b))return;
       pushUndo();
       const j=splitWireAt(w,mouse);
       const nw={id:state.nextId++,a:pending,b:{c:j.id,p:'1'}};
@@ -4927,18 +5953,36 @@ svg.addEventListener('pointerdown',e=>{
 let tipRef=null;
 function tipText(){
   if(!tipRef)return null;
+  /* Im Stromlaufplan gibt es keinen Druck — dort zählt, ob Spannung anliegt. */
+  const elZust=(...ns)=>{
+    if(ns.some(x=>simElShort.has(x)))return'Kurzschluss';
+    const fl=ns.every(x=>simElFluss.has(x));
+    if(ns.some(x=>simElLive.has(x)))return fl?'24 V · Strom fließt':'24 V · kein Strom';
+    if(ns.some(x=>simElGnd.has(x)))return fl?'0 V · Strom fließt':'0 V · kein Strom';
+    return'spannungsfrei';
+  };
   if(tipRef.k==='port'){
-    const pv=simVals[nk(tipRef.c,tipRef.p)]||0;
+    const pc=comp(tipRef.c),pn=nk(tipRef.c,tipRef.p);
+    if(pc&&compDom(pc)==='el')return`Anschluss ${tipRef.lbl||tipRef.p} — ${elZust(pn)}`;
+    const pv=simVals[pn]||0;
     return`Anschluss ${tipRef.lbl||tipRef.p} — ${pv>0?barTxt(pv)+' bar':'drucklos'}`;
   }
   if(tipRef.k==='wire'){
     const w=state.wires.find(x=>x.id===tipRef.id);
     if(!w)return null;
-    const a=simVals[nk(w.a.c,w.a.p)]||0,b=simVals[nk(w.b.c,w.b.p)]||0;
+    const na=nk(w.a.c,w.a.p),nb=nk(w.b.c,w.b.p);
+    if(wireIsEl(w))return elZust(na,nb);
+    const a=simVals[na]||0,b=simVals[nb]||0;
     return(a>0&&b>0)?`${barTxt(Math.max(a,b))} bar`:'drucklos';
   }
   const cc=comp(tipRef.id);
   if(!cc)return null;
+  if(ELPARTS.has(cc.type)){
+    const nm=cc.label?cc.label+' — ':'';
+    if(cc.type==='klemme')return nm+((cc.cfg&&cc.cfg.pol==='0')?'0 V · Rückleitung':'24 V · Versorgung');
+    if(ELLOAD.has(cc.type))return nm+(simElOn[cc.id]?'erregt · Strom fließt':'stromlos');
+    return nm+(kontAn(cc)?'betätigt':'in Ruhestellung');
+  }
   if(cc.type==='zylinder'){
     const q1=simVals[nk(cc.id,'1')]||0,q2=simVals[nk(cc.id,'2')]||0;
     return cc.cfg.typ==='einfach'
@@ -4967,7 +6011,7 @@ function updateTip(e){
       const g2=t.closest&&t.closest('[data-comp]');
       if(g2){
         const cc=comp(+g2.dataset.comp);
-        if(cc&&(cc.type==='zylinder'||cc.type==='behaelter'))tipRef={k:'comp',id:cc.id};
+        if(cc&&(cc.type==='zylinder'||cc.type==='behaelter'||ELPARTS.has(cc.type)))tipRef={k:'comp',id:cc.id};
       }
     }
   }
@@ -4976,7 +6020,14 @@ function updateTip(e){
   el('tip').style.top=(e.clientY-wrap.top+14)+'px';
   paintTip();
 }
-svg.addEventListener('pointerleave',()=>{tipRef=null;paintTip();});
+onCanvas('pointerleave',()=>{
+  tipRef=null;paintTip();
+  if(hoverComp!=null){
+    const hatte=linkPartners(hoverComp).size>0;
+    hoverComp=null;
+    if(hatte&&!drag&&!band&&!wdrag&&!ldrag&&!pan&&!fdrag)render();
+  }
+});
 /* Bauteil(e) zum Ziehen vorbereiten. portRef gesetzt = am Anschlusspunkt angefasst;
    bleibt die Maus stehen, wird daraus beim Loslassen der Beginn einer Leitung. */
 function startCompDrag(id,e,portRef){
@@ -5004,7 +6055,7 @@ function startCompDrag(id,e,portRef){
   try{svg.setPointerCapture(e.pointerId);}catch(err){}
   render();renderProps();
 }
-svg.addEventListener('pointermove',e=>{
+onCanvas('pointermove',e=>{
   if(pan){
     view.x=pan.vx-(e.clientX-pan.mx)*pan.sc;
     view.y=pan.vy-(e.clientY-pan.my)*pan.sc;
@@ -5013,19 +6064,41 @@ svg.addEventListener('pointermove',e=>{
   if(symMode){symPointerMove(e);return;}
   mouse=svgPoint(e);
   updateTip(e);
+  {
+    /* Zeigt die Maus auf ein Bauteil mit Partner, wird neu gezeichnet — sonst nicht,
+       damit das Überfahren des Blattes nicht dauernd Arbeit macht. */
+    const g2=e.target.closest&&e.target.closest('[data-comp]');
+    const hid=g2?+g2.dataset.comp:null;
+    if(hid!==hoverComp){
+      const alt=hoverComp!=null&&linkPartners(hoverComp).size>0;
+      const neu=hid!=null&&linkPartners(hid).size>0;
+      hoverComp=hid;
+      if((alt||neu)&&!drag&&!band&&!wdrag&&!ldrag&&!pan&&!fdrag)render();
+    }
+  }
   if(fdrag&&state.frame){
     const f=state.frame,f0=fdrag.f0,dx=mouse.x-fdrag.sx,dy=mouse.y-fdrag.sy;
-    if(fdrag.mode==='move'){f.x=snap(f0.x+dx);f.y=snap(f0.y+dy);}
-    else{
-      /* Ecke ziehen: Seitenverhältnis bleibt, die gegenüberliegende Ecke steht fest */
+    /* Die gezogene Seite: links der Rahmen selbst, rechts nur dessen Lage */
+    if(fdrag.pane===1&&!state.frameE)state.frameE={x:f.x,y:f.y};
+    const zw=fdrag.pane===1?state.frameE:f;
+    const andere=fdrag.pane===1?f:state.frameE;
+    if(fdrag.mode==='move'){zw.x=snap(f0.x+dx);zw.y=snap(f0.y+dy);}
+    else if(fdrag.mode==='split'){
+      const t=frameQuer()?((mouse.x-f0.x)/f0.w):((mouse.y-f0.y)/f0.h);
+      state.frameSplit=Math.max(0.15,Math.min(0.85,t));
+    }else{
+      /* Ecke ziehen: Seitenverhältnis bleibt, die gegenüberliegende Ecke steht fest.
+         Die Größe gilt für beide Seiten — damit beide im selben Maßstab stehen. Die
+         nicht gezogene Seite behält dabei ihre Mitte. */
       const ratio=f0.h/f0.w;
       const west=fdrag.mode[1]==='w',north=fdrag.mode[0]==='n';
       const ax=west?f0.x+f0.w:f0.x,ay=north?f0.y+f0.h:f0.y;
-      let nw=Math.max(120,Math.abs(mouse.x-ax));
-      let nh=nw*ratio;
-      f.w=Math.round(nw);f.h=Math.round(nh);
-      f.x=Math.round(west?ax-f.w:ax);
-      f.y=Math.round(north?ay-f.h:ay);
+      const nw=Math.max(120,Math.abs(mouse.x-ax));
+      const acx=andere&&andere!==zw?andere.x+f.w/2:0,acy=andere&&andere!==zw?andere.y+f.h/2:0;
+      f.w=Math.round(nw);f.h=Math.round(nw*ratio);
+      zw.x=Math.round(west?ax-f.w:ax);
+      zw.y=Math.round(north?ay-f.h:ay);
+      if(andere&&andere!==zw){andere.x=Math.round(acx-f.w/2);andere.y=Math.round(acy-f.h/2);}
     }
     render();
     return;
@@ -5186,6 +6259,7 @@ window.addEventListener('pointerup',()=>{
     const y1=Math.min(band.y0,mouse.y),y2=Math.max(band.y0,mouse.y);
     if(x2-x1>6||y2-y1>6){
       for(const c of state.comps){
+        if(paneOf(c)!==curPane)continue;
         const b=DEFS[c.type].box(c.cfg);
         const pts=[[b.x,b.y],[b.x+b.w,b.y],[b.x,b.y+b.h],[b.x+b.w,b.y+b.h]].map(q=>rotP(q[0],q[1],c.rot));
         const bx1=c.x+Math.min(...pts.map(q=>q[0])),bx2=c.x+Math.max(...pts.map(q=>q[0]));
@@ -5193,6 +6267,7 @@ window.addEventListener('pointerup',()=>{
         if(bx1<x2&&bx2>x1&&by1<y2&&by2>y1&&!isSel('comp',c.id))selArr.push({kind:'comp',id:c.id});
       }
       for(const w of state.wires){
+        if(wirePane(w)!==curPane)continue;
         const A=absPort(w.a),B=absPort(w.b);
         if(A&&B&&A.x>=x1&&A.x<=x2&&A.y>=y1&&A.y<=y2&&B.x>=x1&&B.x<=x2&&B.y>=y1&&B.y<=y2&&!isSel('wire',w.id))
           selArr.push({kind:'wire',id:w.id});
@@ -5214,7 +6289,7 @@ window.addEventListener('pointermove',e=>{
     positionFloat();
   }
 });
-svg.addEventListener('dblclick',e=>{
+onCanvas('dblclick',e=>{
   if(simOn)return;
   const wh=e.target.closest&&e.target.closest('[data-wire]');
   if(!wh)return;
@@ -5225,7 +6300,7 @@ svg.addEventListener('dblclick',e=>{
   selArr=[{kind:'comp',id:j.id}];
   render();renderProps();
 });
-svg.addEventListener('contextmenu',e=>{
+onCanvas('contextmenu',e=>{
   e.preventDefault();
   pending=null;placing=null;placingSnip=null;
   document.querySelectorAll('.pal').forEach(x=>x.classList.remove('on'));
@@ -5239,6 +6314,7 @@ window.addEventListener('keydown',e=>{
     devMode=!devMode;
     try{localStorage.setItem('pneu-dev',devMode?'1':'0');}catch(err){}
     if(!devMode&&symMode)closeSymMode();
+    document.body.classList.toggle('dev',devMode);
     renderTabs();refreshPal();e.preventDefault();return;
   }
   const tag=document.activeElement&&document.activeElement.tagName;
@@ -5288,7 +6364,21 @@ function applyTheme(){
 applyTheme();
 
 /* ---------- Tabs ---------- */
+/* Der Browser-Tab trägt mit, was gerade läuft — wer in einem anderen Tab arbeitet, sieht
+   sonst nicht, dass die Simulation noch mitrechnet. Geschrieben wird nur bei Änderung. */
+let titelLetzt='';
+function updTitle(){
+  let t='Pneumatik-Editor';
+  if(simOn){
+    const pn=(tabs[simTabIdx]&&tabs[simTabIdx].name)||'';
+    t=(simPaused?'\u23F8 ':'\u25B6 ')+(pn?pn+' \u00b7 ':'')+t;
+  }
+  if(t===titelLetzt)return;
+  titelLetzt=t;
+  document.title=t;
+}
 function renderTabs(){
+  updTitle();
   el('tabbar').innerHTML=tabs.map((t,i)=>
     `<div class="tab${(!symMode&&i===activeTab)?' act':''}${simOn&&i===simTabIdx?' simtab':''}" data-tab="${i}" title="Doppelklick = umbenennen"><span>${esc(t.name)}</span><button class="tclose" data-tclose="${i}" title="Plan schließen">${ICO.x}</button></div>`
   ).join('')+`<button id="tabAdd" title="Neuer Plan">${ICO.plus}</button>`+
@@ -5296,12 +6386,18 @@ function renderTabs(){
   `<span class="spacer"></span>`+
   (devMode?`<button id="btnSym" class="${symMode?'picking':''}" title="Symbol-Editor (Entwickler): öffnet einen eigenen Tab mit allen Symbolen zum Nachzeichnen. Strg+Alt+E blendet den Knopf wieder aus.">${ICO.pencil}<span>Symbole</span></button>`:'')+
   (devMode?`<button id="btnAdvTxt" title="Die e/v-Zuordnung als Text — weitergeben, damit sie fest eingebaut wird">${ICO.book}<span>Modus-Liste</span></button>`:'')+
+  (devMode?`<button id="btnPalTxt" title="Die Reihenfolge der Palette als Text — Kacheln und Überschriften lassen sich mit der Maus umsortieren, dann diese Zeile weitergeben">${ICO.grip}<span>Palette-Liste</span></button>`:'')+
+  ((simpleMode||tutOn)?''
+    :`<button id="btnEP" class="${epOn()?'picking':''}" title="${epOn()
+      ?'Elektropneumatik beenden — beide Pläne bleiben erhalten, sie liegen dann wieder auf einem Blatt'
+      :'Elektropneumatik für dieses Blatt: teilt die Fläche in pneumatischen Plan und Stromlaufplan'}">${ICO.bolt}<span>Elektropneumatik</span></button>`)+
   `<button id="btnAufg" title="Zusatzaufgaben mit Kontrolle">${ICO.liste}<span>Aufgaben</span></button>`+
   `<button id="btnPrint" title="${state.frame?'Druckrahmen entfernen':'Druckrahmen im A4-Format aufs Blatt legen'}">${ICO.print}<span>Drucken</span></button>`+
   (tutOn?`<button id="btnMode" disabled title="Im Tutorial bleibt der einfache Modus fest eingestellt">${ICO.modeS}<span>Einfach</span></button>`
     :`<button id="btnMode" title="${simpleMode?'Einfacher Modus: nur Grundbauteile, keine Detaileinstellungen — klicken für den vollständigen Modus':'Vollständiger Modus: alle Bauteile und Detaileinstellungen — klicken für den einfachen Modus'}">${simpleMode?ICO.modeS+'<span>Einfach</span>':ICO.modeF+'<span>Vollständig</span>'}</button>`)+
   `<button id="btnTheme" title="Design: ${themePref==='auto'?'automatisch':themePref==='dark'?'dunkel':'hell'} (klicken zum Wechseln)">${themePref==='auto'?ICO.auto+'<span>Auto</span>':themePref==='dark'?ICO.moon+'<span>Dunkel</span>':ICO.sun+'<span>Hell</span>'}</button>`+
-  `<button id="btnLib">${ICO.book}<span>Bibliothek</span></button>`;
+  (tutOn?`<button id="btnLib" disabled title="Im Tutorial gesperrt — die Schaltungen sollen selbst entstehen">${ICO.book}<span>Bibliothek</span></button>`
+    :`<button id="btnLib">${ICO.book}<span>Bibliothek</span></button>`);
 }
 function applyMode(){
   /* Im Tutorial zeigt die Palette nur, was schon freigeschaltet ist */
@@ -5311,13 +6407,15 @@ function applyMode(){
     /* Im Tutorial gilt beides: freigeschaltet sein UND nicht auf „nur vollständig" stehen */
     b.style.display=(frei?(!frei.has(ky)||ADVPARTS.has(ky)):(simpleMode&&ADVPARTS.has(ky)))?'none':'';
   });
-  /* Überschriften ohne sichtbare Kachel verschwinden mit */
-  let grp=null,sicht=false;
-  for(const k of el('palParts').children){
-    if(k.classList.contains('grp')){if(grp)grp.style.display=sicht?'':'none';grp=k;sicht=false;}
-    else if(k.classList.contains('pal')&&k.style.display!=='none')sicht=true;
+  /* Überschriften ohne sichtbare Kachel verschwinden mit — je Palettensatz getrennt */
+  for(const box of el('palParts').children){
+    let grp=null,sicht=false;
+    for(const k of box.children){
+      if(k.classList.contains('grp')){if(grp)grp.style.display=sicht?'':'none';grp=k;sicht=false;}
+      else if(k.classList.contains('pal')&&k.style.display!=='none')sicht=true;
+    }
+    if(grp)grp.style.display=sicht?'':'none';
   }
-  if(grp)grp.style.display=sicht?'':'none';
   const wegK=frei?!frei.has(advKey(placing,placingVar)):(simpleMode&&ADVPARTS.has(advKey(placing,placingVar)));
   if(placing&&wegK){
     placing=null;
@@ -5335,10 +6433,13 @@ function switchTab(i){
   activeTab=i;
   state=tabs[i].state;
   undoStack=tabs[i].undo;redoStack=tabs[i].redo;
+  if(!epOn()){activePane=curPane=0;svg=svgP;view=viewP;}
+  document.body.classList.toggle('ep',epOn());
+  applySplit();applyPalPane();applyMode();
   ensureLabels();
   selArr=[];pending=null;placing=null;placingSnip=null;band=null;drag=null;
   document.querySelectorAll('.pal').forEach(x=>x.classList.remove('on'));
-  svg.classList.toggle('simming',simOn&&activeTab===simTabIdx);
+  for(const sv of[svgP,svgE])sv.classList.toggle('simming',simOn&&activeTab===simTabIdx);
   renderTabs();render();renderProps();
 }
 function addTab(st,name){
@@ -5365,10 +6466,16 @@ function closeTab(i){
   state=tabs[activeTab].state;
   undoStack=tabs[activeTab].undo;redoStack=tabs[activeTab].redo;
   selArr=[];pending=null;placingSnip=null;
-  svg.classList.toggle('simming',simOn&&activeTab===simTabIdx);
+  for(const sv of[svgP,svgE])sv.classList.toggle('simming',simOn&&activeTab===simTabIdx);
   renderTabs();render();renderProps();saveWS();
 }
 el('tabbar').addEventListener('click',e=>{
+  if(e.target.closest('#btnPalTxt')){
+    const txt=JSON.stringify(palOrder());
+    if(navigator.clipboard)navigator.clipboard.writeText(txt).catch(()=>{});
+    prompt('Reihenfolge der Palette (kopiert — diese Zeile weitergeben, dann wird sie fest eingebaut):',txt);
+    return;
+  }
   if(e.target.closest('#btnAdvTxt')){
     const txt=JSON.stringify([...ADVPARTS].sort());
     if(navigator.clipboard)navigator.clipboard.writeText(txt).catch(()=>{});
@@ -5390,12 +6497,20 @@ el('tabbar').addEventListener('click',e=>{
     aufgOpen=true;el('aufgBg').classList.add('open');aufgRender(true);return;
   }
   if(e.target.closest('#btnLib')){
+    if(tutOn)return;
     aufgClose();
     el('lib').classList.toggle('open');applyLibW();return;
   }
+  if(e.target.closest('#btnEP')){toggleEP();return;}
   if(e.target.closest('#btnMode')){
     simpleMode=!simpleMode;
-    saveWS();applyMode();renderTabs();render();renderProps();
+    /* Der einfache Modus kennt keine Elektropneumatik — die Seite wird eingeklappt,
+       der Stromlaufplan bleibt aber erhalten. */
+    if(simpleMode)for(const t of tabs)if(t.ep){t.ep=false;}
+    if(!epOn()){activePane=curPane=0;svg=svgP;view=viewP;}
+    document.body.classList.toggle('ep',epOn());
+    applySplit();applyPalPane();
+    saveWS();applyMode();renderTabs();applyView();render();renderProps();
     return;
   }
   if(e.target.closest('#btnTheme')){
@@ -5461,7 +6576,10 @@ function insertGroup(sn,X,Y){
     newSel.push({kind:'comp',id:nc.id});
   }
   for(const nc of newComps){
-    if(GEBERTYP.has(nc.type)&&nc.cfg&&nc.cfg.target!=null)nc.cfg.target=map[nc.cfg.target]!=null?map[nc.cfg.target]:null;
+    /* Verweise zeigen nach dem Einfügen auf die Kopien: Grenztaster und elektrische
+       Geber auf ihren Zylinder, Relaiskontakte auf ihre Spule. */
+    if((GEBERTYP.has(nc.type)||nc.type==='egrenz'||nc.type==='esensor'||nc.type==='ekontakt')
+      &&nc.cfg&&nc.cfg.target!=null)nc.cfg.target=map[nc.cfg.target]!=null?map[nc.cfg.target]:null;
     if(nc.type==='ventil'&&nc.cfg){
       if(nc.cfg.senL!=null)nc.cfg.senL=map[nc.cfg.senL]!=null?map[nc.cfg.senL]:null;
       if(nc.cfg.senR!=null)nc.cfg.senR=map[nc.cfg.senR]!=null?map[nc.cfg.senR]:null;
@@ -5535,7 +6653,7 @@ function aufgCtx(){
     const bk={};
     for(const c of cs)for(const p of DEFS[c.type].ports(c.cfg)){
       const[x,y]=rotP(p.x,p.y,c.rot);
-      const k=Math.round(c.x+x)+','+Math.round(c.y+y);
+      const k=domKey(c)+Math.round(c.x+x)+','+Math.round(c.y+y);
       (bk[k]=bk[k]||[]).push(nk(c.id,p.n));
     }
     for(const k in bk){const g=bk[k];for(let i=1;i<g.length;i++)uni(g[0],g[i]);}
@@ -5554,7 +6672,7 @@ function aufgCtx(){
       const bk={};
       for(const c of cs)for(const p of DEFS[c.type].ports(c.cfg)){
         const[x,y]=rotP(p.x,p.y,c.rot);
-        const k=Math.round(c.x+x)+','+Math.round(c.y+y);
+        const k=domKey(c)+Math.round(c.x+x)+','+Math.round(c.y+y);
         (bk[k]=bk[k]||[]).push(nk(c.id,p.n));
       }
       for(const k in bk){const g=bk[k];for(let i=1;i<g.length;i++)add(g[0],g[i]);}
@@ -6035,7 +7153,7 @@ el('aufgBg').addEventListener('click',e=>{
   if(e.target.closest('#btnTutJa')||e.target.closest('#btnTutNein')){
     tutOn=!!e.target.closest('#btnTutJa');
     aufgFirst=false;
-    if(tutOn){simpleMode=true;aufgTab='tut';}
+    if(tutOn){simpleMode=true;aufgTab='tut';el('lib').classList.remove('open');applyLibW();}
     tutSave();saveWS();renderTabs();applyMode();aufgRender(true);
     if(!tutOn)aufgClose();
     return;
@@ -6045,7 +7163,7 @@ el('aufgBg').addEventListener('click',e=>{
   if(tb){aufgTab=tb.dataset.atab;aufgSel=null;aufgRender(true);return;}
   if(e.target.closest('#btnTut')){
     tutOn=!tutOn;
-    if(tutOn)simpleMode=true;
+    if(tutOn){simpleMode=true;el('lib').classList.remove('open');applyLibW();}
     tutSave();saveWS();renderTabs();applyMode();aufgRender(true);
     return;
   }
@@ -6171,12 +7289,14 @@ el('lib').addEventListener('click',e=>{
   else if(t.id==='libExportAll')exportLib(true);
   else if(t.dataset.place!=null){
     if(simOn&&activeTab===simTabIdx)return;
+    if(tutOn)return;
     placingSnip=snips[+t.dataset.place];
     placing=null;pending=null;
     document.querySelectorAll('.pal').forEach(x=>x.classList.remove('on'));
     render();
   }
   else if(t.dataset.open!=null){
+    if(tutOn)return;
     const p=libPlans[+t.dataset.open];
     addTab(JSON.parse(JSON.stringify(p.state)),p.name);
   }
@@ -6240,6 +7360,61 @@ el('lib').addEventListener('drop',e=>{
   updateDelBtns();
 });
 el('lib').addEventListener('dragend',()=>{libDnD=null;clearDropMarks();});
+el('palParts').addEventListener('pointerdown',e=>{
+  if(!devMode)return;
+  if(e.target.closest('[data-adv]'))return;
+  const nd=e.target.closest('#palParts .pal,#palParts .grp');
+  if(!nd||!nd.parentElement||!nd.parentElement.id)return;
+  palDrag={nd,x:e.clientX,y:e.clientY,on:false,box:nd.parentElement,ziel:null,nach:false};
+});
+window.addEventListener('pointermove',e=>{
+  if(!palDrag)return;
+  if(!palDrag.on){
+    if(Math.hypot(e.clientX-palDrag.x,e.clientY-palDrag.y)<5)return;
+    palDrag.on=true;
+    palDrag.block=palBlock(palDrag.nd);
+    for(const k of palDrag.block)k.classList.add('paldrag');
+  }
+  palClearMarks();
+  palDrag.ziel=null;
+  const t=document.elementFromPoint(e.clientX,e.clientY);
+  const over=t&&t.closest&&t.closest('#palParts .pal,#palParts .grp');
+  if(!over||over.parentElement!==palDrag.box||palDrag.block.indexOf(over)>=0)return;
+  const r=over.getBoundingClientRect();
+  /* Überschriften spannen die ganze Breite — dort entscheidet oben/unten, sonst links/rechts */
+  const nach=over.classList.contains('grp')?(e.clientY>r.top+r.height/2):(e.clientX>r.left+r.width/2);
+  over.classList.add(nach?'palafter':'palbefore');
+  palDrag.ziel=over;palDrag.nach=nach;
+});
+window.addEventListener('pointerup',()=>{
+  if(!palDrag)return;
+  const d=palDrag;palDrag=null;
+  palClearMarks();
+  for(const k of(d.block||[]))k.classList.remove('paldrag');
+  if(d.on){
+    palSuppress=true;
+    if(d.ziel){
+      const ref=d.nach?d.ziel.nextSibling:d.ziel;
+      for(const k of d.block)d.box.insertBefore(k,ref);
+      palSaveOrd();applyMode();
+    }
+  }
+});
+el('split').addEventListener('pointerdown',e=>{
+  splitDrag=true;
+  try{el('split').setPointerCapture(e.pointerId);}catch(err){}
+  e.preventDefault();
+});
+window.addEventListener('pointermove',e=>{
+  if(!splitDrag)return;
+  const r=el('canvasWrap').getBoundingClientRect();
+  epSplit=Math.max(0.18,Math.min(0.82,(e.clientX-r.left)/r.width));
+  applySplit();applyView();positionFrmBar();
+});
+window.addEventListener('pointerup',()=>{
+  if(!splitDrag)return;
+  splitDrag=false;saveWS();render();
+});
 el('lib').addEventListener('pointerdown',e=>{
   if(e.target.id==='libGrip'){
     libDrag={x0:e.clientX,w0:libW};
@@ -6368,6 +7543,8 @@ el('selSpeed').addEventListener('change',applySpeed);
 el('selSpeed').addEventListener('input',applySpeed);
 document.querySelectorAll('.pal').forEach(b=>{
   b.addEventListener('click',e=>{
+    /* Wer eben eine Kachel verschoben hat, wollte kein Werkzeug wählen */
+    if(palSuppress){palSuppress=false;return;}
     const bd=e.target&&e.target.closest&&e.target.closest('[data-adv]');
     if(bd){
       const ty=bd.dataset.adv;
@@ -6416,7 +7593,8 @@ try{
     if(o&&o.ws===1&&Array.isArray(o.tabs)&&o.tabs.length){
       freshUser=false;
       defV=o.defv||1;
-      tabs=o.tabs.map(t=>({name:t.name||'Plan',state:t.state,undo:[],redo:[]}));
+      tabs=o.tabs.map(t=>({name:t.name||'Plan',state:t.state,ep:!!t.ep,undo:[],redo:[]}));
+      if(o.epSplit)epSplit=Math.max(0.18,Math.min(0.82,o.epSplit));
       activeTab=Math.min(o.active||0,tabs.length-1);
       snips=Array.isArray(o.snippets)?o.snippets:[];
       libPlans=Array.isArray(o.plans)?o.plans:[];
@@ -6470,6 +7648,42 @@ try{
     localStorage.setItem('pneu-portv','2');
   }
 }catch(e){}
+/* 19.08.2026 hieß die Näherungsschalter-Betätigung intern 'magnet', der Rollenhebel
+   'rollenstoessel'. Seit der Elektropneumatik ist 'magnet' die Magnetspule — die Umbenennung
+   darf deshalb nur EIN einziges Mal laufen. Vorher lief sie bei jedem Laden mit und hat jede
+   neu gewählte Magnetbetätigung wieder in einen Näherungsschalter verwandelt. */
+try{
+  if(localStorage.getItem('pneu-actv')!=='2'){
+    const altActs=st=>{
+      if(!st||!Array.isArray(st.comps))return;
+      for(const c of st.comps){
+        if(c.type!=='ventil'||!c.cfg)continue;
+        for(const sd of['actL','actR']){
+          const arr=c.cfg[sd];
+          if(!Array.isArray(arr))continue;
+          for(let i=0;i<arr.length;i++){
+            if(arr[i]==='magnet')arr[i]='naeherung';
+            else if(arr[i]==='rollenstoessel')arr[i]='rollenhebel';
+          }
+        }
+        /* Reparatur: Wo die Umbenennung schon zugeschlagen hat, zeigt der Verweis noch auf
+           eine Magnetspule — daran ist eine zerstörte Magnetbetätigung zu erkennen. Ein
+           echter Näherungsschalter verweist nie auf eine Spule. */
+        for(const[sd,sk]of[['actL','senL'],['actR','senR']]){
+          const arr=c.cfg[sd];
+          if(!Array.isArray(arr))continue;
+          const li=st.comps.find(x=>x.id===c.cfg[sk]);
+          if(!li||li.type!=='espule')continue;
+          for(let i=0;i<arr.length;i++)if(arr[i]==='naeherung')arr[i]='magnet';
+        }
+      }
+    };
+    for(const t of tabs)altActs(t.state);
+    for(const sn of snips)altActs(sn);
+    for(const pl of libPlans)altActs(pl.state);
+    localStorage.setItem('pneu-actv','2');
+  }
+}catch(e){}
 if(!tabs.length)tabs=[{name:'Plan 1',state:{comps:[],wires:[],nextId:1},undo:[],redo:[]}];
 if(activeTab>=tabs.length)activeTab=0;
 state=tabs[activeTab].state;
@@ -6480,10 +7694,15 @@ if(localStorage.getItem('pneu-tut')==null){
   el('aufgBg').classList.add('open');
   aufgRender(true);
 }
+document.body.classList.toggle('ep',epOn());
+document.body.classList.toggle('dev',devMode);
+palApplyOrd();
+applySplit();applyPalPane();
 renderTabs();
 renderLib();
 applyMode();
 applySpeed();
 applyView();
 render();renderProps();
+window.addEventListener('resize',()=>{applyView();positionFrmBar();});
 </script>
