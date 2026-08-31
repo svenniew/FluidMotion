@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<title>Pneumatik-Editor</title>
+<title>FluidMotion Editor</title>
 <style>
 :root{
   --bg:#eef1f4; --panel:#fbfcfd; --text:#22303c; --muted:#6b7885;
@@ -451,6 +451,9 @@ body.rbaroffen #paneW.amrand{margin-right:var(--rbarw,360px)}
 /* Das Diagramm selbst */
 /* Versorgungsleitung: Griffe erst beim Überfahren */
 .pgrip .pg{stroke:var(--accent);stroke-width:2.2;opacity:0}
+.fgrip .fg{fill:var(--panel);stroke:var(--accent);stroke-width:1.4;opacity:0}
+.fgrip .fh{fill:transparent;stroke:none}
+[data-comp]:hover .fgrip .fg,[data-comp].sel .fgrip .fg{opacity:1}
 .pgrip .ph{fill:transparent;cursor:ew-resize}
 [data-comp]:hover .pgrip .pg{opacity:1}
 /* Das Punktraster des Diagramms — dieselbe Anmutung wie in den anderen Plänen */
@@ -677,8 +680,17 @@ body.wsdpick #paneL,body.wsdpick #paneE{cursor:copy}
 h1{font-size:var(--fs-kopf);margin:0 0 10px;letter-spacing:.01em}
 /* Der Name steht als erstes in der oberen Leiste — dann braucht die linke Leiste
    nichts mehr zu tragen als ihre Docks und kann ganz zugehen. */
-#tabbar .apptitel{font-size:var(--fs-titel);font-weight:600;letter-spacing:.01em;
-  padding:0 10px 0 3px;white-space:nowrap;user-select:none;color:var(--text)}
+#tabbar .apptitel{display:flex;align-items:center;gap:6px;font-size:var(--fs-titel);
+  font-weight:600;letter-spacing:.01em;padding:0 10px 0 3px;white-space:nowrap;
+  user-select:none;color:var(--text)}
+#tabbar .applogo{width:19px;height:19px;flex-shrink:0;display:block;border-radius:5px}
+/* „Fluid" in der Schriftfarbe, „Motion" im Verlauf des Zeichens, „Editor" als
+   gesperrte Beizeile — wie im Entwurf. */
+#tabbar .mname{font-style:italic}
+#tabbar .mmotion{background:linear-gradient(100deg,#1f6fe0 15%,#15c0a4 85%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+#tabbar .medit{font-size:var(--fs-mikro);font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);margin-left:2px}
 h3{font-size:var(--fs-titel);margin:0 0 10px}
 .grp{font-size:var(--fs-mikro);text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:14px 0 4px}
 button{font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:5px 9px;cursor:pointer;transition:border-color .12s,background .12s}
@@ -933,6 +945,13 @@ body.bedpick #svg,body.bedpick #svgE,body.bedpick #svgG{cursor:copy}
 .bedfeld{font-family:Arial,'DejaVu Sans',Verdana,sans-serif;font-size:15px;letter-spacing:.2px}
 /* Sonderzeichen unter einem Bedingungsfeld */
 .zeichen{display:flex;flex-wrap:wrap;gap:4px;margin:-2px 0 8px}
+/* Die Namen aus Bedingung und Aktion, zum Einfaerben */
+.gnfarb{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 8px}
+.gnfarb button{height:26px;padding:0 9px;border-radius:6px;border:1px solid var(--border);
+  background:var(--panel);font:600 var(--fs-neben) system-ui,sans-serif;cursor:pointer}
+.gnfarb button:hover{border-color:var(--accent)}
+.gnfarb button.an{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.gnpalette{margin-top:-4px}
 .zeichen button{min-width:28px;height:26px;padding:0 6px;border-radius:6px;border:1px solid var(--border);
   background:var(--bg);color:var(--text);cursor:pointer;font-family:inherit;font-size:14px;line-height:1}
 .zeichen button:hover{border-color:var(--accent);background:var(--panel)}
@@ -994,6 +1013,11 @@ g.comp{cursor:move}
 #frmBar button{padding:4px 6px;line-height:1}
 #frmBar button.picking{outline:2px solid #e5534b;outline-offset:-1px;color:#e5534b}
 /* Die Feld-Knoepfe tragen die Farbe ihres Plans — wie die Knoepfe oben in der Leiste */
+/* Das Schriftfeld auf dem Blatt */
+.pschrift rect{fill:var(--paper);stroke:var(--frame);stroke-width:1.1}
+.pschrift text{font-family:system-ui,sans-serif;fill:var(--ink);stroke:none}
+.pschrift .s1{font-weight:600}
+.pschrift .s2{fill:var(--lbl)}
 #frmWsd{color:var(--akzw)}
 #frmGc{color:var(--akzg)}
 #frmBar button#frmWsd.picking{outline-color:var(--akzw);color:var(--akzw)}
@@ -1039,10 +1063,21 @@ g.comp{cursor:move}
 .layf .ic{width:15px;height:15px}
 .layf.ziel{background:color-mix(in srgb,var(--accent) 26%,var(--panel));border-color:var(--accent)}
 .laytip{font-size:var(--fs-mini);margin:9px 0 0}
+/* Das Notizblatt fuellt sein Dock aus; getippt wird in Grundschrift, damit es
+   sich liest wie ein Zettel und nicht wie Quelltext. */
+#notizBox{display:flex;flex-direction:column;min-height:0}
+#notizFeld{flex:1;min-height:150px;width:100%;box-sizing:border-box;resize:none;
+  font:var(--fs-text)/1.5 system-ui,sans-serif;color:var(--text);background:var(--paper);
+  border:1px solid var(--border);border-radius:8px;padding:9px 10px;outline:none}
+#notizFeld:focus{border-color:var(--accent)}
 #printArea{display:none;
   --ink:#000;--paper:#fff;--wire:#000;--wireoff:#666;--grid:#aaa;--muted:#333;
   --inkmuted:#555;--lbl:#333;--accent:#000;--sel:#000;--kb:#000;--elakz:#000;
-  --link:#000;--frame:#000;--wpf:#000;--hot:#000;--border:#888;--text:#000}
+  --link:#000;--frame:#000;--wpf:#000;--hot:#000;--border:#888;--text:#000;
+  /* Papier ist immer weiss: die dunklen Toene, auch wenn der Bildschirm dunkel steht */
+  --tf-rot:#c62f24;--tf-orange:#bd6300;--tf-gelb:#8a6c00;--tf-limette:#5c8a00;
+  --tf-gruen:#1e7a45;--tf-tuerkis:#0d767d;--tf-blau:#2160c4;--tf-violett:#6d3fc0;
+  --tf-magenta:#ad2a76;--tf-braun:#7a5230;--tf-grau:#6b7280}
 #printArea .wslbl text,#printArea .wslbl.ok text,#printArea .wslbl.falsch text{fill:#000}
 #printArea .wsig{opacity:1}
 @media print{
@@ -1104,6 +1139,9 @@ g.comp{cursor:move}
   <div class="grp">Beschriftung</div>
   <button class="pal" data-type="text">Textfeld</button>
   <button class="pal" data-type="pfeil" title="Pfeil — erster Klick setzt den Anfang, zweiter das Ziel. Auf einem Bauteil oder Textfeld abgesetzt, wandert das Ende mit.">Pfeil</button>
+  <button class="pal" data-type="form" data-var="rechteck" title="Rechteck zum Einrahmen — liegt hinter den Bauteilen, Größe an den Ecken ziehen">Rechteck</button>
+  <button class="pal" data-type="form" data-var="oval" title="Oval oder Kreis zum Hervorheben">Oval</button>
+  <button class="pal" data-type="formel" title="Formel — Brüche, Wurzeln, Hoch- und Tiefstellung in gewohnter Kurzschrift">Formel</button>
   </div></div>
   <div id="palE" class="dock">
   <div class="dockhead" data-dockdrag="palE"><span class="dknam" data-dkico="bolt">Elektropneumatik</span><span class="dockbtn"><button data-dockweg="palE" class="pxclose" title="Baukasten schließen — der Knopf am Plan holt ihn zurück">×</button></span></div>
@@ -1135,6 +1173,9 @@ g.comp{cursor:move}
   <div class="grp">Beschriftung</div>
   <button class="pal" data-type="text">Textfeld</button>
   <button class="pal" data-type="pfeil" title="Pfeil — erster Klick setzt den Anfang, zweiter das Ziel. Auf einem Bauteil oder Textfeld abgesetzt, wandert das Ende mit.">Pfeil</button>
+  <button class="pal" data-type="form" data-var="rechteck" title="Rechteck zum Einrahmen — liegt hinter den Bauteilen, Größe an den Ecken ziehen">Rechteck</button>
+  <button class="pal" data-type="form" data-var="oval" title="Oval oder Kreis zum Hervorheben">Oval</button>
+  <button class="pal" data-type="formel" title="Formel — Brüche, Wurzeln, Hoch- und Tiefstellung in gewohnter Kurzschrift">Formel</button>
   </div></div>
   <div id="palG" class="dock">
   <div class="dockhead" data-dockdrag="palG"><span class="dknam" data-dkico="grafcet">GRAFCET</span><span class="dockbtn"><button data-dockweg="palG" class="pxclose" title="Baukasten schließen — der Knopf am Plan holt ihn zurück">×</button></span></div>
@@ -1152,6 +1193,9 @@ g.comp{cursor:move}
   <button class="pal" data-type="gsprung" title="Sprungmarke — Pfeil auf einen Schritt weiter oben oder unten">Sprung</button>
   <button class="pal" data-type="text">Textfeld</button>
   <button class="pal" data-type="pfeil" title="Pfeil — erster Klick setzt den Anfang, zweiter das Ziel.">Pfeil</button>
+  <button class="pal" data-type="form" data-var="rechteck" title="Rechteck zum Einrahmen — liegt hinter den Zeichen, Größe an den Ecken ziehen">Rechteck</button>
+  <button class="pal" data-type="form" data-var="oval" title="Oval oder Kreis zum Hervorheben">Oval</button>
+  <button class="pal" data-type="formel" title="Formel — Brüche, Wurzeln, Hoch- und Tiefstellung in gewohnter Kurzschrift">Formel</button>
   </div></div>
   <div id="palW" class="dock">
   <div class="dockhead" data-dockdrag="palW"><span class="dknam" data-dkico="diag">Funktionsdiagramm</span><span class="dockbtn"><button data-dockweg="palW" class="pxclose" title="Baukasten schließen — der Knopf am Plan holt ihn zurück">×</button></span></div>
@@ -1179,7 +1223,7 @@ g.comp{cursor:move}
 
 <div id="mid">
   <div id="canvasWrap"><div id="paneL"><svg id="svg" xmlns="http://www.w3.org/2000/svg"></svg><div class="panetag" data-ph="p"></div></div><div id="split" title="Grenze verschieben"></div><div id="paneR"><div id="paneE"><svg id="svgE" xmlns="http://www.w3.org/2000/svg"></svg><div class="panetag" data-ph="e"></div></div><div id="splitH" title="Grenze verschieben"></div><div id="paneW"><div class="panetag" data-ph="w"></div><svg id="svgW" xmlns="http://www.w3.org/2000/svg"></svg></div></div><div id="paneA"></div><div id="splitA" title="Grenze verschieben"></div><div id="paneG"><svg id="svgG" xmlns="http://www.w3.org/2000/svg"></svg><div class="panetag" data-ph="g"></div></div><div id="dockFrei"></div><div id="dockZonen"><div id="dockVorschau"><span></span></div></div><div id="layMenu"></div><div id="float"></div><div id="tip"></div><div id="gloss"></div><div id="pins"></div><div id="symed"></div><div id="rbar"><div class="bgrip" id="rGrip" title="Breite ziehen — rastet auf der Breite der linken Leiste ein"></div>
-      <div id="rbody"><div id="rTeile"></div><div id="lib" class="dock dockpanel"></div><div id="aufgBox" class="dock dockpanel"></div>  <div id="helpBox" class="dock dockpanel"><header data-dockdrag="helpBox"><span>Bedienung</span><span class="muted" style="font-size:11px;margin-left:8px">Stand 09.09.2026 &middot; 11:10</span><button class="close" id="btnHelpClose">×</button></header><p class="muted" style="margin:0 0 10px">Klick auf einen Abschnitt klappt ihn auf.</p><details class="hsec"><summary>Zeichnen</summary><ul>
+      <div id="rbody"><div id="rTeile"></div><div id="lib" class="dock dockpanel"></div><div id="aufgBox" class="dock dockpanel"></div><div id="notizBox" class="dock dockpanel"><header data-dockdrag="notizBox"><span>Notizen</span><span class="muted" id="notizStand" style="font-size:11px;margin-left:8px"></span><button class="close" id="btnNotizClose" title="Schließen">×</button></header><textarea id="notizFeld" spellcheck="false" placeholder="Regeln, Merksätze, Erinnerungen …&#10;&#10;Was hier steht, bleibt beim nächsten Öffnen stehen."></textarea></div>  <div id="helpBox" class="dock dockpanel"><header data-dockdrag="helpBox"><span>Bedienung</span><span class="muted" style="font-size:11px;margin-left:8px">Stand 09.09.2026 &middot; 11:10</span><button class="close" id="btnHelpClose">×</button></header><p class="muted" style="margin:0 0 10px">Klick auf einen Abschnitt klappt ihn auf.</p><details class="hsec"><summary>Zeichnen</summary><ul>
       <li><b>Tutorial:</b> Der Knopf „Aufgaben" oben rechts führt in 16 Schritten durch die Grundlagen. Im Tutorial zeigt die Palette nur die schon freigeschalteten Bauteile, und der Modus bleibt auf „einfach"; verlassen kannst du es im selben Fenster jederzeit. Der zweite Reiter enthält die Zusatzaufgaben.</li>
   <li>Bauteil in der Palette wählen, dann aufs Blatt klicken — <kbd>Shift</kbd> hält den Modus für mehrfaches Platzieren, <kbd>R</kbd> dreht schon den Schatten.</li>
   <li>Liegt ein Anschluss des Schattens genau auf einer Leitung, hängt sich das Bauteil dort ein; liegen zwei gegenüberliegende Anschlüsse auf demselben Stück, wird es in die Leitung eingebaut. Das geht auch, wenn man ein noch unverdrahtetes Bauteil auf eine Leitung zieht.</li>
@@ -1213,7 +1257,7 @@ g.comp{cursor:move}
       <li>„Bibliothek" öffnet die rechte Leiste: Auswahl als <b>Schnellbaustein</b> speichern (z.&nbsp;B. „Oder-Schaltung") und über die Plus-Schaltfläche beliebig oft wieder platzieren.</li>
       <li>Pläne lassen sich dort ablegen, umbenennen, in neuen Tabs öffnen sowie einzeln (Häkchen) oder komplett exportieren und importieren — Importiertes erscheint erst in der Liste, ohne sich zu öffnen.</li>
       <li>Die Reihenfolge der Einträge lässt sich per Ziehen (Griff links bzw. ganze Zeile) innerhalb der jeweiligen Liste ändern.</li>
-      <li>Beim Speichern schlägt der Dateidialog den Dokumente-Ordner vor — dort z.&nbsp;B. einen Ordner „Pneumatik-Editor" anlegen; der Dialog merkt sich den zuletzt genutzten Ort.</li>
+      <li>Beim Speichern schlägt der Dateidialog den Dokumente-Ordner vor — dort z.&nbsp;B. einen Ordner „FluidMotion Editor" anlegen; der Dialog merkt sich den zuletzt genutzten Ort.</li>
     </ul></details><details class="hsec"><summary>Simulation</summary><ul>
       <li>„Simulation starten" gibt Druck auf die Quellen: Die Luft breitet sich sichtbar aus, druckführende Leitungen werden hervorgehoben.</li>
       <li>Drücke werden in <b>bar</b> gerechnet (0–6): Quellen liefern einstellbaren Druck, Drosseln lassen nur einen Anteil durch; Zylinder (Mindestdruck), druckbetätigte Ventile und Druckschaltventil (Ansprech-/Schaltdruck) sind konfigurierbar. Leitungen werden je nach Druck unterschiedlich kräftig hervorgehoben; Zeiger über Leitung, Anschluss oder Zylinder zeigt den anliegenden Druck.</li>
@@ -1283,6 +1327,7 @@ g.comp{cursor:move}
       <button id="frmRot" title="Hoch-/Querformat wechseln (Mitte bleibt)"></button>
       <button id="frmWsd" title="Feld für das Weg-Schritt-Diagramm aufs Blatt legen"></button>
       <button id="frmGc" title="Feld für den GRAFCET aufs Blatt legen"></button>
+      <button id="frmTitel" title="Schriftfeld unten rechts: Zeichen, Name, Plan und Datum"></button>
       <button id="frmPrint" title="Drucken / als PDF speichern"></button>
       <button id="frmDel" title="Druckrahmen entfernen"></button>
     </div>
@@ -1297,47 +1342,110 @@ g.comp{cursor:move}
 
 <script>
 'use strict';
-/* App-Icon (Favicon + Manifest) zur Laufzeit erzeugen — Schaltbild "1-2, 4-5 (3 gesperrt)" */
+/* App-Icon (Favicon + Manifest): das Zeichen der Marke — ein F und ein M,
+   kursiv, blau nach tuerkis auf dunkler Kachel. Fuer den Reiter als SVG, damit
+   es in jeder Groesse scharf bleibt; dieselbe Zeichnung noch einmal auf
+   Leinwand, weil Startbild und Manifest ein Rasterbild brauchen. */
+const APPICON=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">`
+  +`<defs><linearGradient id="fm" x1="6" y1="8" x2="58" y2="56" gradientUnits="userSpaceOnUse">`
+  +`<stop offset="0" stop-color="#1f6fe0"/><stop offset=".5" stop-color="#1a8fd0"/>`
+  +`<stop offset="1" stop-color="#15c0a4"/></linearGradient></defs>`
+  +`<rect width="64" height="64" rx="14" fill="#0a111c"/>`
+  +`<g transform="translate(2 0) skewX(-9)" fill="url(#fm)">`
+  +`<rect x="11" y="12" width="8.5" height="40" rx="2.5"/>`
+  +`<rect x="11" y="12" width="21" height="8.5" rx="2.5"/>`
+  +`<rect x="11" y="27" width="15" height="7.5" rx="2.5"/></g>`
+  +`<g transform="translate(2 0) skewX(-9)" fill="none" stroke="url(#fm)" stroke-width="8.5"`
+  +` stroke-linejoin="round" stroke-linecap="round"><path d="M36,52 V21 l9,13 9,-13 V52"/></g></svg>`;
+/* Dasselbe Zeichen inline fuer die Kopfzeile: eigene Kennung fuer den Verlauf,
+   damit sie sich nicht mit einer zweiten im Dokument beisst, und eine Klasse
+   zum Groessesetzen. */
+const APPMARK=APPICON.replace('<svg ','<svg class="applogo" ')
+  .replace('id="fm"','id="fmk"').split('url(#fm)').join('url(#fmk)');
+/* Dasselbe noch einmal fuers Schriftfeld auf dem Blatt — ohne die aeussere Huelle,
+   damit es sich in die Zeichenflaeche einsetzen laesst, und mit dritter Kennung. */
+const APPBLATT=APPICON.replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,'')
+  .replace('id="fm"','id="fmb"').split('url(#fm)').join('url(#fmb)');
 (function(){
   try{
+    const svgUrl='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(APPICON);
     const cv=document.createElement('canvas');
     cv.width=cv.height=256;
     const g=cv.getContext('2d');
-    g.fillStyle='#0e6fb8';
-    if(g.roundRect){g.beginPath();g.roundRect(0,0,256,256,48);g.fill();}
-    else g.fillRect(0,0,256,256);
-    g.strokeStyle='#fff';g.fillStyle='#fff';g.lineWidth=11;g.lineCap='round';g.lineJoin='round';
-    const X=ox=>48+ox*4,TOP=48,BOT=208;
-    g.strokeRect(48,48,160,160);
-    const arrow=(x1,y1,x2,y2)=>{
-      const a=Math.atan2(y2-y1,x2-x1),s=30;
-      g.beginPath();g.moveTo(x1,y1);g.lineTo(x2-12*Math.cos(a),y2-12*Math.sin(a));g.stroke();
+    g.scale(4,4);                       /* die Zeichnung misst 64, das Bild 256 */
+    g.fillStyle='#0a111c';
+    if(g.roundRect){g.beginPath();g.roundRect(0,0,64,64,14);g.fill();}
+    else g.fillRect(0,0,64,64);
+    const far=g.createLinearGradient(6,8,58,56);
+    far.addColorStop(0,'#1f6fe0');far.addColorStop(.5,'#1a8fd0');far.addColorStop(1,'#15c0a4');
+    g.fillStyle=far;g.strokeStyle=far;
+    g.save();
+    g.translate(2,0);
+    g.transform(1,0,-Math.tan(9*Math.PI/180),1,0,0);   /* kursiv wie im Schriftzug */
+    const balken=(x,y,w,h,r)=>{
       g.beginPath();
-      g.moveTo(x2,y2);
-      g.lineTo(x2-s*Math.cos(a-0.42),y2-s*Math.sin(a-0.42));
-      g.lineTo(x2-s*Math.cos(a+0.42),y2-s*Math.sin(a+0.42));
-      g.closePath();g.fill();
+      if(g.roundRect)g.roundRect(x,y,w,h,r);else g.rect(x,y,w,h);
+      g.fill();
     };
-    arrow(X(20),BOT,X(10),TOP);
-    arrow(X(30),TOP,X(34),BOT);
-    g.beginPath();g.moveTo(X(6),BOT);g.lineTo(X(6),BOT-34);g.stroke();
-    g.beginPath();g.moveTo(X(6)-22,BOT-34);g.lineTo(X(6)+22,BOT-34);g.stroke();
-    const url=cv.toDataURL('image/png');
+    balken(11,12,8.5,40,2.5);balken(11,12,21,8.5,2.5);balken(11,27,15,7.5,2.5);
+    g.lineWidth=8.5;g.lineJoin='round';g.lineCap='round';
+    g.beginPath();
+    g.moveTo(36,52);g.lineTo(36,21);g.lineTo(45,34);g.lineTo(54,21);g.lineTo(54,52);
+    g.stroke();
+    g.restore();
+    const png=cv.toDataURL('image/png');
     let l=document.querySelector('link[rel="icon"]');
     if(!l){l=document.createElement('link');l.rel='icon';document.head.appendChild(l);}
-    l.type='image/png';l.href=url;
-    const at=document.createElement('link');at.rel='apple-touch-icon';at.href=url;document.head.appendChild(at);
-    const man={name:'Pneumatik-Editor',short_name:'Pneumatik',display:'standalone',background_color:'#ffffff',theme_color:'#0e6fb8',icons:[{src:url,sizes:'256x256',type:'image/png'}]};
+    l.type='image/svg+xml';l.href=svgUrl;
+    const at=document.createElement('link');at.rel='apple-touch-icon';at.href=png;
+    document.head.appendChild(at);
+    const man={name:'FluidMotion Editor',short_name:'FluidMotion',display:'standalone',
+      background_color:'#0a111c',theme_color:'#0a111c',
+      icons:[{src:png,sizes:'256x256',type:'image/png'}]};
     const lm=document.createElement('link');
     lm.rel='manifest';
     lm.href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(man));
     document.head.appendChild(lm);
   }catch(e){}
 })();
+/* ---------- Notizen ----------
+   Das Blatt gehoert zum Editor, nicht zum einzelnen Plan: eigener Schluessel,
+   gespeichert kurz nach dem Tippen. */
+const NOTIZKEY='pneu-notiz';
+let notizUhr=null;
+function notizStand(txt){
+  const a=el('notizStand'),f=el('notizFeld');
+  if(!a)return;
+  if(txt){a.textContent=txt;return;}
+  const t=((f&&f.value)||'').trim();
+  const w=t?t.split(/\s+/).length:0;
+  a.textContent=w?(w===1?'1 Wort · gesichert':w+' Wörter · gesichert'):'noch nichts notiert';
+}
+function notizSichern(){
+  const f=el('notizFeld');
+  if(!f)return;
+  try{localStorage.setItem(NOTIZKEY,f.value);}catch(e){}
+  notizStand();
+}
+function notizLaden(){
+  const f=el('notizFeld');
+  if(!f)return;
+  try{f.value=localStorage.getItem(NOTIZKEY)||'';}catch(e){}
+  notizStand();
+  f.addEventListener('input',()=>{
+    notizStand('wird gesichert …');
+    clearTimeout(notizUhr);
+    notizUhr=setTimeout(notizSichern,400);
+  });
+  f.addEventListener('blur',notizSichern);
+  window.addEventListener('beforeunload',notizSichern);
+}
 const KEY='pneumatik-editor-v1';
 /* Einheitliche Strich-Icons statt Emoji */
 const SVGI=p=>`<svg class="ic" viewBox="0 0 16 16" aria-hidden="true">${p}</svg>`;
 const ICO={
+  notiz:SVGI('<path d="M3.4 2.2h6.4l2.8 2.8v8.8H3.4z"/><path d="M9.6 2.4v3h3"/>'+
+    '<path d="M5.6 8h5M5.6 10.6h3.4"/>'),
   book:SVGI('<path d="M2 3h3.6a2 2 0 0 1 2 2v8.2a2 2 0 0 0-2-1.6H2z"/><path d="M14 3h-3.6a2 2 0 0 0-2 2v8.2a2 2 0 0 1 2-1.6H14z"/>'),
   liste:SVGI('<path d="M6.4 3.6h7.4M6.4 8h7.4M6.4 12.4h7.4"/><path d="M2.1 3.7l1 1 1.7-2M2.1 8.1l1 1 1.7-2M2.1 12.5l1 1 1.7-2"/>'),
   bolt:SVGI('<path d="M9.3 1.7 4.2 8.7h3.3l-.8 5.6 5.1-7H8.5z"/>'),
@@ -1831,7 +1939,7 @@ let wsigSel=null,wsigHov=null;
 let viewW={x:0,y:0,w:0,h:0},wsdSicht='breite',wPan=null,wsdMassW=0,wsdMassH=0;
 function wsdSichtSetz(k){wsdSicht=k;render();}
 /* Zieht gerade jemand an einem Ende einer Versorgungsleitung? */
-let pgrip=null;
+let pgrip=null,fgrip=null;
 /* Eine Signallinie entsteht in vier Klicks: Punkt 1, sein versetzter Punkt, Punkt 2,
    dessen versetzter Punkt. Gezeichnet wird sie als 1 → versetzt(1) → versetzt(2) → 2.
    `wsdSig` hält die angefangene Linie; `zu` ist der Mauszeiger für die Vorschau. */
@@ -1869,6 +1977,7 @@ function cfgFor(type,varr){
     g.nr=k;
   }
   if(varr&&type==='gverz')g.art=varr;
+  if(varr&&type==='form')g.art=varr;
   if(varr&&ELVAR[type])g[ELVAR[type]]=varr;
   return g;
 }
@@ -1886,16 +1995,16 @@ let libW=360,palW=334,barDrag=null;
    Wo welches steckt, gilt fuer den ganzen Browser — nicht je Blatt. */
 /* Sechs Docks: die drei Baukaesten haengen je an einem Plan, die drei Fenster
    (Bibliothek, Aufgaben, Bedienung) gehen ueber ihre Knoepfe auf und zu. */
-const DOCKID=['simBox','palP','palE','palW','palG','lib','aufgBox','helpBox'];
+const DOCKID=['simBox','palP','palE','palW','palG','lib','aufgBox','notizBox','helpBox'];
 const DOCKPLAN={palP:'p',palE:'e',palW:'w',palG:'g'};
-const DOCKSTD={simBox:'links',palP:'links',palE:'links',palW:'links',palG:'links',lib:'rechts',aufgBox:'rechts',helpBox:'rechts'};
+const DOCKSTD={simBox:'links',palP:'links',palE:'links',palW:'links',palG:'links',lib:'rechts',aufgBox:'rechts',notizBox:'rechts',helpBox:'rechts'};
 const DOCKNAME={simBox:'Simulation',palP:'Pneumatik',palE:'Elektropneumatik',palW:'Funktionsdiagramm',
-  palG:'GRAFCET',lib:'Bibliothek',aufgBox:'Aufgaben',helpBox:'Bedienung'};
+  palG:'GRAFCET',lib:'Bibliothek',aufgBox:'Aufgaben',notizBox:'Notizen',helpBox:'Bedienung'};
 /* Die Knopf-Namen der drei Fenster und ihre Kennung */
-const PANELS={lib:'lib',aufg:'aufgBox',hilfe:'helpBox'};
+const PANELS={lib:'lib',aufg:'aufgBox',notiz:'notizBox',hilfe:'helpBox'};
 /* Die Simulation ist immer da — sie laesst sich verschieben, aber nicht schliessen.
    Die drei Baukaesten dagegen kann man zuklappen; der Knopf am Plan holt sie zurueck. */
-let dockAuf={simBox:true,lib:false,aufgBox:false,helpBox:false};
+let dockAuf={simBox:true,lib:false,aufgBox:false,notizBox:false,helpBox:false};
 let dockZu={palP:false,palE:false,palW:false,palG:false};
 const PANEID={p:'paneL',e:'paneE',w:'paneW',g:'paneG'};
 const palBox=id=>{const d=el(id);return d?d.querySelector('.pbox'):null;};
@@ -2109,13 +2218,18 @@ const isSel=(kind,id)=>selArr.some(s=>s.kind===kind&&s.id===id);
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 function labelPrefix(type,cfg){
   switch(type){
-    case'quelle':case'behaelter':return'AZ';
+    /* Skript: die Druckluftquelle ist die Versorgungseinheit -GQA, der Behaelter -AZ */
+    case'quelle':return'GQA';
+    case'behaelter':return'AZ';
     case'pschiene':return'P';
     case'daempfer':return'RQ';
     case'manometer':return'PG';
     case'zylinder':return'MM';
     case'sensor':case'stoesseltaster':case'rollentaster':case'kipptaster':return'BG';
-    case'drossel':case'drosselventil':return'RZ';
+    /* Tabellenbuch: das Drossel-Rueckschlagventil ist RN, die beidseitig wirkende
+       Drossel bleibt RZ */
+    case'drossel':return'RN';
+    case'drosselventil':return'RZ';
     /* Skript S. 59 ff.: Verarbeitungselemente -KH (auch das Zeitverzögerungsventil, Beispiel 7),
        das Druckschaltventil zählt als Messgrößen-Umformer und heißt dort -BP */
     case'rueckschlag':case'wechsel':case'zweidruck':case'schnell':case'zeitventil':return'KH';
@@ -2230,14 +2344,24 @@ function autoLabel(type,cfg){
    ein handbetätigtes Eingabeglied (-SJ) oder ein Stellglied (-QM). Beim Platzieren steht
    das noch nicht fest, also zieht die Bezeichnung nach — aber nur, solange sie die
    automatisch vergebene ist. Eine selbst gewählte („-1S2") bleibt unangetastet. */
-const AUTOLBL=/^-[A-Z]{2}\d+$/;
+const AUTOLBL=/^-([A-Z]{2,3})\d+$/;
 function relabelAuto(c){
-  if(!c||!AUTOLBL.test(c.label||''))return;
+  const m=AUTOLBL.exec((c&&c.label)||'');
+  if(!m)return;
   const soll=labelPrefix(c.type,c.cfg);
-  if(!soll||c.label.slice(1,3)===soll)return;
+  if(!soll||m[1]===soll)return;
   c.label=autoLabel(c.type,c.cfg);
 }
 function ensureLabels(){
+  /* Zwei Kuerzel wurden nachgezogen: die Druckluftquelle trug frueher das des
+     Behaelters (-AZ) und heisst jetzt -GQA, das Drossel-Rueckschlagventil hiess
+     -RZ und heisst nach Tabellenbuch -RN. Aeltere Plaene ziehen beim Laden nach;
+     selbst vergebene Namen bleiben unberuehrt. */
+  const NACHZUG={quelle:'AZ',drossel:'RZ'};
+  for(const c of state.comps){
+    const alt=NACHZUG[c.type];
+    if(alt&&new RegExp('^-'+alt+'\\d+$').test(c.label||''))c.label=autoLabel(c.type,c.cfg);
+  }
   /* Migration Altformat: frühere Endlagen-Sensoren (ohne gen-Marker) werden zu Rollenhebeltastern
      an identischer Position; zugehörige Ventil-Betätigung "sensor" wird zu "rollenhebel". */
   for(const c of state.comps)
@@ -2334,7 +2458,7 @@ function bauWarn(c){
     }
   }
   if(GEBERTYP.has(c.type)&&(!c.cfg||c.cfg.target==null))
-    return'Dieser Grenztaster überwacht keinen Zylinder — er meldet nie.';
+    return'Dieser Grenztaster überwacht keinen Zylinder — er meldet nie. Wird er von etwas anderem betätigt (Schutzgitter, Werkstück), im Fenster „anderes Betätigungsmittel“ wählen.';
   if((c.type==='egrenz'||c.type==='esensor')&&(!c.cfg||c.cfg.target==null))
     return'Dieser Geber überwacht keinen Zylinder — sein Kontakt schaltet nie.';
   if(c.type==='esensor'&&c.cfg&&c.cfg.art==='reed'&&c.cfg.target!=null){
@@ -2484,7 +2608,16 @@ function markeSvg(c){
   const an=simView&&c&&sensorActive(c);
   const st=an?' style="stroke:var(--hot);stroke-width:2.6"':'';
   let s=`<line x1="0" y1="-13" x2="0" y2="9"${st}/>`;
-  if(c&&c.type==='kipptaster'&&c.cfg){
+  const extern=c&&c.cfg&&c.cfg.target==='andere';
+  if(extern){
+    /* Betaetigt von aussen — ein kleiner Pfeil drueckt auf den Strich */
+    const fa=an?'stroke:var(--hot);stroke-width:1.8':'stroke-width:1.4';
+    s+=`<g class="gextern" style="${fa}"><title>von einem anderen Betätigungsmittel betätigt`+
+       ` — in der Simulation anklicken</title>`+
+       `<line x1="-7.6" y1="-2" x2="-3.4" y2="-2"/>`+
+       `<polygon points="-1.2,-2 -4,-3.7 -4,-0.3" style="fill:currentColor;stroke:none"/></g>`;
+  }
+  if(!extern&&c&&c.type==='kipptaster'&&c.cfg){
     const zu=(c.cfg.rich||'zu')!=='weg',ein=c.cfg.mode==='ein';
     const d=(ein?(zu?-1:1):(zu?1:-1));
     const sa=an?'stroke:var(--hot);stroke-width:1.8':'stroke-width:1.4';
@@ -2841,7 +2974,7 @@ const DEFS={
         /* Die Kupplung IST magnetisch — die vier Zeichen gehören fest zum Symbol */
         for(const sg of[-1,1])
           s+=magnetMark(px+PW/2,sg*22.2,-sg)+magnetMark(px+PW/2,sg*17.8,sg);
-        if((capC||rodC)&&D.e)s+=arrowLine(px-7,17,px+21,-17);
+        if((capC||rodC)&&D.e)s+=arrowLine(px-7,17,px+25.5,-25);
         s+='<line x1="-40" y1="20" x2="-40" y2="30"/><line x1="40" y1="20" x2="40" y2="30"/>';
         s+='<text x="-35" y="29">1</text><text x="45" y="29">2</text>';
         return s;
@@ -2871,7 +3004,7 @@ const DEFS={
       /* Dämpfungsblöcke sind Bauteile, keine Luft — deshalb mit Papierfarbe gefüllt */
       if(capC)s+=`<rect x="${px-9}" y="-12" width="9" height="24" style="fill:var(--paper)"/>`;
       if(rodC)s+=`<rect x="${px+PW}" y="-12" width="9" height="24" style="fill:var(--paper)"/>`;
-      if((capC||rodC)&&D.e)s+=arrowLine(px-8,17,px+18,-17);
+      if((capC||rodC)&&D.e)s+=arrowLine(px-8,17,px+24.5,-25);
       s+='<line x1="-40" y1="20" x2="-40" y2="30"/><text x="-35" y="29">1</text>';
       if(t!=='einfach')s+='<line x1="40" y1="20" x2="40" y2="30"/><text x="45" y="29">2</text>';
       /* einfachwirkend: Entlüftungsbohrung ohne Anschlussgewinde — Dreieck ohne Grundlinie, bündig am Zylinder */
@@ -3251,7 +3384,7 @@ const DEFS={
     cfg:()=>({text:'Aktion',art:'kont',zeit:'5s',bed:''}),
     ports:cfg=>[{n:'1',x:0,y:0,d:[-1,0],lbl:'zum Schritt'},
       {n:'2',x:gaktBr(cfg),y:0,d:[1,0],lbl:'weiter'}],
-    box:cfg=>({x:-4,y:-19,w:gaktBr(cfg)+8,h:38}),
+    box:cfg=>gaktBed(cfg)?{x:-4,y:-34,w:gaktBr(cfg)+8,h:53}:{x:-4,y:-19,w:gaktBr(cfg)+8,h:38},
     draw(cfg,c){
       const b=gaktBr(cfg),k=gaktKenn(cfg);
       /* Wirksam, solange ihr Schritt gesetzt ist */
@@ -3266,10 +3399,11 @@ const DEFS={
         o+=`<text x="13" y="5" text-anchor="middle" style="fill:var(--ink);font:600 12px system-ui,sans-serif">${esc(k)}</text>`;
       }
       o+=`<text x="${tx+(b-tx)/2}" y="5" text-anchor="middle" style="fill:var(--ink);font:13.5px system-ui,sans-serif">${gBedText(cfg.text)}</text>`;
-      /* Bedingung: kurzer Strich nach oben, davor der Text — so steht sie in der Norm */
+      /* Bedingung: kurzer Strich an der linken oberen Ecke, der Text daneben —
+         so steht sie in der Norm und so zeichnet sie das Buch. */
       if(gaktBed(cfg))
-        o+=`<path d="M${Math.min(46,b/2)},-15 L${Math.min(46,b/2)},-30"/>`+
-          `<text x="${Math.min(46,b/2)+5}" y="-24.5" style="fill:var(--ink);font:12.5px system-ui,sans-serif">${gBedText(gaktBed(cfg))}</text>`;
+        o+='<path d="M10,-15 L10,-31"/>'+
+          `<text x="15" y="-25.5" style="fill:var(--ink);font:12.5px system-ui,sans-serif">${gBedText(gaktBed(cfg))}</text>`;
       return o;
     }
   },
@@ -3349,6 +3483,64 @@ const DEFS={
       o+=`<path d="${d}" style="fill:none;stroke:rgba(0,0,0,0);stroke-width:14"/>`;
       return o;
     }
+  },
+  /* Eine gesetzte Formel. Der Bauteilpunkt liegt auf der Grundlinie, ganz links —
+     wie beim Textfeld die erste Zeile. */
+  formel:{
+    label:'Formel',
+    cfg:()=>({text:'p = \\frac{F}{A}',size:16,farbe:'',drucken:true}),
+    ports:()=>[],
+    box(cfg){
+      const sz=cfg.size||16,m=fmlMess(fmlParse(cfg.text),sz);
+      return{x:-5,y:-Math.max(m.a,sz*0.74)-5,w:Math.max(24,m.w)+10,
+             h:Math.max(m.a,sz*0.74)+Math.max(m.d,sz*0.22)+10};
+    },
+    draw(cfg){
+      const sz=cfg.size||16;
+      return`<g${cfg.drucken===false?' opacity="0.5"':''}>`+
+        fmlSvg(fmlParse(cfg.text),sz,0,0,schriftFarbe(cfg.farbe))+'</g>';
+    }
+  },
+  /* Rahmen und Formen zum Hervorheben. Der Bauteilpunkt ist die linke obere Ecke,
+     Breite und Hoehe stehen in cfg — gezogen wird an den vier Ecken. */
+  form:{
+    label:'Form',
+    cfg:()=>({art:'rechteck',w:200,h:120,dicke:1.6,farbe:'',fuell:'keine',rund:8,
+      strich:'voll',drucken:true}),
+    ports:()=>[],
+    box(cfg){
+      const m=6+(cfg.dicke||1.6)*2;
+      return{x:-m,y:-m,w:Math.max(20,cfg.w||200)+2*m,h:Math.max(20,cfg.h||120)+2*m};
+    },
+    draw(cfg){
+      const w=Math.max(20,Math.round(cfg.w||200)),h=Math.max(20,Math.round(cfg.h||120));
+      const col=schriftFarbe(cfg.farbe),d=cfg.dicke||1.6;
+      const strich=cfg.strich||'voll';
+      const dash=strich==='strich'?`stroke-dasharray:${(d*4.5).toFixed(1)} ${(d*3.5).toFixed(1)};`
+        :(strich==='strichpunkt'
+          ?`stroke-dasharray:${(d*7).toFixed(1)} ${(d*2.6).toFixed(1)} ${(d*0.7).toFixed(1)} ${(d*2.6).toFixed(1)};`
+          :'');
+      const fll=cfg.fuell==='zart'?`fill:${col};fill-opacity:.10`
+        :(cfg.fuell==='deckend'?'fill:var(--paper)':'fill:none');
+      const st=`${fll};stroke:${col};stroke-width:${d};${dash}stroke-linejoin:round`;
+      const blass=cfg.drucken===false?' opacity="0.5"':'';
+      const umriss=(stil,extra)=>cfg.art==='oval'
+        ?`<ellipse cx="${w/2}" cy="${h/2}" rx="${w/2}" ry="${h/2}" style="${stil}"${extra}/>`
+        :(cfg.art==='raute'
+          ?`<polygon points="${w/2},0 ${w},${h/2} ${w/2},${h} 0,${h/2}" style="${stil}"${extra}/>`
+          :`<rect x="0" y="0" width="${w}" height="${h}" rx="${
+              Math.max(0,Math.min(cfg.rund!=null?cfg.rund:8,Math.min(w,h)/2))}" style="${stil}"${extra}/>`);
+      /* Die Zeichnung, darueber ein unsichtbarer dicker Umriss zum Anfassen —
+         die Flaeche selbst bleibt frei, sonst faenge der Rahmen jeden Klick darin. */
+      let o=umriss(st,blass);
+      o+=umriss('fill:none;stroke:rgba(0,0,0,0);stroke-width:14','');
+      /* Die vier Ecken zum Ziehen — sichtbar, sobald die Maus auf der Form steht */
+      o+='<g class="fgrip">'+[['nw',0,0],['ne',w,0],['sw',0,h],['se',w,h]].map(g=>
+        `<rect class="fg" x="${g[1]-4}" y="${g[2]-4}" width="8" height="8"/>`+
+        `<rect class="fh" data-fgrip="${g[0]}" x="${g[1]-9}" y="${g[2]-9}" width="18" height="18"`+
+        ` style="cursor:${g[0]==='nw'||g[0]==='se'?'nwse':'nesw'}-resize"/>`).join('')+'</g>';
+      return o;
+    }
   }
 };
 /* Breite eines Aktionskastens: so breit wie sein Text, mindestens 90 */
@@ -3420,6 +3612,34 @@ const GZEICHEN=[
   ['1','immer erfüllt']
 ];
 /* Die Leiste zu einem Eingabefeld */
+/* Derselbe Ton wie im Plan — fuer die Anzeige im Fenster. */
+function gFarbeVon(nm){
+  const t=gNameFarbe(nm);
+  return t?`var(--tf-${t})`:'var(--text)';
+}
+/* Welcher Name gerade eingefaerbt wird (Kleinschreibung, ohne Minus) */
+let gnPick=null;
+/* Die Namen eines Textes als Knoepfe; darunter die Palette fuer den gewaehlten. */
+function gNamenFarbHtml(namen){
+  const list=[];
+  for(const x of namen){
+    /* Zahlen und Zeiten sind keine Bezeichnungen */
+    if(!x||/^\d/.test(x))continue;
+    if(!list.some(y=>gnKey(y)===gnKey(x)))list.push(x);
+  }
+  if(!list.length)return'';
+  let h='<label>Farbe der Bezeichnungen</label><div class="gnfarb">'+
+    list.map(x=>`<button type="button" data-gnpick="${esc(x)}"`+
+      `${gnPick===gnKey(x)?' class="an"':''} style="color:${gFarbeVon(x)}"`+
+      ` title="Farbe für ${esc(x)} wählen">${esc(x)}</button>`).join('')+'</div>';
+  const off=list.find(x=>gnKey(x)===gnPick);
+  if(off)
+    h+=`<div class="farbgrid gnpalette">`+
+      TXTFARBEN.map(f=>`<button type="button" data-gnfarbe="${f[0]}" data-gnname="${esc(off)}"`+
+        `${gNameFarbe(off)===f[0]?' class="on"':''} title="${f[1]}"`+
+        ` style="--sw:${f[0]?`var(--tf-${f[0]})`:'var(--ink)'}"></button>`).join('')+'</div>';
+  return h;
+}
 function zeichenHtml(k){
   return`<div class="zeichen" data-zfeld="${k}">`+
     GZEICHEN.map(z=>`<button type="button" data-zein="${z[0]}" title="${esc(z[1])}"`+
@@ -3446,7 +3666,9 @@ function zeichenEin(inp,was){
     inp.setSelectionRange(a,a+teil.length);
   }else{
     inp.value=v.slice(0,a)+was+v.slice(b);
-    inp.setSelectionRange(a+was.length,a+was.length);
+    /* Steht im Eingesetzten ein leeres Klammerpaar, springt die Schreibmarke hinein */
+    const kl=was.indexOf('{}');
+    inp.setSelectionRange(a+(kl>=0?kl+1:was.length),a+(kl>=0?kl+1:was.length));
   }
   inp.focus();
 }
@@ -3492,6 +3714,29 @@ function gVorNimm(id,i){
 }
 /* Welcher Schritt haengt oberhalb dieser Transition? Sein Name ist der uebliche
    Bezugspunkt einer Zeitbedingung. */
+/* An welchem Schritt haengt diese Aktion? Ueber die Wirkverbindungen zurueck —
+   die Aktionen koennen aneinandergereiht sein. */
+function gAktSchrittNr(c){
+  const gesehen=new Set();
+  let k=c;
+  for(let i=0;i<12&&k;i++){
+    const vor=gSchritteAn(k.id,'1');
+    if(vor.length){
+      const st=comp(vor[0]);
+      if(st&&st.type==='gschritt')return String(st.cfg.nr!=null?st.cfg.nr:'');
+    }
+    /* eine Aktion davor? dann dort weitersuchen */
+    let weiter=null;
+    for(const w of state.wires){
+      const a=w.a.c===k.id&&w.a.p==='1'?w.b:(w.b.c===k.id&&w.b.p==='1'?w.a:null);
+      if(!a)continue;
+      const o=comp(a.c);
+      if(o&&o.type==='gaktion'&&!gesehen.has(o.id)){gesehen.add(o.id);weiter=o;break;}
+    }
+    k=weiter;
+  }
+  return'';
+}
 function gNaechsterSchritt(t){
   for(const w of state.wires){
     for(const[a,b]of[[w.a,w.b],[w.b,w.a]]){
@@ -3507,14 +3752,48 @@ function gNaechsterSchritt(t){
 const UEBER='\u0305';
 /* Ein Text mit Ueberstrichen wird zu tspans: die ueberstrichenen Stellen bekommen
    einen echten durchgehenden Strich statt vieler kombinierender Zeichen. */
+/* Welchen Ton hat dieser Name? Ohne Zuordnung keinen — dann steht er in der
+   Schriftfarbe, also weiss auf dunklem und schwarz auf hellem Grund. Die
+   Zuordnung gilt fuer den ganzen Plan, damit ein Name ueberall gleich aussieht. */
+const gnKey=nm=>String(nm||'').replace(/^-/,'').replace(new RegExp(UEBER,'g'),'').toLowerCase();
+function gNameFarbe(nm){
+  const t=state.gnfarb;
+  return(t&&t[gnKey(nm)])||'';
+}
+function gNameFarbeSetz(nm,f){
+  if(!state.gnfarb)state.gnfarb={};
+  const k=gnKey(nm);
+  if(f)state.gnfarb[k]=f;
+  else delete state.gnfarb[k];
+  if(!Object.keys(state.gnfarb).length)delete state.gnfarb;
+}
+/* Ein Name im Text: fuehrendes Minus, dann Buchstaben und Ziffern. */
+const GNAMERE=/-?[A-Za-z][A-Za-z0-9]*/g;
 function gBedText(t){
   const st=String(t==null?'':t);
-  let o='',lauf='',neg=false,offen=false;
-  const raus=()=>{
-    if(!lauf)return;
-    o+=neg?`<tspan style="text-decoration:overline">${esc(lauf)}</tspan>`:esc(lauf);
-    lauf='';
+  const farbig=!!state.gnfarb;
+  let o='',lauf='',neg=false;
+  /* Ein Stueck Text ausgeben: was ein Name aus dem Plan ist, bekommt seinen Ton. */
+  const stueck=(txt,ueber)=>{
+    if(!txt)return'';
+    const stil=ueber?'text-decoration:overline':'';
+    if(!farbig)return stil?`<tspan style="${stil}">${esc(txt)}</tspan>`:esc(txt);
+    let r='',zu=0;
+    GNAMERE.lastIndex=0;
+    let m;
+    while((m=GNAMERE.exec(txt))){
+      const nm=m[0],ton=gNameFarbe(nm);
+      if(!ton)continue;
+      const vor=txt.slice(zu,m.index);
+      if(vor)r+=stil?`<tspan style="${stil}">${esc(vor)}</tspan>`:esc(vor);
+      r+=`<tspan style="fill:var(--tf-${ton})${stil?';'+stil:''}">${esc(nm)}</tspan>`;
+      zu=m.index+nm.length;
+    }
+    const rest=txt.slice(zu);
+    if(rest)r+=stil?`<tspan style="${stil}">${esc(rest)}</tspan>`:esc(rest);
+    return r;
   };
+  const raus=()=>{o+=stueck(lauf,neg);lauf='';};
   for(let i=0;i<st.length;i++){
     const ch=st[i];
     if(ch===UEBER)continue;
@@ -3750,6 +4029,12 @@ function gUmbenennen(alt,neu){
     if(c.type==='gtrans')c.cfg.bed=tausch(c.cfg.bed);
     else if(c.type==='gaktion'){c.cfg.text=tausch(c.cfg.text);c.cfg.bed=tausch(c.cfg.bed);}
   }
+  /* Der gewaehlte Ton haengt am Namen — er zieht mit um */
+  if(state.gnfarb&&state.gnfarb[za]!=null){
+    const ton=state.gnfarb[za];
+    delete state.gnfarb[za];
+    state.gnfarb[glatt(b)]=ton;
+  }
 }
 /* Laeuft gerade eine Namensaufnahme? {cid, k, pos} */
 let bedPick=null;
@@ -3910,6 +4195,194 @@ const TXTFARBEN=[['','Standard']].concat([['rot', 'Rot'], ['orange', 'Orange'], 
 /* Für den Druck: derselbe Satz in den dunklen Tönen, denn Papier ist immer weiß */
 const FARBHELL={rot:'#c62f24',orange:'#bd6300',gelb:'#8a6c00',limette:'#5c8a00',gruen:'#1e7a45',tuerkis:'#0d767d',blau:'#2160c4',violett:'#6d3fc0',magenta:'#ad2a76',braun:'#7a5230',grau:'#6b7280'};
 const schriftFarbe=f=>FARBHELL[f]?`var(--tf-${f})`:'var(--ink)';
+/* ---------- Formelsatz ----------
+   \frac{a}{b} Bruch, a^2 hoch, p_1 tief, \sqrt{x} Wurzel, \pi und die uebrigen
+   Zeichen aus FMLZEICHEN. Alles andere steht so da, wie es getippt wurde. */
+const FMLZEICHEN={pi:'\u03c0',tau:'\u03c4',Delta:'\u0394',delta:'\u03b4',eta:'\u03b7',
+  rho:'\u03c1',mu:'\u00b5',nu:'\u03bd',alpha:'\u03b1',beta:'\u03b2',gamma:'\u03b3',
+  lambda:'\u03bb',omega:'\u03c9',phi:'\u03c6',theta:'\u03b8',Sigma:'\u03a3',Omega:'\u03a9',
+  cdot:'\u00b7',times:'\u00d7',pm:'\u00b1',mp:'\u2213',le:'\u2264',ge:'\u2265',
+  ne:'\u2260',approx:'\u2248',to:'\u2192',deg:'\u00b0',infty:'\u221e',
+  propto:'\u221d',dots:'\u2026',permille:'\u2030'};
+const FMLNAMEN=Object.keys(FMLZEICHEN);
+/* Breite eines Stuecks Text: gemessen mit derselben Schrift, in der es gesetzt
+   wird. Beim Zeichnen wird dasselbe Stueck mehrfach gemessen — darum das
+   Gedaechtnis. */
+const fmlBreite=(function(){
+  let ctx,merk=new Map();
+  return function(t,sz){
+    t=String(t);
+    if(!t)return 0;
+    const k=sz+'|'+t;
+    if(merk.has(k))return merk.get(k);
+    if(ctx===undefined){
+      try{ctx=document.createElement('canvas').getContext('2d');}catch(e){ctx=null;}
+    }
+    let w=0;
+    if(ctx){
+      ctx.font=sz+'px system-ui,sans-serif';
+      w=ctx.measureText(t).width;
+    }
+    if(!(w>0))w=fmlBreiteNaeh(t,sz);
+    if(merk.size<4000)merk.set(k,w);
+    return w;
+  };
+})();
+/* Naeherungsbreite eines Stuecks Text — der Rueckfall */
+function fmlBreiteNaeh(t,sz){
+  let w=0;
+  for(const ch of String(t)){
+    if('il|!.,;:\'\u2019 '.indexOf(ch)>=0)w+=sz*0.30;
+    else if('ftrJ()[]{}-'.indexOf(ch)>=0)w+=sz*0.36;
+    else if('mwMW'.indexOf(ch)>=0)w+=sz*0.86;
+    else if(ch>='A'&&ch<='Z')w+=sz*0.68;
+    else w+=sz*0.55;
+  }
+  return w;
+}
+/* Quelltext -> Baum */
+function fmlParse(src){
+  const s=String(src==null?'':src);
+  let i=0;
+  function gruppe(){
+    while(s[i]===' ')i++;
+    if(s[i]==='{'){i++;const r=reihe('}');if(s[i]==='}')i++;return r;}
+    return einzel();
+  }
+  function einzel(){
+    if(s[i]==='\\'){
+      let j=i+1,nm='';
+      while(j<s.length&&/[A-Za-z]/.test(s[j])){nm+=s[j];j++;}
+      i=j;
+      if(nm==='frac'){const o=gruppe(),u=gruppe();return{t:'frac',o:o,u:u};}
+      if(nm==='sqrt')return{t:'sqrt',k:gruppe()};
+      if(!nm){i++;return{t:'txt',s:'\\'};}
+      return{t:'txt',s:FMLZEICHEN[nm]||nm};
+    }
+    const ch=s[i]||'';i++;
+    return{t:'txt',s:ch};
+  }
+  function reihe(ende){
+    const out=[];
+    let schutz=0;
+    while(i<s.length&&s[i]!==ende&&schutz++<4000){
+      if(s[i]==='^'||s[i]==='_'){
+        /* Hoch- und Tiefstellung haengen an dem, was zuletzt gesetzt wurde */
+        const art=s[i];i++;
+        const inh=gruppe();
+        let b=out.pop()||{t:'txt',s:''};
+        /* nur der letzte Buchstabe traegt das Zeichen, nicht das ganze Wort */
+        if(b.t==='txt'&&b.s.length>1){
+          out.push({t:'txt',s:b.s.slice(0,-1)});
+          b={t:'txt',s:b.s.slice(-1)};
+        }
+        if(b.t!=='skript')b={t:'skript',b:b,h:null,tf:null};
+        if(art==='^')b.h=inh;else b.tf=inh;
+        out.push(b);
+        continue;
+      }
+      if(s[i]==='}'){i++;continue;}
+      if(s[i]!=='\\'&&s[i]!=='{'){
+        let t='';
+        while(i<s.length&&s[i]!==ende&&'\\{}^_'.indexOf(s[i])<0){t+=s[i];i++;}
+        out.push({t:'txt',s:t});
+        continue;
+      }
+      out.push(gruppe());
+    }
+    return{t:'reihe',k:out};
+  }
+  return reihe(null);
+}
+/* Mass eines Bausteins: Breite, Hoehe ueber und unter der Grundlinie */
+function fmlMess(n,sz){
+  if(!n)return{w:0,a:0,d:0};
+  if(n.t==='txt')return{w:fmlBreite(n.s,sz),a:n.s?sz*0.74:0,d:n.s?sz*0.22:0};
+  if(n.t==='reihe'){
+    let w=0,a=0,d=0;
+    for(const k of n.k){const m=fmlMess(k,sz);w+=m.w;a=Math.max(a,m.a);d=Math.max(d,m.d);}
+    return{w:w,a:a,d:d};
+  }
+  if(n.t==='frac'){
+    const s2=sz*0.94,o=fmlMess(n.o,s2),u=fmlMess(n.u,s2);
+    return{w:Math.max(o.w,u.w)+sz*0.5,
+           a:sz*0.30+sz*0.16+o.a+o.d,
+           d:u.a+u.d+sz*0.16-sz*0.30};
+  }
+  if(n.t==='sqrt'){
+    const k=fmlMess(n.k,sz);
+    return{w:k.w+sz*0.72,a:k.a+sz*0.22,d:k.d};
+  }
+  if(n.t==='skript'){
+    const b=fmlMess(n.b,sz);
+    const h=n.h?fmlMess(n.h,sz*0.72):null,tf=n.tf?fmlMess(n.tf,sz*0.72):null;
+    return{w:b.w+sz*0.03+Math.max(h?h.w:0,tf?tf.w:0),
+           a:Math.max(b.a,h?sz*0.45+h.a:0),
+           d:Math.max(b.d,tf?sz*0.22+tf.d:0)};
+  }
+  return{w:0,a:0,d:0};
+}
+/* Baustein zeichnen; y ist die Grundlinie */
+function fmlSvg(n,sz,x,y,col){
+  const r2=v=>Math.round(v*100)/100;
+  if(!n)return'';
+  if(n.t==='txt')
+    return n.s?`<text x="${r2(x)}" y="${r2(y)}" style="font:${r2(sz)}px system-ui,sans-serif;`+
+      `fill:${col};stroke:none;white-space:pre">${esc(n.s)}</text>`:'';
+  if(n.t==='reihe'){
+    let o='',cx=x;
+    for(const k of n.k){o+=fmlSvg(k,sz,cx,y,col);cx+=fmlMess(k,sz).w;}
+    return o;
+  }
+  if(n.t==='frac'){
+    const s2=sz*0.94,o=fmlMess(n.o,s2),u=fmlMess(n.u,s2),m=fmlMess(n,sz);
+    const mitte=x+m.w/2,yb=y-sz*0.30;
+    let out=`<line x1="${r2(x+sz*0.08)}" y1="${r2(yb)}" x2="${r2(x+m.w-sz*0.08)}" y2="${r2(yb)}"`+
+      ` style="stroke:${col};stroke-width:${r2(sz*0.06+0.5)}"/>`;
+    out+=fmlSvg(n.o,s2,mitte-o.w/2,yb-sz*0.16-o.d,col);
+    out+=fmlSvg(n.u,s2,mitte-u.w/2,yb+sz*0.16+u.a,col);
+    return out;
+  }
+  if(n.t==='sqrt'){
+    const k=fmlMess(n.k,sz),yt=y-k.a-sz*0.20;
+    let out=`<path d="M${r2(x)},${r2(y-k.a*0.45)} L${r2(x+sz*0.20)},${r2(y+k.d)}`+
+      ` L${r2(x+sz*0.44)},${r2(yt)} L${r2(x+sz*0.66+k.w)},${r2(yt)}"`+
+      ` style="fill:none;stroke:${col};stroke-width:${r2(sz*0.07+0.4)};`+
+      `stroke-linejoin:round;stroke-linecap:round"/>`;
+    out+=fmlSvg(n.k,sz,x+sz*0.66,y,col);
+    return out;
+  }
+  if(n.t==='skript'){
+    const b=fmlMess(n.b,sz);
+    let out=fmlSvg(n.b,sz,x,y,col);
+    if(n.h)out+=fmlSvg(n.h,sz*0.72,x+b.w+sz*0.03,y-sz*0.45,col);
+    if(n.tf)out+=fmlSvg(n.tf,sz*0.72,x+b.w+sz*0.03,y+sz*0.22,col);
+    return out;
+  }
+  return'';
+}
+/* Die Knopfleiste unter dem Eingabefeld */
+const FMLKNOPF=[
+  ['\\frac{}{}','Bruch','a\u2044b'],
+  ['^{}','hochgestellt','x\u00b2'],
+  ['_{}','tiefgestellt','x\u2081'],
+  ['\\sqrt{}','Wurzel','\u221a'],
+  ['\\pi','Pi','\u03c0'],
+  ['\\Delta','Delta','\u0394'],
+  ['\\eta','Wirkungsgrad','\u03b7'],
+  ['\\rho','Dichte','\u03c1'],
+  ['\\cdot','mal','\u00b7'],
+  ['\\le','kleiner oder gleich','\u2264'],
+  ['\\ge','groesser oder gleich','\u2265'],
+  ['\\approx','ungefaehr','\u2248'],
+  ['\\deg','Grad','\u00b0']
+];
+function fmlZeichenHtml(){
+  return'<div class="zeichen" data-zfeld="ftext">'+
+    FMLKNOPF.map(z=>`<button type="button" data-zein="${esc(z[0])}" title="${esc(z[1])}">${z[2]}</button>`).join('')+
+    '</div>';
+}
+
 const farbName=f=>(TXTFARBEN.find(x=>x[0]===f)||TXTFARBEN[0])[1];
 function pfeilSpitze(p,q,col,w,blass){
   const dx=q[0]-p[0],dy=q[1]-p[1],L=Math.hypot(dx,dy)||1;
@@ -3941,7 +4414,7 @@ const pfeilPkt=(c,i)=>({x:c.x+c.cfg.pts[i][0],y:c.y+c.cfg.pts[i][1]});
 function pfeilFang(x,y,von,ausser){
   let best=null,bA=1e18;
   for(const c of state.comps){
-    if(c.type==='pfeil'||c.type==='knoten'||c.id===ausser)continue;
+    if(c.type==='pfeil'||c.type==='knoten'||c.type==='form'||c.id===ausser)continue;
     if(paneOf(c)!==curPane)continue;
     const b=absBox(c);
     if(x<b.x1-4||x>b.x2+4||y<b.y1-4||y>b.y2+4)continue;
@@ -4006,11 +4479,11 @@ function symIndex(){
   }
   symCache.clear();
 }
-/* Die bis zum 19.08.2026 gezeichneten Korrekturen sind fest eingebaut — die gespeicherte
+/* Die bis zum 31.08.2026 gezeichneten Korrekturen sind fest eingebaut — die gespeicherte
    Overlay-Fassung wird darum einmalig verworfen, sonst käme sie doppelt zur Wirkung. */
 try{
-  if(localStorage.getItem('pneu-symv')!=='8'){
-    symOvr={};localStorage.removeItem('pneu-symovr');localStorage.setItem('pneu-symv','8');
+  if(localStorage.getItem('pneu-symv')!=='9'){
+    symOvr={};localStorage.removeItem('pneu-symovr');localStorage.setItem('pneu-symv','9');
   }
 }catch(e){}
 /* Altbestand: Schlüssel hießen früher typ:signatur */
@@ -4790,6 +5263,14 @@ function sensorActive(c){
   if(c&&c.type==='espule')return!!simElOn[c.id];
   const cfg=c&&c.cfg;
   if(!cfg||cfg.target==null)return false;
+  /* Nicht am Kolben, sondern am Schutzgitter, am Werkstueck oder an der Hand des
+     Bedieners: dann meldet er, solange man ihn drueckt. Die Kipprolle gibt auch
+     hier nur ihren kurzen Impuls. */
+  if(cfg.target==='andere'){
+    if(c.type==='kipptaster')return(simKipp[c.id]||0)>simTime;
+    return!!((simHeld[c.id]&&simHeld[c.id].S)||(simCtrlHeld[c.id]&&simCtrlHeld[c.id].S)
+      ||(simLatch[c.id]&&simLatch[c.id].S));
+  }
   const t=comp(cfg.target);
   if(!t||t.type!=='zylinder')return false;
   /* Kipprolle: kein Dauersignal in der Endlage, nur ein kurzer Impuls beim Überfahren */
@@ -5643,7 +6124,8 @@ function segHitsBox(p,q,b){
 function blockBoxes(w,A,B){
   const out=[],ends=[{ref:w.a,P:A},{ref:w.b,P:B}],dm=wireDom(w);
   for(const c of state.comps){
-    if(c.type==='knoten'||c.type==='text'||c.type==='pfeil')continue;
+    if(c.type==='knoten'||c.type==='text'||c.type==='pfeil'||c.type==='form'
+      ||c.type==='formel')continue;
     /* Ein Bauteil des anderen Plans steht dieser Leitung nicht im Weg */
     if(compDom(c)!==dm&&compDom(c)!=null)continue;
     const r=absBox(c);
@@ -5990,8 +6472,9 @@ function renderPane(pane){
     const k=domKey(c)+Math.round(c.x+qx)+'|'+Math.round(c.y+qy);
     (portAt[k]=portAt[k]||[]).push({id:c.id,t:c.type});
   }
-  const drawOrder=state.comps.filter(c=>paneOf(c)===pane)
-    .sort((a,b)=>(VENTP.has(a.type)?0:1)-(VENTP.has(b.type)?0:1));
+  /* Formen liegen ganz hinten — sie rahmen ein, sie decken nicht zu. */
+  const zRang=c=>c.type==='form'?-1:(VENTP.has(c.type)?0:1);
+  const drawOrder=state.comps.filter(c=>paneOf(c)===pane).sort((a,b)=>zRang(a)-zRang(b));
   for(const c of drawOrder){
     const def=DEFS[c.type],hb=def.box(c.cfg);
     let hx=hb.x,hw=hb.w;
@@ -6002,8 +6485,8 @@ function renderPane(pane){
     }
     /* Der Pfeil bekommt keine flaechige Trefferzone — sonst faenge sein Kasten
        jeden Klick daneben ab. Getroffen wird nur die Linie selbst. */
-    s+=`<g class="comp${c.type==='pfeil'&&c.cfg.drucken===false?' nodruck':''}" data-comp="${c.id}" transform="translate(${c.x},${c.y}) rotate(${c.rot})">`;
-    if(c.type!=='pfeil')
+    s+=`<g class="comp${(c.type==='pfeil'||c.type==='form'||c.type==='formel')&&c.cfg.drucken===false?' nodruck':''}" data-comp="${c.id}" transform="translate(${c.x},${c.y}) rotate(${c.rot})">`;
+    if(c.type!=='pfeil'&&c.type!=='form')
       s+=`<rect x="${hx}" y="${hb.y}" width="${hw}" height="${hb.h}" fill="rgba(0,0,0,0)" stroke="none"/>`;
     s+=`<g class="sym">${symDraw(c.type,c.cfg,c)}</g>`;
     for(const p of def.ports(c.cfg)){
@@ -6223,6 +6706,10 @@ function renderPane(pane){
        und liest sich bei jedem Format gleich. Nach unten begrenzt, damit winzige
        Rahmen noch eine lesbare Beschriftung behalten. */
     const fs=Math.max(11,Math.min(f.w,f.h)/28);
+    /* Zuerst das Schriftfeld: es steht ausserhalb der Rahmengruppe, weil die beim
+       Drucken entfernt wird. Auf dem geteilten Blatt traegt es die zweite Haelfte. */
+    if(state.schriftfeld!==false&&(pane===2||(epOn()?pane===1:pane===0)))
+      s+=schriftfeldSvg(f,fs);
     s+=`<g id="printFrame${pane}"><rect class="pframe" x="${f.x}" y="${f.y}" width="${f.w}" height="${f.h}"/>`;
     /* Die Naht zwischen den beiden Planfeldern gehoert aufs Hauptblatt. Das eigene
        Blatt des GRAFCET traegt nur die Schrittkette. */
@@ -6481,6 +6968,13 @@ function positionFrmBar(){
     bw.title=state.wframe?'Feld für das Weg-Schritt-Diagramm entfernen'
       :'Feld für das Weg-Schritt-Diagramm aufs Blatt legen';
   }
+  const bt=el('frmTitel');
+  if(bt){
+    bt.classList.toggle('picking',state.schriftfeld!==false);
+    bt.title=state.schriftfeld!==false
+      ?'Schriftfeld unten rechts entfernen'
+      :'Schriftfeld unten rechts aufs Blatt setzen: Zeichen, Name, Plan und Datum';
+  }
   const bg=el('frmGc');
   if(bg){
     bg.style.display=gcOn()?'':'none';
@@ -6505,11 +6999,29 @@ function rotateFrame(){
   if(e){e.x=Math.round(ex-f.w/2);e.y=Math.round(ey-f.h/2);}
   render();
 }
+/* Das Schriftfeld unten rechts auf dem Blatt: Zeichen, Name, Plan und Datum.
+   Die Masse haengen an der Schriftgroesse des Blattes, damit es bei jedem Format
+   gleich aussieht. */
+function schriftfeldSvg(f,fs){
+  const h=Math.max(24,fs*2.8),b=Math.max(140,Math.min(f.w*0.36,fs*16));
+  const x=f.x+f.w-b-fs*0.6,y=f.y+f.h-h-fs*0.6;
+  const m=h*0.6,lx=x+h*0.2+m+fs*0.5;
+  const name=(tabs[activeTab]&&tabs[activeTab].name)||'';
+  const d=new Date();
+  const zz=v=>('0'+v).slice(-2);
+  const datum=zz(d.getDate())+'.'+zz(d.getMonth()+1)+'.'+d.getFullYear();
+  return`<g class="pschrift">`+
+    `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${b.toFixed(1)}" height="${h.toFixed(1)}" rx="${(fs*0.3).toFixed(1)}"/>`+
+    `<svg x="${(x+h*0.2).toFixed(1)}" y="${(y+(h-m)/2).toFixed(1)}" width="${m.toFixed(1)}" height="${m.toFixed(1)}" viewBox="0 0 64 64">${APPBLATT}</svg>`+
+    `<text class="s1" x="${lx.toFixed(1)}" y="${(y+h*0.45).toFixed(1)}" style="font-size:${(fs*0.95).toFixed(1)}px">FluidMotion Editor</text>`+
+    `<text class="s2" x="${lx.toFixed(1)}" y="${(y+h*0.83).toFixed(1)}" style="font-size:${(fs*0.78).toFixed(1)}px">${esc(name)}${name?' · ':''}${datum}</text>`+
+    `</g>`;
+}
 /* Inhalt einer Zeichenfläche ohne Bedienhilfen */
 function printBody(sv){
   const c=sv.cloneNode(true);
   c.querySelectorAll('.port,.band,.selbox,.temp,.wirehit,#ghost,#printFrame0,#printFrame1,#printFrame2,#wFrame0,#wFrame1,#wFrame2,#gFrame0,#gFrame1,#gFrame2,#gridBg,#gridBgE,#gridBgG,.linkbox,.linkmark,'+
-    '.pfrahmen,.pfgriff,.pfp,.pfziel,.nodruck').forEach(x=>x.remove());
+    '.pfrahmen,.pfgriff,.pfp,.pfziel,.fgrip,.nodruck').forEach(x=>x.remove());
   c.querySelectorAll('.selw').forEach(x=>x.classList.remove('selw'));
   return c.innerHTML;
 }
@@ -6895,10 +7407,11 @@ function simInfoBody(c){
     row('Steuerdruck an 12',bar(pv));
     row('Zustand',pv>=Math.max(thr,0.01)?'geschaltet (1 → 2)':'Ruhe (2 → 3 entlüftet)');
   }else if(GEBERTYP.has(c.type)){
-    const t=comp(c.cfg.target);
+    const t=comp(c.cfg.target),ex=c.cfg.target==='andere';
     row('Bauart',DEFS[c.type].label);
-    row('Überwacht',t?esc(t.label||('Zylinder '+t.id)):'— nicht zugeordnet —');
-    row('Endlage',c.cfg.mode==='ein'?'eingefahren (hinten)':'ausgefahren (vorn)');
+    row('Betätigt von',ex?'anderem Betätigungsmittel'
+      :(t?esc(t.label||('Zylinder '+t.id)):'— nicht zugeordnet —'));
+    if(!ex)row('Endlage',c.cfg.mode==='ein'?'eingefahren (hinten)':'ausgefahren (vorn)');
     if(c.type==='kipptaster'){
       row('Betätigt',(c.cfg.rich||'zu')!=='weg'?'beim Anfahren':'beim Verlassen');
       row('Impulsdauer',barTxt(c.cfg.imp!=null?c.cfg.imp:0.7)+' s');
@@ -7130,10 +7643,16 @@ function renderProps(){
         :'Sperrt den Durchfluss 2 → 1 und lässt 1 → 2 ungehindert durch.')+'</p>';
     }else if(GEBERTYP.has(c.type)){
       const g=c.cfg,zyl=state.comps.filter(x=>x.type==='zylinder');
-      body+=optHtml('target',[['','— wählen —']].concat(zyl.map(z=>[z.id,z.label||('Zylinder '+z.id)])),g.target==null?'':g.target,'Überwachter Aktor');
-      body+=optHtml('mode',[['aus','ausgefahren (Endlage vorn)'],['ein','eingefahren (Endlage hinten)']],g.mode,c.type==='kipptaster'?'Sitzt an Endlage':'Schaltet bei Endlage');
+      /* Der magnetische Naeherungsschalter braucht den Magnetkolben — nur die
+         mechanischen Geber lassen sich auch von etwas anderem betaetigen. */
+      const frei=c.type!=='sensor',extern=g.target==='andere';
+      const ziele=[['','— wählen —']].concat(zyl.map(z=>[z.id,z.label||('Zylinder '+z.id)]));
+      if(frei)ziele.push(['andere','anderes Betätigungsmittel (Schutzgitter, Werkstück …)']);
+      body+=optHtml('target',ziele,g.target==null?'':g.target,'Betätigt von');
+      if(!extern)
+        body+=optHtml('mode',[['aus','ausgefahren (Endlage vorn)'],['ein','eingefahren (Endlage hinten)']],g.mode,c.type==='kipptaster'?'Sitzt an Endlage':'Schaltet bei Endlage');
       if(c.type==='kipptaster'){
-        body+=optHtml('rich',[['zu','beim Anfahren der Endlage'],['weg','beim Verlassen der Endlage']],g.rich||'zu','Betätigt in Fahrtrichtung');
+        if(!extern)body+=optHtml('rich',[['zu','beim Anfahren der Endlage'],['weg','beim Verlassen der Endlage']],g.rich||'zu','Betätigt in Fahrtrichtung');
         body+=numHtml('imp',g.imp!=null?g.imp:0.7,'Impulsdauer (s)',0.05,5,0.05);
       }
       const GHINT={
@@ -7142,6 +7661,10 @@ function renderProps(){
         rollentaster:'Rollenhebeltaster: sitzt an der Kolbenstangen-Bahn; die Kolbennocke läuft über die Rolle.',
         kipptaster:'Kipprollentaster mit Leerrücklauf: gibt nur beim Überfahren in Pfeilrichtung einen kurzen Impuls und fällt danach wieder ab — damit lassen sich Signalüberschneidungen an Impulsventilen vermeiden. Der Impuls muss länger stehen als die Luft für einen Leitungszug braucht (0,45 s), sonst kommt er am Steueranschluss nicht an. Betätigt am Ventil nur „Kipprolle“.'};
       const vGeb=state.comps.filter(x=>x.type==='ventil'&&x.cfg&&(x.cfg.senL===c.id||x.cfg.senR===c.id));
+      if(extern)
+        body+='<p class="muted" style="font-size:11.5px">Betätigt wird er nicht vom Kolben, sondern von etwas anderem — einem Schutzgitter, einem Werkstück, von Hand. '+
+          'Der Strich steht deshalb dort, wo du ihn hinsetzt, und folgt keinem Zylinder. In der Simulation den Strich anklicken; mit Strg bleibt er gedrückt'+
+          (c.type==='kipptaster'?'. Die Kipprolle gibt bei jedem Klick ihren kurzen Impuls':'')+'.</p>';
       body+=`<p class="muted" style="font-size:11.5px">Der Strich zeigt nur den Einbauort. ${GHINT[c.type]} Angelegt wird er im Fenster des Wegeventils — `+
         (vGeb.length?`hier gehört er zu ${vGeb.map(x=>esc(x.label||('#'+x.id))).join(', ')}.`:'im Moment gehört er zu keinem Ventil.')+'</p>';
     }else if(c.type==='klemme'){
@@ -7208,12 +7731,13 @@ function renderProps(){
         const nn=gNamen(c.cfg.bed);
         if(nn.length)body+='<p class="muted" style="font-size:11.5px">Im Plan gefunden: '+
           nn.map(x=>gKennt(x)
-            ?`<b>${esc(x)}</b>&nbsp;✓`
+            ?`<b style="color:${gFarbeVon(x)}">${esc(x)}</b>&nbsp;✓`
             :`<b style="color:var(--sel)">${esc(x)}</b>&nbsp;?`).join(' · ')+
           (nn.every(gKennt)?'':'<br>Mit <b>?</b> gekennzeichnete Namen gibt es im Plan nicht — '+
             'sie gelten immer als nicht erfüllt. Gemeint ist die Bezeichnung eines Bauteils '+
             '(z. B. <b>-BG1</b>) oder ein Schritt (<b>X2</b>).')+'</p>';
       }
+      body+=gNamenFarbHtml(gNamen(c.cfg.bed));
       body+='<p class="muted" style="font-size:11.5px">Die Leiste setzt an der Schreibmarke ein. '+
         'Der Überstrich legt sich über das, was markiert ist — ohne Markierung über das letzte Wort. '+
         '<b>X4</b> heißt „Schritt 4 ist gesetzt", <b>↑b1</b> die steigende Flanke.</p>';
@@ -7229,7 +7753,16 @@ function renderProps(){
         `<input type="text" data-k="gzeit" value="${esc(c.cfg.zeit||'')}" maxlength="12"${zeitAn?'':' disabled'}>`;
       body+=`<label${bedAn?'':' class="muted"'}>Bedingung${bedAn?'':' — nur bei „an Bedingung geknüpft" oder „bei Ereignis"'}</label>`+
         pickZeile('gabed',c.cfg.bed,60,!bedAn);
-      if(bedAn)body+=zeichenHtml('gabed');
+      if(bedAn){
+        body+=zeichenHtml('gabed');
+        /* Derselbe Zeitbaustein wie bei der Transition: „2s/X2" heisst „2 s, nachdem
+           Schritt 2 gesetzt wurde" — die Nummer steht schon drin. */
+        body+='<div class="row" style="align-items:flex-end">'+
+          `<div style="flex:1"><label>Zeit</label><input type="text" data-gzt="t" value="2s" size="4"></div>`+
+          `<div style="flex:1"><label>nach Schritt</label><input type="text" data-gzt="x" value="${esc(gAktSchrittNr(c))}" size="4"></div>`+
+          '<button type="button" data-gzt="setz" data-gztfeld="gabed" title="Als Bedingung eintragen: 2s/X2">einsetzen</button></div>';
+      }
+      body+=gNamenFarbHtml(gNamen(c.cfg.text).concat(gNamen(c.cfg.bed)));
       body+='<p class="muted" style="font-size:11.5px">Das Bestimmungszeichen steht im linken Feld des Kastens, '+
         'die Bedingung über ihm. Mehrere Aktionen hängt man aneinander — jeder Kasten hat rechts einen Anschluss.</p>';
     }else if(c.type==='gverz'){
@@ -7249,6 +7782,33 @@ function renderProps(){
       body+=groessenHtml(c.cfg.size||14);
       body+=stilHtml(c.cfg);
       body+=farbGridHtml(c.cfg.farbe,'Schriftfarbe — '+farbName(c.cfg.farbe||''));
+    }else if(c.type==='formel'){
+      body+=`<label>Formel</label><textarea data-k="ftext" rows="2">${esc(c.cfg.text||'')}</textarea>`;
+      body+=fmlZeichenHtml();
+      body+=groessenHtml(c.cfg.size||16);
+      body+=farbGridHtml(c.cfg.farbe,'Farbe — '+farbName(c.cfg.farbe||''));
+      body+=`<label class="chk"><input type="checkbox" data-k="fmldruck"${c.cfg.drucken!==false?' checked':''}> wird mitgedruckt</label>`;
+      body+='<p class="muted" style="font-size:11.5px">Geschrieben wird in der gewohnten Kurzschrift: '+
+        '<b>\\frac{F}{A}</b> setzt einen Bruch, <b>d^2</b> stellt hoch, <b>p_1</b> tief, '+
+        '<b>\\sqrt{x}</b> zieht die Wurzel, <b>\\pi</b> und die Knöpfe darüber setzen die Zeichen. '+
+        'Mehrere Zeichen in geschweifte Klammern: <b>10^{-3}</b>.</p>';
+    }else if(c.type==='form'){
+      body+=optHtml('fart',[['rechteck','Rechteck'],['oval','Oval / Kreis'],['raute','Raute']],
+        c.cfg.art||'rechteck','Form');
+      body+=farbGridHtml(c.cfg.farbe,'Farbe — '+farbName(c.cfg.farbe||''));
+      body+=optHtml('fdicke',[[1,'dünn'],[1.6,'mittel'],[2.6,'kräftig'],[4,'dick']],c.cfg.dicke||1.6,'Strichstärke');
+      body+=optHtml('fstrich',[['voll','durchgezogen'],['strich','gestrichelt'],
+        ['strichpunkt','strichpunktiert — Wirkungsbereich']],c.cfg.strich||'voll','Linienart');
+      body+=optHtml('ffuell',[['keine','ohne Füllung'],['zart','zart getönt'],
+        ['deckend','deckend — verdeckt, was darunter liegt']],c.cfg.fuell||'keine','Füllung');
+      if((c.cfg.art||'rechteck')==='rechteck')
+        body+=numHtml('frund',c.cfg.rund!=null?c.cfg.rund:8,'Ecken abrunden',0,60,1);
+      body+=numHtml('fbreite',Math.round(c.cfg.w||200),'Breite',20,4000,10);
+      body+=numHtml('fhoehe',Math.round(c.cfg.h||120),'Höhe',20,4000,10);
+      body+=`<label class="chk"><input type="checkbox" data-k="fdruck"${c.cfg.drucken!==false?' checked':''}> wird mitgedruckt</label>`;
+      body+='<p class="muted" style="font-size:11.5px">Die Form liegt hinter allen anderen Zeichen und lässt '+
+        'Klicks in ihrer Fläche durch — angefasst wird sie an ihrem Rand, in der Größe verändert an den vier Ecken. '+
+        'Strichpunktiert umrandet man nach Norm einen Wirkungsbereich, etwa eine Wartungseinheit.</p>';
     }else if(c.type==='pfeil'){
       body+=farbGridHtml(c.cfg.farbe,'Farbe — '+farbName(c.cfg.farbe||''));
       body+=optHtml('pdicke',[[1,'dünn'],[1.6,'mittel'],[2.6,'kräftig'],[4,'dick']],c.cfg.dicke||1.6,'Strichstärke');
@@ -7305,8 +7865,14 @@ function renderProps(){
     if(!c)return;
     const t=(p.querySelector('[data-gzt="t"]').value||'5s').trim();
     const x=(p.querySelector('[data-gzt="x"]').value||'').trim();
+    const zeit=gNormBed(t)+'/X'+x.replace(/^X/i,'');
     pushUndo();
-    c.cfg.bed=gNormBed(t)+'/X'+x.replace(/^X/i,'');
+    /* Bei der Aktion an die vorhandene Bedingung anhaengen statt sie zu ersetzen —
+       im Buch steht dort „2s/X2 + …". Ist das Feld leer, steht nur die Zeit da. */
+    if(gz.dataset.gztfeld==='gabed'){
+      const alt=String(c.cfg.bed||'').trim();
+      c.cfg.bed=alt?zeit+' + '+alt:zeit;
+    }else c.cfg.bed=zeit;
     render();renderProps();
   });
   /* Die drei neuen Reihen schalten unmittelbar am Bauteil — kein Umweg über applyProp */
@@ -7318,6 +7884,17 @@ function renderProps(){
   }));
   p.querySelectorAll('[data-farbe]').forEach(b=>b.addEventListener('click',()=>{
     if(!c)return;pushUndo();c.cfg.farbe=b.dataset.farbe;render();renderProps();
+  }));
+  /* Die Bezeichnungen im GRAFCET: erst den Namen waehlen, dann seinen Ton */
+  p.querySelectorAll('[data-gnpick]').forEach(b=>b.addEventListener('click',()=>{
+    const k=gnKey(b.dataset.gnpick);
+    gnPick=(gnPick===k)?null:k;
+    renderProps();
+  }));
+  p.querySelectorAll('[data-gnfarbe]').forEach(b=>b.addEventListener('click',()=>{
+    pushUndo();
+    gNameFarbeSetz(b.dataset.gnname,b.dataset.gnfarbe);
+    render();renderProps();
   }));
   const dv=p.querySelector('details.adv');
   if(dv)dv.addEventListener('toggle',()=>{advOpen=dv.open;});
@@ -7510,7 +8087,8 @@ function applyProp(c,k,v){
   }else if(c.type==='druckschalt'){
     if(k==='schwelle'){c.cfg.schwelle=Math.max(0,Math.min(6,parseFloat(v)||0));delete c.cfg.ansprech;}
   }else if(GEBERTYP.has(c.type)){
-    if(k==='target')c.cfg.target=v?+v:null;
+    /* 'andere' ist keine Bauteilnummer und bleibt Text */
+    if(k==='target')c.cfg.target=v==='andere'?'andere':(v?+v:null);
     else if(k==='mode')c.cfg.mode=v;
     else if(k==='rich')c.cfg.rich=v;
     else if(k==='imp')c.cfg.imp=Math.max(0.05,Math.min(5,parseFloat(v)||0.7));
@@ -7559,6 +8137,19 @@ function applyProp(c,k,v){
     else if(k==='tfett')c.cfg.fett=!!v;
     else if(k==='tkursiv')c.cfg.kursiv=!!v;
     else if(k==='tunter')c.cfg.unter=!!v;
+  }else if(c.type==='formel'){
+    if(k==='ftext')c.cfg.text=v;
+    else if(k==='fmldruck')c.cfg.drucken=!!v;
+  }else if(c.type==='form'){
+    if(k==='fart')c.cfg.art=v;
+    else if(k==='ffarbe')c.cfg.farbe=v;
+    else if(k==='fdicke')c.cfg.dicke=parseFloat(v)||1.6;
+    else if(k==='fstrich')c.cfg.strich=v;
+    else if(k==='ffuell')c.cfg.fuell=v;
+    else if(k==='frund')c.cfg.rund=Math.max(0,Math.min(60,parseFloat(v)||0));
+    else if(k==='fbreite')c.cfg.w=Math.max(20,Math.min(4000,parseFloat(v)||200));
+    else if(k==='fhoehe')c.cfg.h=Math.max(20,Math.min(4000,parseFloat(v)||120));
+    else if(k==='fdruck')c.cfg.drucken=!!v;
   }else if(c.type==='pfeil'){
     if(k==='pfarbe')c.cfg.farbe=v;
     else if(k==='pdicke')c.cfg.dicke=parseFloat(v)||1.6;
@@ -8874,6 +9465,10 @@ function renderWSD(){
      sie mit der Zeichnung und man sieht sie kaum noch. */
   wsdAusschnitt(W,H);
   const wsc=(viewW.w>0)?(svgW.getBoundingClientRect().width||viewW.w)/viewW.w:1;
+  /* Zeicheneinheiten je Bildschirmpunkt — damit lassen sich Trefferflaechen in
+     Bildschirmmass angeben, statt mit der Zeichnung zu schrumpfen. */
+  const uW=wsc>0?1/wsc:1;
+  const punkte=p=>p*uW;
   /* Dasselbe Verhaeltnis wie die kraeftigen Punkte im pneumatischen Plan: dort steht
      ein Radius von 1,05 auf einem Abstand von 20 (jeder zweite Rasterpunkt). Genau
      das gilt hier — 1,05 auf WR=20. Der Radius waechst also beim Hineinzoomen mit;
@@ -8930,7 +9525,8 @@ function renderWSD(){
        `<title>Eingabeelement verschieben</title></circle>`+
        ((wsdTool==='sig'||wsdSig)
          ?`<circle class="wanch" data-anch="${-1-si}.0" cx="${sp.x}" cy="${sp.y}" r="7"><title>Signallinie von hier beginnen</title></circle>`:'')+
-       `<g class="wdel" data-wstartweg="${si}"><circle class="dh" cx="${sp.x-22}" cy="${sp.y}" r="9"/>`+
+       `<g class="wdel" data-wstartweg="${si}"><circle class="dh" cx="${sp.x-22}" cy="${sp.y}"`+
+       ` r="${Math.max(9,punkte(13)).toFixed(0)}"/>`+
        `<circle cx="${sp.x-22}" cy="${sp.y}" r="6.5"/>`+
        `<line x1="${sp.x-25}" y1="${sp.y-3}" x2="${sp.x-19}" y2="${sp.y+3}"/>`+
        `<line x1="${sp.x-19}" y1="${sp.y-3}" x2="${sp.x-25}" y2="${sp.y+3}"/>`+
@@ -8967,7 +9563,9 @@ function renderWSD(){
     /* Der Treffkreis ist deutlich größer als das gezeichnete Kreuz — bei kleinem
        Diagramm wäre es sonst nur ein paar Bildschirmpunkte groß. */
     s+=`<g class="wdel" data-del="${ri}" transform="translate(${xn+20},${oben(ri)+G.RH/2})">`+
-      `<title>Zeile entfernen</title><circle class="dh" r="${(G.RH/2).toFixed(0)}"/>`+
+      `<title>Zeile entfernen</title>`+
+      `<ellipse class="dh" rx="${Math.max(G.RH/2,punkte(14)).toFixed(0)}"`+
+      ` ry="${Math.min(G.RH/2,Math.max(16,punkte(14))).toFixed(0)}"/>`+
       '<circle r="9.5"/><path d="M-3.8,-3.8 L3.8,3.8 M3.8,-3.8 L-3.8,3.8"/></g>';
     s+=`<text class="wlvl" x="${xv-6}" y="${y1(ri)+4}">1</text>`;
     s+=`<text class="wlvl" x="${xv-6}" y="${y0(ri)+4}">0</text>`;
@@ -9642,7 +10240,7 @@ function renderPaneHeads(){
   }
 }
 /* Bauteile, die auf beide Seiten gehören */
-const BEIDE=new Set(['leitung','text','pfeil']);
+const BEIDE=new Set(['leitung','text','pfeil','form','formel']);
 /* Gehört ein Werkzeug auf diese Seite? */
 /* Auf welche Seite gehoert ein Werkzeug? Beschriftungen ueberallhin, sonst
    entscheidet die Art des Bauteils. */
@@ -10195,6 +10793,14 @@ onCanvas('pointerdown',e=>{
           }
         }
       }
+      /* Ein Geber ohne Zylinder wird hier von Hand betaetigt — er vertritt das
+         Schutzgitter oder das Werkstueck, das ihn im Betrieb drueckt. */
+      if(c&&GEBERTYP.has(c.type)&&c.cfg&&c.cfg.target==='andere'){
+        if(c.type==='kipptaster')simKipp[c.id]=simTime+Math.max(0.05,c.cfg.imp!=null?c.cfg.imp:0.7);
+        else if(e.ctrlKey||e.metaKey)simCtrlHeld[c.id]=Object.assign({},simCtrlHeld[c.id],{S:true});
+        else simHeld[c.id]=Object.assign({},simHeld[c.id],{S:true});
+        betaetigt=true;
+      }
       if(c&&c.type==='eschalter'){
         if((c.cfg&&c.cfg.halt)==='rast'){
           const cur=!!(simLatch[c.id]&&simLatch[c.id].S);
@@ -10208,6 +10814,18 @@ onCanvas('pointerdown',e=>{
       if(c&&!betaetigt){simInfoId=c.id;simInfoPin=false;renderSimInfo();}
     }
     return;
+  }
+  /* An den Ecken einer Form ziehen */
+  const fgh=e.target.closest&&e.target.closest('[data-fgrip]');
+  if(fgh){
+    const gc=fgh.closest('[data-comp]');
+    const fc=gc?comp(+gc.dataset.comp):null;
+    if(fc&&fc.type==='form'){
+      fgrip={id:fc.id,ecke:fgh.dataset.fgrip,sx:mouse.x,sy:mouse.y,
+             x0:fc.x,y0:fc.y,w0:fc.cfg.w||200,h0:fc.cfg.h||120,snap0:JSON.stringify(state)};
+      try{svg.setPointerCapture(e.pointerId);}catch(err){}
+      return;
+    }
   }
   /* An den Enden der Versorgungsleitung ziehen */
   const pg=e.target.closest&&e.target.closest('[data-pgrip]');
@@ -10300,6 +10918,9 @@ onCanvas('pointerdown',e=>{
     if(GEBERTYP.has(placing)){
       const b=sensorSnap(mouse.x,mouse.y,-1,placing);
       if(b){c.x=b.x;c.y=b.y;c.rot=b.rot;c.cfg.target=b.target;c.cfg.mode=b.mode;}
+      /* Abseits jedes Zylinders abgelegt: dann betaetigt ihn etwas anderes. Beim
+         magnetischen Geber gibt es das nicht, der bleibt unzugeordnet. */
+      else if(placing!=='sensor')c.cfg.target='andere';
     }
     {
       const j=(!VENTP.has(placing)&&!GEBERTYP.has(placing))?placeJoin(placing,cfg0,c.x,c.y,c.rot):null;
@@ -10591,6 +11212,24 @@ onCanvas('pointermove',e=>{
     }
     return;
   }
+  if(fgrip){
+    const fc=comp(fgrip.id);
+    if(fc){
+      if(fgrip.snap0){pushUndo(fgrip.snap0);fgrip.snap0=null;}
+      /* Im gedrehten Bauteil wird in seinen eigenen Achsen gerechnet */
+      const gd=rotP(snap(mouse.x)-snap(fgrip.sx),snap(mouse.y)-snap(fgrip.sy),(360-fc.rot)%360);
+      const west=fgrip.ecke[1]==='w',nord=fgrip.ecke[0]==='n';
+      const nw=Math.max(20,Math.round(west?fgrip.w0-gd[0]:fgrip.w0+gd[0]));
+      const nh=Math.max(20,Math.round(nord?fgrip.h0-gd[1]:fgrip.h0+gd[1]));
+      /* Zieht man an der linken oberen Ecke, wandert der Bauteilpunkt mit */
+      const lx=west?fgrip.w0-nw:0,ly=nord?fgrip.h0-nh:0;
+      const gv=rotP(lx,ly,fc.rot);
+      fc.x=Math.round(fgrip.x0+gv[0]);fc.y=Math.round(fgrip.y0+gv[1]);
+      fc.cfg.w=nw;fc.cfg.h=nh;
+      render();renderProps();
+    }
+    return;
+  }
   if(pgrip){
     const pc=comp(pgrip.id);
     if(pc){
@@ -10822,7 +11461,7 @@ onCanvas('pointermove',e=>{
 window.addEventListener('pointerup',()=>{
   if(symMode){symPointerUp();pan=null;return;}
   const dEnd=drag,wEnd=wdrag,pfEnd=pfdrag;
-  drag=null;pan=null;hdrag=null;wdrag=null;ldrag=null;fdrag=null;pgrip=null;simHeld={};
+  drag=null;pan=null;hdrag=null;wdrag=null;ldrag=null;fdrag=null;pgrip=null;fgrip=null;simHeld={};
   if(!dEnd)gRast=null;
   pfdrag=null;pfeilZiel=null;
   if(pfEnd){render();renderProps();}
@@ -11006,7 +11645,7 @@ applyTheme();
    sonst nicht, dass die Simulation noch mitrechnet. Geschrieben wird nur bei Änderung. */
 let titelLetzt='';
 function updTitle(){
-  let t='Pneumatik-Editor';
+  let t='FluidMotion Editor';
   if(simOn){
     const pn=(tabs[simTabIdx]&&tabs[simTabIdx].name)||'';
     t=(simPaused?'\u23F8 ':'\u25B6 ')+(pn?pn+' \u00b7 ':'')+t;
@@ -11017,7 +11656,9 @@ function updTitle(){
 }
 function renderTabs(){
   updTitle();
-  el('tabbar').innerHTML='<span class="apptitel">Pneumatik-Editor</span>'+tabs.map((t,i)=>
+  el('tabbar').innerHTML='<span class="apptitel">'+APPMARK+
+    '<span class="mname">Fluid<span class="mmotion">Motion</span></span>'+
+    '<span class="medit">Editor</span></span>'+tabs.map((t,i)=>
     `<div class="tab${(!symMode&&i===activeTab)?' act':''}${simOn&&i===simTabIdx?' simtab':''}" data-tab="${i}" title="Doppelklick = umbenennen"><span>${esc(t.name)}</span><button class="tclose" data-tclose="${i}" title="Plan schließen">${ICO.x}</button></div>`
   ).join('')+`<button id="tabAdd" title="Neuer Plan">${ICO.plus}</button>`+
   (symMode?`<div class="tab symtab act" title="Symbol-Editor"><span>Symbole</span><button class="tclose" id="symTabClose" title="Symbol-Editor schließen">${ICO.x}</button></div>`:'')+
@@ -11044,6 +11685,7 @@ function renderTabs(){
       :'Weg-Schritt-Diagramm für dieses Blatt: der Ablauf als Zeichnung, rechts unten'}">`+
       `<span class="pico pi-w">${ICO.diag}</span><span>Weg-Schritt</span></button>`)+
   `<button id="btnAufg" class="${dockAuf.aufgBox?'an':''}" title="Zusatzaufgaben mit Kontrolle">${ICO.liste}<span>Aufgaben</span></button>`+
+  `<button id="btnNotiz" class="${dockAuf.notizBox?'an':''}" title="Notizen — ein Blatt für Regeln und Merksätze, es bleibt beim nächsten Öffnen stehen">${ICO.notiz}<span>Notizen</span></button>`+
   `<button id="btnHelp" class="${dockAuf.helpBox?'an':''}" title="Bedienung — öffnet sich als Leiste rechts">${ICO.help}<span>Bedienung</span></button>`+
   `<button id="btnPrint" class="${state.frame?'an':''}" title="${state.frame?'Druckrahmen entfernen':'Druckrahmen im A4-Format aufs Blatt legen'}">${ICO.print}<span>Drucken</span></button>`+
   (tutOn?`<button id="btnMode" disabled title="Im Tutorial bleibt der einfache Modus fest eingestellt">${ICO.modeS}<span>Einfach</span></button>`
@@ -11199,7 +11841,7 @@ async function saveFile(suggested,data){
   try{
     if(window.showSaveFilePicker){
       const h=await showSaveFilePicker({suggestedName:suggested,id:'pneumatik',startIn:'documents',
-        types:[{description:'Pneumatik-Editor JSON',accept:{'application/json':['.json']}}]});
+        types:[{description:'FluidMotion Editor JSON',accept:{'application/json':['.json']}}]});
       const w=await h.createWritable();
       await w.write(data);await w.close();
       return;
@@ -11243,7 +11885,8 @@ function insertGroup(sn,X,Y){
     /* Verweise zeigen nach dem Einfügen auf die Kopien: Grenztaster und elektrische
        Geber auf ihren Zylinder, Relaiskontakte auf ihre Spule. */
     if((GEBERTYP.has(nc.type)||nc.type==='egrenz'||nc.type==='esensor'||nc.type==='ekontakt')
-      &&nc.cfg&&nc.cfg.target!=null)nc.cfg.target=map[nc.cfg.target]!=null?map[nc.cfg.target]:null;
+      &&nc.cfg&&nc.cfg.target!=null&&nc.cfg.target!=='andere')
+      nc.cfg.target=map[nc.cfg.target]!=null?map[nc.cfg.target]:null;
     if(nc.type==='ventil'&&nc.cfg){
       if(nc.cfg.senL!=null)nc.cfg.senL=map[nc.cfg.senL]!=null?map[nc.cfg.senL]:null;
       if(nc.cfg.senR!=null)nc.cfg.senR=map[nc.cfg.senR]!=null?map[nc.cfg.senR]:null;
@@ -11927,7 +12570,7 @@ function aufgRender(force){
   if(aufgFirst){
     aufgPut('<header data-dockdrag="aufgBox"><span>Willkommen</span>'+
       '<button class="close" id="btnAufgClose" title="Schließen">×</button></header>'+
-      '<div class="welc"><p>Dieser Editor zeichnet und simuliert pneumatische Schaltpläne. '+
+      '<div class="welc"><p>FluidMotion zeichnet und simuliert pneumatische Schaltpläne. '+
       'Wenn du magst, führt dich ein Tutorial in 16 Schritten durch die Grundlagen: Es beginnt mit Quelle, Ventil und Zylinder, '+
       'und mit jeder gelösten Lektion kommen neue Bauteile und Betätigungen dazu.</p>'+
       '<p class="ahint">Du kannst das Tutorial jederzeit über den Knopf „Aufgaben" starten und wieder verlassen.</p>'+
@@ -12056,7 +12699,7 @@ function exportLib(all){
     });
     if(!ss.length&&!pp.length){alert('Nichts angehakt — Schnellbausteine/Pläne zuerst in der Liste auswählen.');return;}
   }
-  saveFile(all?'pneumatik-bibliothek.json':'pneumatik-bibliothek-auswahl.json',
+  saveFile(all?'fluidmotion-bibliothek.json':'fluidmotion-bibliothek-auswahl.json',
     JSON.stringify({typ:'pneumatik-bibliothek',snippets:ss,plans:pp},null,1));
 }
 function importItem(arr,item,contentOf){
@@ -12847,6 +13490,7 @@ el('icSim').innerHTML=ICO.sim;
 el('frmRot').innerHTML=ICO.rotate;
 el('frmWsd').innerHTML=ICO.diag;
 el('frmGc').innerHTML=ICO.grafcet;
+el('frmTitel').innerHTML=ICO.notiz;
 el('frmPrint').innerHTML=ICO.print;
 el('frmDel').innerHTML=ICO.x;
 el('symTools').addEventListener('click',e=>{
@@ -12875,6 +13519,11 @@ el('symStepSel').addEventListener('change',e=>{symStep=parseFloat(e.target.value
 el('frmRot').addEventListener('click',rotateFrame);
 el('frmWsd').addEventListener('click',toggleWFrame);
 el('frmGc').addEventListener('click',toggleGFrame);
+el('frmTitel').addEventListener('click',()=>{
+  pushUndo();
+  state.schriftfeld=state.schriftfeld===false;
+  render();positionFrmBar();
+});
 el('frmPrint').addEventListener('click',doPrint);
 el('frmDel').addEventListener('click',()=>{state.frame=null;state.wframe=null;state.gframe=null;render();renderTabs();});
 el('spdCombo').querySelector('.cbtn').innerHTML=ICO.chev;
@@ -12886,6 +13535,12 @@ el('btnStepB').innerHTML=ICO.stepB;
 /* Der Knopf sitzt in der Tableiste und wird bei jedem renderTabs neu erzeugt —
    deshalb ein Handler auf der Leiste statt auf dem Knopf. */
 el('tabbar').addEventListener('click',e=>{
+  if(e.target.closest('#btnNotiz')){
+    rToggle('notiz');
+    const f=el('notizFeld');
+    if(dockAuf.notizBox&&f)setTimeout(()=>f.focus(),0);
+    return;
+  }
   if(!e.target.closest('#btnHelp'))return;
   rToggle('hilfe');
   el('autoDBox').style.display=simpleMode?'none':'block';
@@ -12897,6 +13552,8 @@ el('chkAutoD').addEventListener('change',()=>{
   saveWS();render();renderProps();
 });
 el('helpBox').addEventListener('click',e=>{if(e.target.closest('#btnHelpClose'))rHide('hilfe');});
+el('notizBox').addEventListener('click',e=>{if(e.target.closest('#btnNotizClose'))rHide('notiz');});
+notizLaden();
 el('btnPlay').addEventListener('click',()=>{simOn?stopSim():startSim();});
 el('btnPause').addEventListener('click',()=>{
   if(!simOn||activeTab!==simTabIdx)return;
